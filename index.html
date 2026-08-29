@@ -286,6 +286,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <a href="#tools">Features</a>
       <a href="#subjects">Subjects</a>
       <a href="#demo">Live Demo</a>
+      <a href="#progress">Progress</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -300,6 +301,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <a href="#tools">Features</a>
     <a href="#subjects">Subjects</a>
     <a href="#demo">Live Demo</a>
+    <a href="#progress">Progress</a>
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
     <div class="mobile-nav-actions">
@@ -521,6 +523,40 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <div class="how-num">3</div>
         <h3>Apni progress dekho</h3>
         <p>Har hafta ek clear report — kaunse topics strong ho gaye, kaunse abhi bhi kaam maangte hain.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= PROGRESS DASHBOARD ============================= -->
+<section id="progress">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Sirf tumhare liye</span>
+      <h2>Apna weak-area report dekho</h2>
+      <p>Ye wo cheez hai jo koi general AI chatbot nahi deta — tumhari apni practice se banaya gaya, tumhare exact weak topics ka data.</p>
+    </div>
+
+    <div id="progressLoggedOut" style="max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
+      <p style="color:var(--text-dim); font-size:15px; margin-bottom:20px;">Apna progress dekhne ke liye pehle login karein.</p>
+      <button type="button" class="btn btn-primary" id="progressLoginBtn">Login / Sign up</button>
+    </div>
+
+    <div id="progressLoggedIn" style="display:none; max-width:800px; margin:0 auto;">
+      <div id="progressLoading" style="text-align:center; color:var(--text-dim); font-size:14.5px; padding:30px 0;">Progress load ho raha hai...</div>
+      <div id="progressEmpty" style="display:none; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
+        <p style="color:var(--text-dim); font-size:15px;">Abhi tak koi MCQ attempt nahi mila. "Live Demo" mein jaake kuch MCQs solve karein, phir yahan report dikhega.</p>
+        <a href="#demo" class="btn btn-outline" style="margin-top:16px;">MCQs practice karo</a>
+      </div>
+      <div id="progressContent" style="display:none;">
+        <div style="background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); padding:28px 26px; margin-bottom:24px;">
+          <h3 style="font-size:18px; margin-bottom:18px;">Subject-wise attempts</h3>
+          <div id="progressBars"></div>
+        </div>
+        <div style="background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:24px 26px;">
+          <h3 style="font-size:16px; margin-bottom:14px;">Recent attempts</h3>
+          <div id="progressList"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -899,6 +935,7 @@ authForm.addEventListener('submit', async (e) => {
 
     refreshAuthButtonLabel();
     showLoggedInView(email);
+    renderProgressSection();
   } catch (err) {
     authError.textContent = err.message;
     authError.style.display = 'block';
@@ -914,7 +951,90 @@ authLogoutBtn.addEventListener('click', () => {
   localStorage.removeItem('nishaan_user_id');
   refreshAuthButtonLabel();
   showLoggedOutView();
+  renderProgressSection();
 });
+
+// ============ Progress Dashboard ============
+const progressLoggedOut = document.getElementById('progressLoggedOut');
+const progressLoggedIn = document.getElementById('progressLoggedIn');
+const progressLoading = document.getElementById('progressLoading');
+const progressEmpty = document.getElementById('progressEmpty');
+const progressContent = document.getElementById('progressContent');
+const progressBars = document.getElementById('progressBars');
+const progressList = document.getElementById('progressList');
+const progressLoginBtn = document.getElementById('progressLoginBtn');
+
+if (progressLoginBtn) progressLoginBtn.addEventListener('click', openAuthModal);
+
+const subjectColorVar = (topic) => {
+  const t = topic.toLowerCase();
+  if (t.includes('bio') || t.includes('cell') || t.includes('heart') || t.includes('genetic')) return { color: 'var(--cyan)', bg: 'rgba(0,229,255,.14)' };
+  if (t.includes('chem') || t.includes('mole') || t.includes('organic')) return { color: 'var(--pink)', bg: 'rgba(255,46,154,.14)' };
+  if (t.includes('phys') || t.includes('electro') || t.includes('mechanic')) return { color: 'var(--gold)', bg: 'rgba(255,194,75,.14)' };
+  return { color: 'var(--lime)', bg: 'rgba(180,255,60,.14)' };
+};
+
+async function renderProgressSection() {
+  const userId = localStorage.getItem('nishaan_user_id');
+
+  if (!userId) {
+    progressLoggedOut.style.display = 'block';
+    progressLoggedIn.style.display = 'none';
+    return;
+  }
+
+  progressLoggedOut.style.display = 'none';
+  progressLoggedIn.style.display = 'block';
+  progressLoading.style.display = 'block';
+  progressEmpty.style.display = 'none';
+  progressContent.style.display = 'none';
+
+  try {
+    const res = await fetch(BACKEND_URL + '/api/weak-areas/' + userId);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Load failed');
+
+    const attempts = data.attempts || [];
+    progressLoading.style.display = 'none';
+
+    if (attempts.length === 0) {
+      progressEmpty.style.display = 'block';
+      return;
+    }
+
+    // Count attempts per topic
+    const counts = {};
+    attempts.forEach(a => { counts[a.topic] = (counts[a.topic] || 0) + 1; });
+    const maxCount = Math.max(...Object.values(counts));
+
+    progressBars.innerHTML = '';
+    Object.entries(counts).forEach(([topic, count]) => {
+      const pct = Math.round((count / maxCount) * 100);
+      const { color } = subjectColorVar(topic);
+      const row = document.createElement('div');
+      row.style.cssText = 'margin-bottom:16px;';
+      row.innerHTML =
+        '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + topic + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + count + ' attempt' + (count > 1 ? 's' : '') + '</span></div>' +
+        '<div style="height:9px; border-radius:99px; background:var(--surface-2); overflow:hidden;"><span style="display:block; height:100%; border-radius:99px; width:' + pct + '%; background:' + color + ';"></span></div>';
+      progressBars.appendChild(row);
+    });
+
+    progressList.innerHTML = '';
+    attempts.slice(0, 8).forEach(a => {
+      const date = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const item = document.createElement('div');
+      item.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:14px;';
+      item.innerHTML = '<span style="color:var(--text);">' + a.topic + '</span><span style="color:var(--text-faint); font-family:var(--font-mono); font-size:12px;">' + date + '</span>';
+      progressList.appendChild(item);
+    });
+
+    progressContent.style.display = 'block';
+  } catch (e) {
+    progressLoading.textContent = 'Progress load nahi ho saka. Dobara try karein.';
+  }
+}
+
+renderProgressSection();
 
 const waitlistForm = document.getElementById('waitlistForm');
 const waitlistSuccess = document.getElementById('waitlistSuccess');
