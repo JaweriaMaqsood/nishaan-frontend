@@ -482,16 +482,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <button class="demo-tab" id="tabMcqBtn" style="flex:1; padding:12px; border-radius:12px; font-size:13.5px; font-weight:700; text-align:center; color:var(--text-dim); background:transparent; border:1.6px solid transparent;">MCQ Generator</button>
       </div>
 
-      <div style="padding:26px 28px 30px;" id="doubtPanel">
-        <label style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:10px;">Apna concept doubt poochein</label>
-        <textarea id="doubtInput" rows="3" placeholder="Jaise: Enzyme inhibition kya hoti hai?" style="width:100%; resize:none; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:14px; padding:14px 16px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:14px;"></textarea>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-          <button class="demo-chip" data-q="Active transport aur diffusion mein kya farq hai?" style="font-size:12.5px; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border); color:var(--text-dim); background:var(--bg-soft);">Active transport vs diffusion</button>
-          <button class="demo-chip" data-q="Mole concept ka formula samjhao" style="font-size:12.5px; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border); color:var(--text-dim); background:var(--bg-soft);">Mole concept</button>
+      <div style="padding:0;" id="doubtPanel">
+        <div id="chatMessages" style="max-height:380px; min-height:180px; overflow-y:auto; padding:22px 26px 8px;"></div>
+        <div style="padding:14px 26px 22px; border-top:1px solid var(--border);">
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;" id="doubtChips">
+            <button class="demo-chip" data-q="Active transport aur diffusion mein kya farq hai?" style="font-size:12.5px; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border); color:var(--text-dim); background:var(--bg-soft);">Active transport vs diffusion</button>
+            <button class="demo-chip" data-q="Mole concept ka formula samjhao" style="font-size:12.5px; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border); color:var(--text-dim); background:var(--bg-soft);">Mole concept</button>
+          </div>
+          <div style="display:flex; gap:8px; align-items:flex-end;">
+            <textarea id="doubtInput" rows="2" placeholder="Apna sawal likhein..." style="flex:1; resize:none; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:14px; padding:12px 14px; color:var(--text); font-size:14.5px; font-family:var(--font-body);"></textarea>
+            <button class="btn btn-primary" id="doubtBtn" style="flex-shrink:0;">Poocho</button>
+          </div>
+          <p style="font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-top:10px;">Tumhare apne backend se jawab aata hai</p>
         </div>
-        <button class="btn btn-primary" id="doubtBtn">Poocho</button>
-        <div id="doubtAnswer"></div>
-        <p style="font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-top:14px;">Tumhare apne backend se jawab aata hai</p>
       </div>
 
       <div style="padding:26px 28px 30px; display:none;" id="mcqPanel">
@@ -759,6 +762,7 @@ tabDoubtBtn.addEventListener('click', () => {
   tabDoubtBtn.classList.add('active'); tabDoubtBtn.style.background = 'var(--surface-2)'; tabDoubtBtn.style.borderColor = 'var(--border-strong)';
   tabMcqBtn.classList.remove('active'); tabMcqBtn.style.background = 'transparent'; tabMcqBtn.style.borderColor = 'transparent';
   doubtPanel.style.display = 'block'; mcqPanel.style.display = 'none';
+  showTutorGreeting();
 });
 tabMcqBtn.addEventListener('click', () => {
   tabMcqBtn.classList.add('active'); tabMcqBtn.style.background = 'var(--surface-2)'; tabMcqBtn.style.borderColor = 'var(--border-strong)';
@@ -768,29 +772,84 @@ tabMcqBtn.addEventListener('click', () => {
 
 const doubtInput = document.getElementById('doubtInput');
 const doubtBtn = document.getElementById('doubtBtn');
-const doubtAnswer = document.getElementById('doubtAnswer');
+const chatMessages = document.getElementById('chatMessages');
 document.querySelectorAll('#doubtPanel .demo-chip').forEach(chip => {
   chip.addEventListener('click', () => { doubtInput.value = chip.dataset.q; askDoubt(); });
 });
 doubtBtn.addEventListener('click', askDoubt);
+doubtInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); askDoubt(); }
+});
+
+let chatHistory = []; // [{role:'user'|'assistant', content:'...'}]
+let greetingShown = false;
+
+function appendMessage(role, text) {
+  const bubble = document.createElement('div');
+  const isUser = role === 'user';
+  bubble.style.cssText =
+    'max-width:85%; margin-bottom:14px; padding:12px 16px; border-radius:14px; font-size:14.5px; line-height:1.65; white-space:pre-wrap; ' +
+    (isUser
+      ? 'margin-left:auto; background:var(--grad); color:#170D30; border-bottom-right-radius:4px;'
+      : 'margin-right:auto; background:var(--bg-soft); color:var(--text); border:1.4px solid var(--border); border-bottom-left-radius:4px;');
+  bubble.textContent = text;
+  chatMessages.appendChild(bubble);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function showTutorGreeting() {
+  if (greetingShown) return;
+  greetingShown = true;
+  const userId = localStorage.getItem('nishaan_user_id');
+  const studentClass = localStorage.getItem('nishaan_student_class');
+  try {
+    const res = await fetch(BACKEND_URL + '/api/tutor-greeting', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, studentClass })
+    });
+    const data = await res.json();
+    appendMessage('assistant', data.greeting);
+    chatHistory.push({ role: 'assistant', content: data.greeting });
+  } catch (e) {
+    appendMessage('assistant', 'Assalam o Alaikum! Aaj kis topic mein madad chahiye?');
+  }
+}
 
 async function askDoubt() {
   const q = doubtInput.value.trim();
   if (!q) return;
-  doubtBtn.disabled = true; doubtBtn.textContent = 'Soch rahe hain...';
-  doubtAnswer.innerHTML = '';
+  appendMessage('user', q);
+  chatHistory.push({ role: 'user', content: q });
+  doubtInput.value = '';
+  doubtBtn.disabled = true; doubtBtn.textContent = '...';
+
+  const thinking = document.createElement('div');
+  thinking.id = 'thinkingBubble';
+  thinking.style.cssText = 'max-width:85%; margin-bottom:14px; padding:12px 16px; border-radius:14px; font-size:14px; background:var(--bg-soft); border:1.4px solid var(--border); color:var(--text-faint);';
+  thinking.textContent = 'Soch rahe hain...';
+  chatMessages.appendChild(thinking);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
   try {
     const res = await fetch(BACKEND_URL + '/api/doubt', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: q, userId: localStorage.getItem('nishaan_user_id'), studentClass: localStorage.getItem('nishaan_student_class') })
+      body: JSON.stringify({
+        question: q,
+        userId: localStorage.getItem('nishaan_user_id'),
+        studentClass: localStorage.getItem('nishaan_student_class'),
+        history: chatHistory.slice(0, -1)
+      })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Request failed');
-    doubtAnswer.innerHTML = '<div style="margin-top:18px; padding:18px; border-radius:14px; background:var(--bg-soft); border:1.4px solid var(--border); font-size:14.5px; line-height:1.7; color:var(--text); white-space:pre-wrap;"></div>';
-    doubtAnswer.querySelector('div').textContent = data.answer;
+    document.getElementById('thinkingBubble')?.remove();
+    appendMessage('assistant', data.answer);
+    chatHistory.push({ role: 'assistant', content: data.answer });
   } catch (e) {
-    doubtAnswer.innerHTML = '<div style="margin-top:18px; padding:18px; border-radius:14px; background:var(--bg-soft); border:1.4px solid var(--border); font-size:14px; color:var(--pink);">Kuch masla ho gaya. Backend check karein ya dobara try karein.</div>';
+    document.getElementById('thinkingBubble')?.remove();
+    appendMessage('assistant', 'Kuch masla ho gaya. Backend check karein ya dobara try karein.');
   } finally {
     doubtBtn.disabled = false; doubtBtn.textContent = 'Poocho';
   }
@@ -1109,6 +1168,7 @@ async function renderProgressSection() {
 }
 
 renderProgressSection();
+showTutorGreeting();
 
 const waitlistForm = document.getElementById('waitlistForm');
 const waitlistSuccess = document.getElementById('waitlistSuccess');
