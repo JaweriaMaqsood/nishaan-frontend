@@ -287,6 +287,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <a href="#subjects">Subjects</a>
       <a href="#demo">Live Demo</a>
       <a href="#progress">Progress</a>
+      <a href="#leaderboard">Leaderboard</a>
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
     </nav>
@@ -302,6 +303,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <a href="#subjects">Subjects</a>
     <a href="#demo">Live Demo</a>
     <a href="#progress">Progress</a>
+      <a href="#leaderboard">Leaderboard</a>
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
     <div class="mobile-nav-actions">
@@ -567,6 +569,33 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <h3 style="font-size:16px; margin-bottom:14px;">Recent attempts</h3>
           <div id="progressList"></div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= LEADERBOARD ============================= -->
+<section id="leaderboard">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow">Apni class ke sath compete karo</span>
+      <h2>Leaderboard</h2>
+      <p>Jitna practice karo, utna rank aage — sirf apni class ke students ke sath fair muqabla.</p>
+    </div>
+
+    <div id="leaderboardLoggedOut" style="max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
+      <p style="color:var(--text-dim); font-size:15px; margin-bottom:20px;">Leaderboard dekhne ke liye pehle login karein.</p>
+      <button type="button" class="btn btn-primary" id="leaderboardLoginBtn">Login / Sign up</button>
+    </div>
+
+    <div id="leaderboardLoggedIn" style="display:none; max-width:600px; margin:0 auto;">
+      <div id="leaderboardLoading" style="text-align:center; color:var(--text-dim); font-size:14.5px; padding:30px 0;">Leaderboard load ho raha hai...</div>
+      <div id="leaderboardEmpty" style="display:none; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
+        <p style="color:var(--text-dim); font-size:15px;">Abhi koi MCQ attempt nahi mila tumhari class mein. Pehle practice karo — leaderboard mein aane wale pehle student bano!</p>
+        <a href="#demo" class="btn btn-outline" style="margin-top:16px;">MCQs practice karo</a>
+      </div>
+      <div id="leaderboardContent" style="display:none; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); padding:10px 8px;">
+        <div id="leaderboardRows"></div>
       </div>
     </div>
   </div>
@@ -1049,6 +1078,7 @@ authForm.addEventListener('submit', async (e) => {
     refreshAuthButtonLabel();
     showLoggedInView(email);
     renderProgressSection();
+    renderLeaderboard();
   } catch (err) {
     authError.textContent = err.message;
     authError.style.display = 'block';
@@ -1066,6 +1096,7 @@ authLogoutBtn.addEventListener('click', () => {
   refreshAuthButtonLabel();
   showLoggedOutView();
   renderProgressSection();
+  renderLeaderboard();
 });
 
 // ============ Progress Dashboard ============
@@ -1166,6 +1197,69 @@ async function renderProgressSection() {
     progressLoading.textContent = 'Progress load nahi ho saka. Dobara try karein.';
   }
 }
+
+// ============ Leaderboard ============
+const leaderboardLoggedOut = document.getElementById('leaderboardLoggedOut');
+const leaderboardLoggedIn = document.getElementById('leaderboardLoggedIn');
+const leaderboardLoading = document.getElementById('leaderboardLoading');
+const leaderboardEmpty = document.getElementById('leaderboardEmpty');
+const leaderboardContent = document.getElementById('leaderboardContent');
+const leaderboardRows = document.getElementById('leaderboardRows');
+const leaderboardLoginBtn = document.getElementById('leaderboardLoginBtn');
+
+if (leaderboardLoginBtn) leaderboardLoginBtn.addEventListener('click', openAuthModal);
+
+async function renderLeaderboard() {
+  const userId = localStorage.getItem('nishaan_user_id');
+  const studentClass = localStorage.getItem('nishaan_student_class');
+
+  if (!userId || !studentClass) {
+    leaderboardLoggedOut.style.display = 'block';
+    leaderboardLoggedIn.style.display = 'none';
+    return;
+  }
+
+  leaderboardLoggedOut.style.display = 'none';
+  leaderboardLoggedIn.style.display = 'block';
+  leaderboardLoading.style.display = 'block';
+  leaderboardEmpty.style.display = 'none';
+  leaderboardContent.style.display = 'none';
+
+  try {
+    const res = await fetch(BACKEND_URL + '/api/leaderboard/' + studentClass);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Load failed');
+
+    const list = data.leaderboard || [];
+    leaderboardLoading.style.display = 'none';
+
+    if (list.length === 0) {
+      leaderboardEmpty.style.display = 'block';
+      return;
+    }
+
+    leaderboardRows.innerHTML = '';
+    const medals = ['🥇', '🥈', '🥉'];
+    list.forEach((entry, i) => {
+      const isMe = entry.userId === userId;
+      const row = document.createElement('div');
+      row.style.cssText =
+        'display:flex; align-items:center; gap:14px; padding:13px 16px; border-radius:12px; margin-bottom:4px;' +
+        (isMe ? ' background:rgba(0,229,255,.1); border:1.4px solid var(--cyan);' : '');
+      row.innerHTML =
+        '<span style="width:28px; text-align:center; font-size:15px; font-weight:700; color:var(--text-faint); font-family:var(--font-mono);">' + (medals[i] || (i + 1)) + '</span>' +
+        '<span style="flex:1; font-size:14.5px; font-weight:700; color:var(--text);">' + entry.displayName + (isMe ? ' (Aap)' : '') + '</span>' +
+        '<span style="font-family:var(--font-mono); font-size:13px; color:var(--text-dim);">' + entry.score + ' sahi</span>';
+      leaderboardRows.appendChild(row);
+    });
+
+    leaderboardContent.style.display = 'block';
+  } catch (e) {
+    leaderboardLoading.textContent = 'Leaderboard load nahi ho saka. Dobara try karein.';
+  }
+}
+
+renderLeaderboard();
 
 renderProgressSection();
 showTutorGreeting();
