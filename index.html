@@ -709,6 +709,24 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   </div>
 </footer>
 
+<!-- ============================= CLASS FIX MODAL (for older accounts missing class) ============================= -->
+<div id="classFixOverlay" style="display:none; position:fixed; inset:0; z-index:200; background:rgba(10,5,25,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px;">
+  <div style="width:100%; max-width:400px; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); padding:32px 28px;">
+    <h3 style="font-size:19px; margin-bottom:8px;">Apni class batayein</h3>
+    <p style="color:var(--text-dim); font-size:14px; margin-bottom:20px;">Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.</p>
+    <select id="classFixSelect" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;">
+      <option value="">Class select karein</option>
+      <option value="primary">Class 1-5 (Primary)</option>
+      <option value="middle">Class 6-8 (Middle)</option>
+      <option value="matric">Class 9-10 / Matric / O-Levels</option>
+      <option value="inter">Class 11-12 / Inter / A-Levels</option>
+      <option value="entry_test">Entry Test (MDCAT, ECAT, etc.)</option>
+    </select>
+    <p id="classFixError" style="display:none; font-size:13px; color:var(--pink); margin-bottom:12px;"></p>
+    <button type="button" class="btn btn-primary btn-block" id="classFixSaveBtn">Save karein</button>
+  </div>
+</div>
+
 <!-- ============================= AUTH MODAL ============================= -->
 <div id="authOverlay" style="display:none; position:fixed; inset:0; z-index:200; background:rgba(10,5,25,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px;">
   <div style="width:100%; max-width:400px; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); padding:32px 28px; position:relative;">
@@ -1030,6 +1048,71 @@ function refreshAuthButtonLabel() {
   if (authOpenBtnMobile) authOpenBtnMobile.textContent = label;
 }
 refreshAuthButtonLabel();
+
+// Backfill student_class for accounts created before this field existed locally
+const classFixOverlay = document.getElementById('classFixOverlay');
+const classFixSelect = document.getElementById('classFixSelect');
+const classFixError = document.getElementById('classFixError');
+const classFixSaveBtn = document.getElementById('classFixSaveBtn');
+
+async function backfillStudentClassIfMissing() {
+  const userId = localStorage.getItem('nishaan_user_id');
+  const existingClass = localStorage.getItem('nishaan_student_class');
+  if (!userId || existingClass) return;
+
+  try {
+    const res = await fetch(BACKEND_URL + '/api/profile/' + userId);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.studentClass) {
+        localStorage.setItem('nishaan_student_class', data.studentClass);
+        renderLeaderboard();
+        renderProgressSection();
+        return;
+      }
+    }
+    // No profile found at all (older account) — ask the student to pick their class
+    classFixOverlay.style.display = 'flex';
+  } catch (e) {
+    // silent — leaderboard/progress will just show the login prompt if this fails
+  }
+}
+backfillStudentClassIfMissing();
+
+classFixSaveBtn.addEventListener('click', async () => {
+  const studentClass = classFixSelect.value;
+  classFixError.style.display = 'none';
+  if (!studentClass) {
+    classFixError.textContent = 'Class select karna zaroori hai';
+    classFixError.style.display = 'block';
+    return;
+  }
+  const userId = localStorage.getItem('nishaan_user_id');
+  const email = localStorage.getItem('nishaan_user_email');
+
+  classFixSaveBtn.disabled = true;
+  classFixSaveBtn.textContent = 'Save ho raha hai...';
+  try {
+    const res = await fetch(BACKEND_URL + '/api/profile/' + userId, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentClass, email })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Save failed');
+
+    localStorage.setItem('nishaan_student_class', studentClass);
+    classFixOverlay.style.display = 'none';
+    renderLeaderboard();
+    renderProgressSection();
+  } catch (e) {
+    classFixError.textContent = 'Kuch masla ho gaya, dobara try karein';
+    classFixError.style.display = 'block';
+  } finally {
+    classFixSaveBtn.disabled = false;
+    classFixSaveBtn.textContent = 'Save karein';
+  }
+});
 
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
