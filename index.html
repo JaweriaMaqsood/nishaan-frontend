@@ -298,21 +298,50 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <div class="sehar-float" style="position:absolute; bottom:8%; right:26%; font-size:20px; animation-delay:-3.5s;">✨</div>
   </div>
 
-  <div id="seharWelcomeCard" style="position:relative; max-width:520px; width:100%; text-align:center; opacity:0; background:rgba(42,22,80,.45); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border:1.4px solid rgba(255,255,255,.16); border-radius:32px; padding:52px 38px; box-shadow:0 40px 100px -30px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08);">
-    <div style="font-size:15px; letter-spacing:0.35em; color:var(--gold); font-family:var(--font-mono); margin-bottom:22px; text-transform:uppercase;">✦ Khaas Aapke Liye ✦</div>
+  <div id="seharWelcomeCard" style="position:relative; max-width:560px; width:100%; text-align:center; opacity:0; background:rgba(42,22,80,.45); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border:1.4px solid rgba(255,255,255,.16); border-radius:32px; padding:48px 36px 40px; box-shadow:0 40px 100px -30px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08);">
 
-    <h1 style="font-family:'Playfair Display', serif; font-style:italic; font-weight:700; font-size:clamp(38px,7vw,58px); line-height:1.15; margin-bottom:6px; color:var(--text);">Khush Aamdeed,</h1>
-    <h1 class="grad-text" style="font-family:'Playfair Display', serif; font-style:italic; font-weight:700; font-size:clamp(46px,9vw,72px); line-height:1.1; margin-bottom:22px;">Sehar</h1>
+    <!-- Decorative frame -->
+    <div aria-hidden="true" style="position:absolute; inset:14px; border:1.4px solid rgba(255,255,255,.14); border-radius:22px; pointer-events:none;"></div>
+    <div aria-hidden="true" style="position:absolute; top:2px; left:10px; font-size:24px; transform:rotate(-18deg);">🌸</div>
+    <div aria-hidden="true" style="position:absolute; top:2px; right:10px; font-size:24px; transform:rotate(18deg) scaleX(-1);">🌸</div>
+    <div aria-hidden="true" style="position:absolute; bottom:2px; left:14px; font-size:18px;">✨</div>
+    <div aria-hidden="true" style="position:absolute; bottom:2px; right:14px; font-size:18px;">✨</div>
 
-    <p style="font-family:'Caveat', cursive; font-weight:700; font-size:26px; color:var(--pink); line-height:1.4; margin-bottom:22px;">"aapke liye, dil se bana hai ye" 💌</p>
+    <button type="button" id="seharReplayBtn" aria-label="Awaaz dobara sunein" style="position:absolute; top:20px; right:20px; width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.08); border:1.2px solid var(--border-strong); color:var(--text-dim); display:grid; place-items:center; font-size:14px;">🔊</button>
 
-    <p style="color:var(--text-dim); font-size:15.5px; line-height:1.85; margin-bottom:18px; font-family:var(--font-body);">
-      Bohot khushi ho rahi hai ke ye chhota sa tohfa aapke haath tak pohanch raha hai. Ye website sirf aapke liye banayi gayi hai — aapki parhai ke safar ko thora aasan aur khoobsurat banane ke liye. Har concept, har MCQ, har chhota sa feature yahan aap hi ko sochte hue banaya gaya hai.
+    <div style="font-size:13px; letter-spacing:0.3em; color:var(--gold); font-family:var(--font-mono); margin:14px 0 18px; text-transform:uppercase;">✦ khaas aapke liye ✦</div>
+
+    <h1 style="position:relative; display:inline-block; font-family:'Playfair Display', serif; font-style:italic; font-weight:700; font-size:clamp(46px,10vw,76px); line-height:1; margin-bottom:8px; color:var(--text);">
+      <span aria-hidden="true" style="position:absolute; left:-6%; right:-6%; top:38%; height:38%; background:linear-gradient(90deg, rgba(255,46,154,.35), rgba(0,229,255,.3)); filter:blur(2px); transform:rotate(-1.5deg); border-radius:50%; z-index:-1;"></span>
+      Welcome! <span style="font-size:0.6em;">💖</span>
+    </h1>
+
+    <p class="grad-text" style="font-family:'Playfair Display', serif; font-style:italic; font-weight:700; font-size:clamp(22px,4.4vw,30px); margin-bottom:18px;">Sehar &amp; Sehar Army</p>
+
+    <p style="font-family:'Caveat', cursive; font-weight:700; font-size:24px; color:var(--pink); line-height:1.4; margin-bottom:20px;">"aapke liye, dil se bana hai ye" 💌</p>
+
+    <p style="color:var(--text-dim); font-size:15px; line-height:1.85; margin-bottom:26px; font-family:var(--font-body);">
+      Bohot khushi ho rahi hai ke ye chhota sa tohfa aapke haath tak pohanch raha hai. Ye Rehnuma sirf aapke liye banaya gaya hai — aapki parhai ka apna, pyara sa corner. ✨
     </p>
 
-    <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:36px;">
+    <!-- Icon row -->
+    <div style="display:flex; justify-content:center; gap:22px; flex-wrap:wrap; margin-bottom:28px; padding:0 4px;">
+      <div style="width:60px;"><div style="font-size:22px; margin-bottom:6px;">📘</div><p style="font-size:10.5px; color:var(--text-faint); font-family:var(--font-mono);">DOUBTS</p></div>
+      <div style="width:60px;"><div style="font-size:22px; margin-bottom:6px;">📝</div><p style="font-size:10.5px; color:var(--text-faint); font-family:var(--font-mono);">MCQS</p></div>
+      <div style="width:60px;"><div style="font-size:22px; margin-bottom:6px;">📊</div><p style="font-size:10.5px; color:var(--text-faint); font-family:var(--font-mono);">PROGRESS</p></div>
+      <div style="width:60px;"><div style="font-size:22px; margin-bottom:6px;">🏆</div><p style="font-size:10.5px; color:var(--text-faint); font-family:var(--font-mono);">RANK</p></div>
+      <div style="width:60px;"><div style="font-size:22px; margin-bottom:6px;">🎙️</div><p style="font-size:10.5px; color:var(--text-faint); font-family:var(--font-mono);">VOICE</p></div>
+    </div>
+
+    <!-- Mini info card -->
+    <div style="display:flex; align-items:center; gap:12px; text-align:left; background:rgba(255,255,255,.05); border:1.2px solid var(--border); border-radius:16px; padding:14px 16px; margin-bottom:28px;">
+      <span style="font-size:20px;">💡</span>
+      <p style="font-size:12.5px; color:var(--text-dim); line-height:1.6;">Login karein → koi bhi sawal poochein → apni progress khud dekhein. Bas itna hi asaan hai!</p>
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:30px;">
       <span style="height:1px; width:36px; background:var(--border-strong);"></span>
-      <p style="color:var(--text-faint); font-size:12.5px; font-family:var(--font-mono); letter-spacing:0.03em;">5 Nov 🎂 aapka din · 8 Sep 🎂 mera</p>
+      <p style="color:var(--text-faint); font-size:12px; font-family:var(--font-mono); letter-spacing:0.03em;">5 Nov 🎂 aapka din · 8 Sep 🎂 mera</p>
       <span style="height:1px; width:36px; background:var(--border-strong);"></span>
     </div>
 
@@ -883,9 +912,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 const seharWelcome = document.getElementById('seharWelcome');
 const seharWelcomeCard = document.getElementById('seharWelcomeCard');
 const seharEnterBtn = document.getElementById('seharEnterBtn');
+const seharReplayBtn = document.getElementById('seharReplayBtn');
 seharWelcome.style.transition = 'opacity .5s ease';
 seharWelcomeCard.style.animation = 'seharSpinIn 1.15s cubic-bezier(.2,.8,.25,1) forwards';
+
+function speakSeharWelcome() {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const msg = new SpeechSynthesisUtterance('Welcome Sehar, and Sehar army!');
+  msg.rate = 0.92;
+  msg.pitch = 1.15;
+  const voices = window.speechSynthesis.getVoices();
+  const niceVoice = voices.find(v => v.lang === 'en-GB') || voices.find(v => v.lang === 'en-IN') || voices[0];
+  if (niceVoice) msg.voice = niceVoice;
+  window.speechSynthesis.speak(msg);
+}
+// Try right away; some browsers need voices to finish loading first
+setTimeout(speakSeharWelcome, 600);
+if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
+seharReplayBtn.addEventListener('click', speakSeharWelcome);
+
 seharEnterBtn.addEventListener('click', () => {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
   seharWelcome.style.opacity = '0';
   setTimeout(() => { seharWelcome.style.display = 'none'; }, 500);
 });
