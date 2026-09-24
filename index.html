@@ -298,7 +298,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .tools-grid{ grid-template-columns:1fr; }
   .waitlist{ margin:0 16px; padding:44px 24px; border-radius:24px; }
   .footer-top{ flex-direction:column; }
-  #seharReplayBtn{ top:18px !important; right:18px !important; }
   #seharWelcomeCard{ padding:100px 20px 60px !important; }
 }
 </style>
@@ -366,8 +365,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   <div aria-hidden="true" style="position:fixed; inset:0; z-index:4; display:flex; align-items:center; justify-content:center; pointer-events:none;">
     <span style="font-family:'Playfair Display', serif; font-style:italic; font-weight:700; font-size:120px; background:linear-gradient(135deg, var(--cyan), var(--pink), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 28px rgba(255,255,255,.28)); opacity:0; animation:seharSGlow 2s ease-in-out .3s forwards;">S</span>
   </div>
-
-  <button type="button" id="seharReplayBtn" aria-label="Awaaz dobara sunein" style="position:fixed; top:28px; right:28px; width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,.06); border:1.2px solid rgba(255,255,255,.16); color:var(--text-dim); display:grid; place-items:center; font-size:14px; z-index:5; transition:background .25s ease, border-color .25s ease;">🔉</button>
 
   <div id="seharWelcomeCard" style="position:relative; z-index:3; min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:130px 26px 80px;">
 
@@ -466,14 +463,14 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section class="hero" id="top">
   <div class="wrap hero-inner">
     <div class="hero-copy reveal">
-      <span class="eyebrow">Har Class · Har Subject · AI Tutor</span>
-      <h1>Jahan raah bhatko,<br>wahi <span class="grad-text">rehnuma</span> mil jaye.</h1>
-      <p class="hero-sub">Rehnuma tumhara concept samjhata hai, MCQs practice karwata hai, aur bataata hai exactly kahan practice ki zaroorat hai — Primary se Entry Test (MDCAT/ECAT) tak, sab ek jagah.</p>
+      <span class="eyebrow" data-i18n="heroEyebrow">Har Class · Har Subject · AI Tutor</span>
+      <h1 data-i18n="heroTitle">Jahan raah bhatko,<br>wahi <span class="grad-text">rehnuma</span> mil jaye.</h1>
+      <p class="hero-sub" data-i18n="heroSub">Rehnuma tumhara concept samjhata hai, MCQs practice karwata hai, aur bataata hai exactly kahan practice ki zaroorat hai — Primary se Entry Test (MDCAT/ECAT) tak, sab ek jagah.</p>
       <div class="hero-ctas">
-        <a href="#waitlist" class="btn btn-primary btn-lg">Waitlist mein shamil ho</a>
-        <a href="#demo" class="btn btn-outline btn-lg">Live demo try karo</a>
+        <a href="#waitlist" class="btn btn-primary btn-lg" data-i18n="heroCta1">Waitlist mein shamil ho</a>
+        <a href="#demo" class="btn btn-outline btn-lg" data-i18n="heroCta2">Live demo try karo</a>
       </div>
-      <p class="hero-note">Abhi beta mein hai · First 500 logon ko 1 mahina free milega</p>
+      <p class="hero-note" data-i18n="heroNote">Abhi beta mein hai · First 500 logon ko 1 mahina free milega</p>
     </div>
 
     <div class="hero-visual reveal" aria-hidden="true">
@@ -499,7 +496,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <div class="report-divider" style="margin:0 24px;"></div>
         <div class="report-flag">
           <span class="report-flag-icon">!</span>
-          <span>Is hafte <strong>Electrostatics</strong> par focus karo — sabse weak topic hai.</span>
+          <span data-i18n="heroReportFlag">Is hafte <strong>Electrostatics</strong> par focus karo — sabse weak topic hai.</span>
         </div>
       </div>
     </div>
@@ -509,29 +506,29 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section id="problem">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Asal masla</span>
-      <h2>Tuition abhi bhi guess-work jaisi lagti hai</h2>
+      <span class="eyebrow" data-i18n="problemEyebrow">Asal masla</span>
+      <h2 data-i18n="problemTitle">Tuition abhi bhi guess-work jaisi lagti hai</h2>
       <p>Class mein sab ek hi speed se parhte hain — lekin tumhari weak topics kisi aur ki nahi hoti.</p>
     </div>
     <div class="compare-grid">
       <div class="compare-card old reveal">
-        <span class="compare-label">Purana tareeqa</span>
-        <h3>Tuition academy + Guess paper</h3>
+        <span class="compare-label" data-i18n="compareOldLabel">Purana tareeqa</span>
+        <h3 data-i18n="compareOldTitle">Tuition academy + Guess paper</h3>
         <ul class="compare-list">
-          <li><span class="compare-mark">✕</span>Poori class same pace par parhti hai, chahe tum kisi topic mein weak ho ya strong</li>
-          <li><span class="compare-mark">✕</span>Doubt poochne ke liye agle lecture tak wait karna padta hai</li>
-          <li><span class="compare-mark">✕</span>Pata nahi chalta exactly kaunsa topic revise karna hai</li>
-          <li><span class="compare-mark">✕</span>English-heavy content, concept samajhne mein waqt lagta hai</li>
+          <li><span class="compare-mark">✕</span><span data-i18n="compareOld1">Poori class same pace par parhti hai, chahe tum kisi topic mein weak ho ya strong</span></li>
+          <li><span class="compare-mark">✕</span><span data-i18n="compareOld2">Doubt poochne ke liye agle lecture tak wait karna padta hai</span></li>
+          <li><span class="compare-mark">✕</span><span data-i18n="compareOld3">Pata nahi chalta exactly kaunsa topic revise karna hai</span></li>
+          <li><span class="compare-mark">✕</span><span data-i18n="compareOld4">English-heavy content, concept samajhne mein waqt lagta hai</span></li>
         </ul>
       </div>
       <div class="compare-card new reveal">
-        <span class="compare-label">Rehnuma ke sath</span>
-        <h3>AI jo tumhari class aur pace samjhe</h3>
+        <span class="compare-label" data-i18n="compareNewLabel">Rehnuma ke sath</span>
+        <h3 data-i18n="compareNewTitle">AI jo tumhari class aur pace samjhe</h3>
         <ul class="compare-list">
-          <li><span class="compare-mark">✓</span>Jo topic weak hai usi pe zyada MCQs milte hain — automatic</li>
-          <li><span class="compare-mark">✓</span>Doubt raat 2 baje bhi ho, foran jawab milta hai</li>
-          <li><span class="compare-mark">✓</span>Har topic ka exact weak % dikhta hai — guess nahi, data</li>
-          <li><span class="compare-mark">✓</span>Roman Urdu + English mix mein, tumhari class ke level par samjhaya jata hai</li>
+          <li><span class="compare-mark">✓</span><span data-i18n="compareNew1">Jo topic weak hai usi pe zyada MCQs milte hain — automatic</span></li>
+          <li><span class="compare-mark">✓</span><span data-i18n="compareNew2">Doubt raat 2 baje bhi ho, foran jawab milta hai</span></li>
+          <li><span class="compare-mark">✓</span><span data-i18n="compareNew3">Har topic ka exact weak % dikhta hai — guess nahi, data</span></li>
+          <li><span class="compare-mark">✓</span><span data-i18n="compareNew4">Roman Urdu + English mix mein, tumhari class ke level par samjhaya jata hai</span></li>
         </ul>
       </div>
     </div>
@@ -541,31 +538,31 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section class="tools" id="tools">
   <div class="wrap">
     <div class="section-head center reveal">
-      <span class="eyebrow">Kya milta hai</span>
-      <h2>Teen tools, jo abhi sabse zyada zaroori hain</h2>
-      <p>Hum poori cheez ek sath nahi bana rahe — pehle wo teen cheezein jo tumhara sabse zyada waqt bachati hain.</p>
+      <span class="eyebrow" data-i18n="toolsEyebrow">Kya milta hai</span>
+      <h2 data-i18n="toolsTitle">Teen tools, jo abhi sabse zyada zaroori hain</h2>
+      <p data-i18n="toolsSub">Hum poori cheez ek sath nahi bana rahe — pehle wo teen cheezein jo tumhara sabse zyada waqt bachati hain.</p>
     </div>
     <div class="tools-grid">
       <article class="tool-card reveal">
-        <span class="tool-qnum">01 — Doubt Solver</span>
+        <span class="tool-qnum" data-i18n="tool1Num">01 — Doubt Solver</span>
         <div class="tool-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H9l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.7.2-1.2.7-1.2 1.4v.3M11.5 16h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
-        <h3>Concept Doubt Solver</h3>
-        <p>Koi bhi Biology, Chemistry ya Physics ka concept poocho — AI Roman Urdu mein simple kar ke samjhata hai, misalon ke sath.</p>
-        <div class="tool-example">"Active transport aur diffusion mein kya farq hai?"</div>
+        <h3 data-i18n="tool1Title">Concept Doubt Solver</h3>
+        <p data-i18n="tool1Desc">Koi bhi Biology, Chemistry ya Physics ka concept poocho — AI Roman Urdu mein simple kar ke samjhata hai, misalon ke sath.</p>
+        <div class="tool-example" data-i18n="tool1Example">"Active transport aur diffusion mein kya farq hai?"</div>
       </article>
       <article class="tool-card reveal">
-        <span class="tool-qnum">02 — MCQ Generator</span>
+        <span class="tool-qnum" data-i18n="tool2Num">02 — MCQ Generator</span>
         <div class="tool-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="7" cy="17" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M13 7h7M13 17h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <h3>MCQ Practice Generator</h3>
-        <p>Koi topic chuno — AI foran past-paper-style MCQs generate karta hai, mushkil level tumhari practice se khud adjust hota hai.</p>
-        <div class="tool-example">Topic: "Enzyme Kinetics" → 10 MCQs, 3 minute mein</div>
+        <h3 data-i18n="tool2Title">MCQ Practice Generator</h3>
+        <p data-i18n="tool2Desc">Koi topic chuno — AI foran past-paper-style MCQs generate karta hai, mushkil level tumhari practice se khud adjust hota hai.</p>
+        <div class="tool-example" data-i18n="tool2Example">Topic: "Enzyme Kinetics" → 10 MCQs, 3 minute mein</div>
       </article>
       <article class="tool-card reveal">
-        <span class="tool-qnum">03 — Weak Area Tracker</span>
+        <span class="tool-qnum" data-i18n="tool3Num">03 — Weak Area Tracker</span>
         <div class="tool-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M11 20V4M18 20v-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
-        <h3>Weak Area Tracker</h3>
-        <p>Har ghalat jawab record hota hai. Rehnuma bataata hai exactly kaunsa chapter, kaunsa concept dobara parhna hai.</p>
-        <div class="tool-example">"Physics → Electrostatics: 41% — is week yahin focus karo"</div>
+        <h3 data-i18n="tool3Title">Weak Area Tracker</h3>
+        <p data-i18n="tool3Desc">Har ghalat jawab record hota hai. Rehnuma bataata hai exactly kaunsa chapter, kaunsa concept dobara parhna hai.</p>
+        <div class="tool-example" data-i18n="tool3Example">"Physics → Electrostatics: 41% — is week yahin focus karo"</div>
       </article>
     </div>
   </div>
@@ -574,45 +571,45 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section id="subjects">
   <div class="wrap">
     <div class="section-head center reveal">
-      <span class="eyebrow">Coverage</span>
-      <h2>Har class, har level ke liye</h2>
-      <p>Primary se lekar entry test tak — Rehnuma tumhari class ke hisaab se samjhata hai.</p>
+      <span class="eyebrow" data-i18n="subjectsEyebrow">Coverage</span>
+      <h2 data-i18n="subjectsTitle">Har class, har level ke liye</h2>
+      <p data-i18n="subjectsSub">Primary se lekar entry test tak — Rehnuma tumhari class ke hisaab se samjhata hai.</p>
     </div>
     <div class="tools-grid" style="grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));">
       <article class="tool-card reveal" style="padding:22px 16px;">
         <div class="tool-icon" style="color:var(--lime); background:rgba(180,255,60,.14); border-color:rgba(180,255,60,.35); width:44px; height:44px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3c-4 3-6 6-6 10a6 6 0 0 0 12 0c0-4-2-7-6-10Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         </div>
-        <h3 style="font-size:15.5px;">Primary</h3>
-        <p style="font-size:13px;">Class 1-5, sab subjects</p>
+        <h3 style="font-size:15.5px;" data-i18n="subjPrimaryTitle">Primary</h3>
+        <p style="font-size:13px;" data-i18n="subjPrimaryDesc">Class 1-5, sab subjects</p>
       </article>
       <article class="tool-card reveal" style="padding:22px 16px;">
         <div class="tool-icon" style="color:var(--cyan); background:rgba(0,229,255,.14); border-color:rgba(0,229,255,.35); width:44px; height:44px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v5.5L5 18a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9.5V3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         </div>
-        <h3 style="font-size:15.5px;">Middle</h3>
-        <p style="font-size:13px;">Class 6-8, sab subjects</p>
+        <h3 style="font-size:15.5px;" data-i18n="subjMiddleTitle">Middle</h3>
+        <p style="font-size:13px;" data-i18n="subjMiddleDesc">Class 6-8, sab subjects</p>
       </article>
       <article class="tool-card reveal" style="padding:22px 16px;">
         <div class="tool-icon" style="color:var(--gold); background:rgba(255,194,75,.14); border-color:rgba(255,194,75,.35); width:44px; height:44px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="12" rx="9" ry="4" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="12" rx="9" ry="4" stroke="currentColor" stroke-width="1.6" transform="rotate(60 12 12)"/></svg>
         </div>
-        <h3 style="font-size:15.5px;">Matric / O-Levels</h3>
-        <p style="font-size:13px;">Class 9-10, sab subjects</p>
+        <h3 style="font-size:15.5px;" data-i18n="subjMatricTitle">Matric / O-Levels</h3>
+        <p style="font-size:13px;" data-i18n="subjMatricDesc">Class 9-10, sab subjects</p>
       </article>
       <article class="tool-card reveal" style="padding:22px 16px;">
         <div class="tool-icon" style="color:var(--pink); background:rgba(255,46,154,.14); border-color:rgba(255,46,154,.35); width:44px; height:44px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H9l-4 4V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         </div>
-        <h3 style="font-size:15.5px;">Inter / A-Levels</h3>
-        <p style="font-size:13px;">Class 11-12, sab subjects</p>
+        <h3 style="font-size:15.5px;" data-i18n="subjInterTitle">Inter / A-Levels</h3>
+        <p style="font-size:13px;" data-i18n="subjInterDesc">Class 11-12, sab subjects</p>
       </article>
       <article class="tool-card reveal" style="padding:22px 16px;">
         <div class="tool-icon" style="color:var(--cyan); background:rgba(0,229,255,.14); border-color:rgba(0,229,255,.35); width:44px; height:44px;">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2 2 8l10 6 10-6-10-6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M2 8v8l10 6 10-6V8" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
         </div>
-        <h3 style="font-size:15.5px;">Entry Test</h3>
-        <p style="font-size:13px;">MDCAT, ECAT prep</p>
+        <h3 style="font-size:15.5px;" data-i18n="subjEntryTitle">Entry Test</h3>
+        <p style="font-size:13px;" data-i18n="subjEntryDesc">MDCAT, ECAT prep</p>
       </article>
     </div>
   </div>
@@ -622,9 +619,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section id="demo">
   <div class="wrap">
     <div class="section-head center reveal">
-      <span class="eyebrow">Try karo, mockup nahi</span>
-      <h2>Ye asal AI hai — abhi test karo</h2>
-      <p>Neeche koi bhi doubt poocho ya koi topic do MCQs ke liye — jawab tumhare apne backend se aa raha hai.</p>
+      <span class="eyebrow" data-i18n="demoEyebrow">Try karo, mockup nahi</span>
+      <h2 data-i18n="demoTitle">Ye asal AI hai — abhi test karo</h2>
+      <p data-i18n="demoSub">Neeche koi bhi doubt poocho ya koi topic do MCQs ke liye — jawab tumhare apne backend se aa raha hai.</p>
     </div>
 
     <div class="demo-shell reveal" style="max-width:640px; margin:0 auto; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); overflow:hidden;">
@@ -651,6 +648,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <button type="button" class="btn btn-outline" id="micBtn" style="flex-shrink:0; padding:14px 16px;" title="Bol kar poocho" aria-label="Voice input">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             </button>
+            <button type="button" class="btn btn-outline" id="imageGenBtn" style="flex-shrink:0; padding:14px 16px;" title="AI se pic banwayein" aria-label="Generate image">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.8" stroke="currentColor" stroke-width="1.6"/><path d="m4 17 5-5 3.5 3.5L16 11l4 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
             <button class="btn btn-primary" id="doubtBtn" data-i18n="askButton" style="flex-shrink:0;">Poocho</button>
           </div>
           <p id="micStatus" style="font-family:var(--font-mono); font-size:11.5px; color:var(--cyan); margin-top:10px; display:none;">🎙️ Sun rahe hain... bolein</p>
@@ -676,24 +676,24 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section class="how" id="how">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Tareeqa</span>
-      <h2>Exam-day jaisa simple, roz ke liye</h2>
+      <span class="eyebrow" data-i18n="howEyebrow">Tareeqa</span>
+      <h2 data-i18n="howTitle">Exam-day jaisa simple, roz ke liye</h2>
     </div>
     <div class="how-steps">
       <div class="how-step reveal">
         <div class="how-num">1</div>
-        <h3>Apna weak topic chuno</h3>
-        <p>Ya khud batao, ya Rehnuma tumhare pichle attempts se suggest karega kaunsa topic aaj practice karna hai.</p>
+        <h3 data-i18n="how1Title">Apna weak topic chuno</h3>
+        <p data-i18n="how1Desc">Ya khud batao, ya Rehnuma tumhare pichle attempts se suggest karega kaunsa topic aaj practice karna hai.</p>
       </div>
       <div class="how-step reveal">
         <div class="how-num">2</div>
-        <h3>Solve karo, doubt poocho</h3>
-        <p>MCQs solve karo — jahan atko, foran doubt poocho. Koi wait nahi, koi judgement nahi.</p>
+        <h3 data-i18n="how2Title">Solve karo, doubt poocho</h3>
+        <p data-i18n="how2Desc">MCQs solve karo — jahan atko, foran doubt poocho. Koi wait nahi, koi judgement nahi.</p>
       </div>
       <div class="how-step reveal">
         <div class="how-num">3</div>
-        <h3>Apni progress dekho</h3>
-        <p>Har hafta ek clear report — kaunse topics strong ho gaye, kaunse abhi bhi kaam maangte hain.</p>
+        <h3 data-i18n="how3Title">Apni progress dekho</h3>
+        <p data-i18n="how3Desc">Har hafta ek clear report — kaunse topics strong ho gaye, kaunse abhi bhi kaam maangte hain.</p>
       </div>
     </div>
   </div>
@@ -703,9 +703,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section id="progress">
   <div class="wrap">
     <div class="section-head center reveal">
-      <span class="eyebrow">Sirf tumhare liye</span>
-      <h2>Apna weak-area report dekho</h2>
-      <p>Ye wo cheez hai jo koi general AI chatbot nahi deta — tumhari apni practice se banaya gaya, tumhare exact weak topics ka data.</p>
+      <span class="eyebrow" data-i18n="progressEyebrow">Sirf tumhare liye</span>
+      <h2 data-i18n="progressTitle">Apna weak-area report dekho</h2>
+      <p data-i18n="progressSub">Ye wo cheez hai jo koi general AI chatbot nahi deta — tumhari apni practice se banaya gaya, tumhare exact weak topics ka data.</p>
     </div>
 
     <div id="progressLoggedOut" style="max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
@@ -714,18 +714,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     </div>
 
     <div id="progressLoggedIn" style="display:none; max-width:800px; margin:0 auto;">
-      <div id="progressLoading" style="text-align:center; color:var(--text-dim); font-size:14.5px; padding:30px 0;">Progress load ho raha hai...</div>
+      <div id="progressLoading" data-i18n="progressLoadingText" style="text-align:center; color:var(--text-dim); font-size:14.5px; padding:30px 0;">Progress load ho raha hai...</div>
       <div id="progressEmpty" style="display:none; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
-        <p style="color:var(--text-dim); font-size:15px;">Abhi tak koi MCQ attempt nahi mila. "Live Demo" mein jaake kuch MCQs solve karein, phir yahan report dikhega.</p>
-        <a href="#demo" class="btn btn-outline" style="margin-top:16px;">MCQs practice karo</a>
+        <p data-i18n="progressEmptyText" style="color:var(--text-dim); font-size:15px;">Abhi tak koi MCQ attempt nahi mila. "Live Demo" mein jaake kuch MCQs solve karein, phir yahan report dikhega.</p>
+        <a href="#demo" class="btn btn-outline" style="margin-top:16px;" data-i18n="practiceNowBtn">MCQs practice karo</a>
       </div>
       <div id="progressContent" style="display:none;">
         <div style="background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); padding:28px 26px; margin-bottom:24px;">
-          <h3 style="font-size:18px; margin-bottom:18px;">Subject-wise attempts</h3>
+          <h3 style="font-size:18px; margin-bottom:18px;" data-i18n="progressSubjectWise">Subject-wise attempts</h3>
           <div id="progressBars"></div>
         </div>
         <div style="background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:24px 26px;">
-          <h3 style="font-size:16px; margin-bottom:14px;">Recent attempts</h3>
+          <h3 style="font-size:16px; margin-bottom:14px;" data-i18n="progressRecent">Recent attempts</h3>
           <div id="progressList"></div>
         </div>
       </div>
@@ -737,9 +737,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section id="leaderboard">
   <div class="wrap">
     <div class="section-head center reveal">
-      <span class="eyebrow">Apni class ke sath compete karo</span>
-      <h2>Leaderboard</h2>
-      <p>Jitna practice karo, utna rank aage — sirf apni class ke students ke sath fair muqabla.</p>
+      <span class="eyebrow" data-i18n="leaderboardEyebrow">Apni class ke sath compete karo</span>
+      <h2 data-i18n="leaderboardTitle">Leaderboard</h2>
+      <p data-i18n="leaderboardSub">Jitna practice karo, utna rank aage — sirf apni class ke students ke sath fair muqabla.</p>
     </div>
 
     <div id="leaderboardLoggedOut" style="max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
@@ -748,10 +748,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     </div>
 
     <div id="leaderboardLoggedIn" style="display:none; max-width:600px; margin:0 auto;">
-      <div id="leaderboardLoading" style="text-align:center; color:var(--text-dim); font-size:14.5px; padding:30px 0;">Leaderboard load ho raha hai...</div>
+      <div id="leaderboardLoading" data-i18n="leaderboardLoadingText" style="text-align:center; color:var(--text-dim); font-size:14.5px; padding:30px 0;">Leaderboard load ho raha hai...</div>
       <div id="leaderboardEmpty" style="display:none; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
-        <p style="color:var(--text-dim); font-size:15px;">Abhi koi MCQ attempt nahi mila tumhari class mein. Pehle practice karo — leaderboard mein aane wale pehle student bano!</p>
-        <a href="#demo" class="btn btn-outline" style="margin-top:16px;">MCQs practice karo</a>
+        <p data-i18n="leaderboardEmptyText" style="color:var(--text-dim); font-size:15px;">Abhi koi MCQ attempt nahi mila tumhari class mein. Pehle practice karo — leaderboard mein aane wale pehle student bano!</p>
+        <a href="#demo" class="btn btn-outline" style="margin-top:16px;" data-i18n="practiceNowBtn">MCQs practice karo</a>
       </div>
       <div id="leaderboardContent" style="display:none; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); padding:10px 8px;">
         <div id="leaderboardRows"></div>
@@ -763,34 +763,34 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section class="pricing" id="pricing">
   <div class="wrap">
     <div class="section-head center reveal">
-      <span class="eyebrow">Pricing</span>
-      <h2>Academy ke ek mahine se sasta</h2>
-      <p>Launch ke waqt ye pricing hogi — waitlist walon ke liye pehla mahina free.</p>
+      <span class="eyebrow" data-i18n="pricingEyebrow">Pricing</span>
+      <h2 data-i18n="pricingTitle">Academy ke ek mahine se sasta</h2>
+      <p data-i18n="pricingSub">Launch ke waqt ye pricing hogi — waitlist walon ke liye pehla mahina free.</p>
     </div>
     <div class="pricing-grid">
       <div class="price-card reveal">
-        <h3>Free</h3>
-        <p class="price-desc">Try karne ke liye</p>
-        <div class="price-amount">Rs 0<span class="per">/mahina</span></div>
+        <h3 data-i18n="priceFreeTitle">Free</h3>
+        <p class="price-desc" data-i18n="priceFreeDesc">Try karne ke liye</p>
+        <div class="price-amount">Rs 0<span class="per" data-i18n="pricePerMonth">/mahina</span></div>
         <ul class="price-list">
-          <li><span class="price-check">✓</span>5 doubts / din</li>
-          <li><span class="price-check">✓</span>10 MCQs / din</li>
-          <li><span class="price-check">✓</span>Basic weak-area report</li>
+          <li><span class="price-check">✓</span><span data-i18n="priceFree1">5 doubts / din</span></li>
+          <li><span class="price-check">✓</span><span data-i18n="priceFree2">10 MCQs / din</span></li>
+          <li><span class="price-check">✓</span><span data-i18n="priceFree3">Basic weak-area report</span></li>
         </ul>
-        <a href="#waitlist" class="btn btn-outline btn-block">Waitlist join karo</a>
+        <a href="#waitlist" class="btn btn-outline btn-block" data-i18n="waitlistJoin">Waitlist join karo</a>
       </div>
       <div class="price-card featured reveal">
-        <span class="price-badge">Waitlist offer</span>
-        <h3>Pro</h3>
-        <p class="price-desc">Full access ke liye</p>
-        <div class="price-amount">Rs 499<span class="per">/mahina</span></div>
+        <span class="price-badge" data-i18n="priceBadge">Waitlist offer</span>
+        <h3 data-i18n="pricePro">Pro</h3>
+        <p class="price-desc" data-i18n="priceProDesc">Full access ke liye</p>
+        <div class="price-amount">Rs 499<span class="per" data-i18n="pricePerMonth">/mahina</span></div>
         <ul class="price-list">
-          <li><span class="price-check">✓</span>Unlimited doubts aur MCQs</li>
-          <li><span class="price-check">✓</span>Detailed weak-area tracking</li>
-          <li><span class="price-check">✓</span>Weekly progress report</li>
-          <li><span class="price-check">✓</span>Full past-paper MCQ bank</li>
+          <li><span class="price-check">✓</span><span data-i18n="pricePro1">Unlimited doubts aur MCQs</span></li>
+          <li><span class="price-check">✓</span><span data-i18n="pricePro2">Detailed weak-area tracking</span></li>
+          <li><span class="price-check">✓</span><span data-i18n="pricePro3">Weekly progress report</span></li>
+          <li><span class="price-check">✓</span><span data-i18n="pricePro4">Full past-paper MCQ bank</span></li>
         </ul>
-        <a href="#waitlist" class="btn btn-primary btn-block">Waitlist join karo</a>
+        <a href="#waitlist" class="btn btn-primary btn-block" data-i18n="waitlistJoin">Waitlist join karo</a>
       </div>
     </div>
   </div>
@@ -799,25 +799,25 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section class="faq" id="faq">
   <div class="wrap wrap-narrow">
     <div class="section-head reveal">
-      <span class="eyebrow">Sawal jawab</span>
+      <span class="eyebrow" data-i18n="faqEyebrow">Sawal jawab</span>
       <h2>FAQ</h2>
     </div>
     <div class="faq-list reveal">
       <div class="faq-item open">
-        <button class="faq-q">Rehnuma kab launch hoga?<svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <div class="faq-a"><p>Hum abhi beta build kar rahe hain. Waitlist join karne walon ko sabse pehle access milega, launch date confirm hote hi email/SMS se pata chal jayega.</p></div>
+        <button class="faq-q"><span data-i18n="faq1Q">Rehnuma kab launch hoga?</span><svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq1A">Hum abhi beta build kar rahe hain. Waitlist join karne walon ko sabse pehle access milega, launch date confirm hote hi email/SMS se pata chal jayega.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Kaunsi classes ke liye hai?<svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <div class="faq-a"><p>Rehnuma Primary (Class 1-5) se lekar Entry Test prep (MDCAT/ECAT) tak, har level ke students ke liye hai. Sign up karte waqt apni class batao, jawab usi level ke mutabiq milega.</p></div>
+        <button class="faq-q"><span data-i18n="faq2Q">Kaunsi classes ke liye hai?</span><svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq2A">Rehnuma Primary (Class 1-5) se lekar Entry Test prep (MDCAT/ECAT) tak, har level ke students ke liye hai. Sign up karte waqt apni class batao, jawab usi level ke mutabiq milega.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Kya ye tuition/academy ka replacement hai?<svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <div class="faq-a"><p>Nahi — Rehnuma tumhari tuition/academy ke sath, extra practice partner ke tor par kaam karta hai. Jab doubt ho ya practice chahiye ho, kabhi bhi available hai.</p></div>
+        <button class="faq-q"><span data-i18n="faq3Q">Kya ye tuition/academy ka replacement hai?</span><svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq3A">Nahi — Rehnuma tumhari tuition/academy ke sath, extra practice partner ke tor par kaam karta hai. Jab doubt ho ya practice chahiye ho, kabhi bhi available hai.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-q">Free trial mein kya milta hai?<svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        <div class="faq-a"><p>Free plan mein roz 5 doubts aur 10 MCQs milte hain, hamesha ke liye free. Waitlist ke pehle 500 logon ko launch par 1 mahina Pro free milega.</p></div>
+        <button class="faq-q"><span data-i18n="faq4Q">Free trial mein kya milta hai?</span><svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="faq-a"><p data-i18n="faq4A">Free plan mein roz 5 doubts aur 10 MCQs milte hain, hamesha ke liye free. Waitlist ke pehle 500 logon ko launch par 1 mahina Pro free milega.</p></div>
       </div>
     </div>
   </div>
@@ -826,15 +826,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <section id="waitlist" style="padding-top:20px;">
   <div class="waitlist reveal">
     <div class="wrap">
-      <span class="eyebrow" style="justify-content:center;">Beta launching soon</span>
-      <h2>Sabse pehle try karne walon mein shamil ho</h2>
-      <p>Apna email do — launch hote hi sabse pehle pata chalega, aur 1 mahina Pro free milega.</p>
+      <span class="eyebrow" style="justify-content:center;" data-i18n="waitlistEyebrow">Beta launching soon</span>
+      <h2 data-i18n="waitlistTitle">Sabse pehle try karne walon mein shamil ho</h2>
+      <p data-i18n="waitlistDesc">Apna email do — launch hote hi sabse pehle pata chalega, aur 1 mahina Pro free milega.</p>
       <form class="waitlist-form" id="waitlistForm" action="https://formspree.io/f/mppaykaj" method="POST">
         <input type="email" name="email" id="waitlistEmail" placeholder="you@example.com" aria-label="Email address" required />
         <button type="submit" class="btn btn-primary" id="waitlistSubmitBtn" data-i18n="waitlistJoin">Waitlist join karo</button>
       </form>
       <p class="waitlist-success" id="waitlistSuccess">Shukriya! Aap waitlist mein shamil ho gaye hain. 🎉</p>
-      <p class="waitlist-note">Koi spam nahi — sirf launch update.</p>
+      <p class="waitlist-note" data-i18n="waitlistNote">Koi spam nahi — sirf launch update.</p>
     </div>
   </div>
 </section>
@@ -848,23 +848,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <span class="logo-mark"><img src="data:image/png;base64,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" alt="Rehnuma logo" style="width:100%; height:100%; object-fit:contain; border-radius:11px;"></span>
           Rehnuma
         </a>
-        <p>Har class ke liye AI tutor — doubts solve karo, MCQs practice karo, apni weak spots pakdo.</p>
+        <p data-i18n="footerDesc">Har class ke liye AI tutor — doubts solve karo, MCQs practice karo, apni weak spots pakdo.</p>
       </div>
       <div class="footer-links">
         <div class="footer-col">
-          <h5>Product</h5>
-          <a href="#tools">Features</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#faq">FAQ</a>
+          <h5 data-i18n="footerProduct">Product</h5>
+          <a href="#tools" data-i18n="navFeatures">Features</a>
+          <a href="#pricing" data-i18n="navPricing">Pricing</a>
+          <a href="#faq" data-i18n="navFaq">FAQ</a>
         </div>
         <div class="footer-col">
-          <h5>Company</h5>
-          <button type="button">Hamare baray mein</button>
-          <button type="button">Contact</button>
+          <h5 data-i18n="footerCompany">Company</h5>
+          <button type="button" data-i18n="footerAbout">Hamare baray mein</button>
+          <button type="button" data-i18n="footerContact">Contact</button>
         </div>
       </div>
     </div>
-    <div class="footer-bottom">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
+    <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
   </div>
 </footer>
 
@@ -997,6 +997,83 @@ const translations = {
     loginSignupBtn: 'Login / Sign up',
     waitlistJoin: 'Join Waitlist', callEndBtn: 'End call',
     callIdle: 'Tap the mic to start talking', callListening: 'Listening...', callThinking: 'Javeria is thinking...', callSpeaking: 'Javeria is speaking...',
+    thinkingText: 'Thinking...', editSave: 'Save', editCancel: 'Cancel', errorGeneric: 'Something went wrong. Check the backend or try again.',
+    imageGenerating: 'Generating image...', imageFailed: 'Could not generate the image. Try again.',
+    heroEyebrow: 'Every Class · Every Subject · AI Tutor',
+    heroTitle: 'Wherever you lose your way,<br>that\'s where you\'ll find your <span class="grad-text">guide</span>.',
+    heroSub: 'Rehnuma explains your concepts, gets you practicing with MCQs, and shows you exactly where you need more practice — from Primary all the way to Entry Test (MDCAT/ECAT), all in one place.',
+    heroCta1: 'Join the waitlist', heroCta2: 'Try the live demo',
+    heroNote: 'Currently in beta · First 500 people get 1 month free',
+    heroReportFlag: 'Focus on <strong>Electrostatics</strong> this week — your weakest topic.',
+    problemEyebrow: 'The real problem', problemTitle: 'Tuition still feels like guesswork',
+    compareOldLabel: 'The old way', compareOldTitle: 'Tuition academy + guess papers',
+    compareOld1: "The whole class moves at the same pace, whether you're weak or strong in a topic",
+    compareOld2: 'You have to wait until the next lecture to ask a doubt',
+    compareOld3: 'You never know exactly which topic to revise',
+    compareOld4: 'English-heavy content takes longer to understand',
+    compareNewLabel: 'With Rehnuma', compareNewTitle: 'AI that understands your class and pace',
+    compareNew1: 'Weak topics automatically get more MCQs',
+    compareNew2: 'Doubt at 2am? You get an instant answer',
+    compareNew3: 'See your exact weak % on every topic — data, not guesswork',
+    compareNew4: 'Explained in a Roman Urdu + English mix, at your class level',
+    toolsEyebrow: 'What you get', toolsTitle: 'Three tools that matter most right now',
+    toolsSub: "We're not building everything at once — just the three things that save you the most time.",
+    tool1Num: '01 — Doubt Solver', tool1Title: 'Concept Doubt Solver',
+    tool1Desc: 'Ask any Biology, Chemistry or Physics concept — the AI explains it simply, with examples.',
+    tool1Example: '"What\'s the difference between active transport and diffusion?"',
+    tool2Num: '02 — MCQ Generator', tool2Title: 'MCQ Practice Generator',
+    tool2Desc: 'Pick a topic — the AI instantly generates past-paper-style MCQs, and difficulty adjusts to your practice.',
+    tool2Example: 'Topic: "Enzyme Kinetics" → 10 MCQs, in 3 minutes',
+    tool3Num: '03 — Weak Area Tracker', tool3Title: 'Weak Area Tracker',
+    tool3Desc: 'Every wrong answer is recorded. Rehnuma tells you exactly which chapter, which concept, needs revisiting.',
+    tool3Example: '"Physics → Electrostatics: 41% — focus here this week"',
+    subjectsEyebrow: 'Coverage', subjectsTitle: 'For every class, every level',
+    subjectsSub: 'From Primary all the way to entry test — Rehnuma explains things according to your class.',
+    subjPrimaryTitle: 'Primary', subjPrimaryDesc: 'Class 1-5, all subjects',
+    subjMiddleTitle: 'Middle', subjMiddleDesc: 'Class 6-8, all subjects',
+    subjMatricTitle: 'Matric / O-Levels', subjMatricDesc: 'Class 9-10, all subjects',
+    subjInterTitle: 'Inter / A-Levels', subjInterDesc: 'Class 11-12, all subjects',
+    subjEntryTitle: 'Entry Test', subjEntryDesc: 'MDCAT, ECAT prep',
+    demoEyebrow: 'Try it, not a mockup', demoTitle: 'This is real AI — test it now',
+    demoSub: 'Ask any doubt below, or give a topic for MCQs — the answer comes from your own backend.',
+    howEyebrow: 'How it works', howTitle: 'Simple as exam day, every day',
+    how1Title: 'Pick your weak topic',
+    how1Desc: 'Tell it yourself, or Rehnuma will suggest what to practice today based on your past attempts.',
+    how2Title: 'Solve, ask doubts',
+    how2Desc: 'Solve MCQs — wherever you get stuck, ask instantly. No waiting, no judgement.',
+    how3Title: 'See your progress',
+    how3Desc: 'A clear report every week — which topics got stronger, which still need work.',
+    progressEyebrow: 'Just for you', progressTitle: 'See your weak-area report',
+    progressSub: 'This is something no general AI chatbot gives you — built from your own practice, your exact weak topics.',
+    progressLoadingText: 'Loading progress...',
+    progressEmptyText: 'No MCQ attempts yet. Go to "Live Demo" and solve a few MCQs, then your report will appear here.',
+    practiceNowBtn: 'Practice MCQs', progressSubjectWise: 'Subject-wise attempts', progressRecent: 'Recent attempts',
+    leaderboardEyebrow: 'Compete with your class', leaderboardTitle: 'Leaderboard',
+    leaderboardSub: 'The more you practice, the higher you rank — a fair contest, only against your own class.',
+    leaderboardLoadingText: 'Loading leaderboard...',
+    leaderboardEmptyText: 'No MCQ attempts in your class yet. Practice first — be the first student on the leaderboard!',
+    pricingEyebrow: 'Pricing', pricingTitle: 'Cheaper than one month of academy',
+    pricingSub: 'This will be the pricing at launch — the first month is free for waitlist members.',
+    priceFreeTitle: 'Free', priceFreeDesc: 'To try it out', pricePerMonth: '/month',
+    priceFree1: '5 doubts / day', priceFree2: '10 MCQs / day', priceFree3: 'Basic weak-area report',
+    priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'For full access',
+    pricePro1: 'Unlimited doubts and MCQs', pricePro2: 'Detailed weak-area tracking',
+    pricePro3: 'Weekly progress report', pricePro4: 'Full past-paper MCQ bank',
+    faqEyebrow: 'Questions & Answers',
+    faq1Q: 'When will Rehnuma launch?',
+    faq1A: "We're currently building the beta. Waitlist members get access first — you'll hear by email/SMS as soon as the launch date is confirmed.",
+    faq2Q: 'Which classes is it for?',
+    faq2A: 'Rehnuma is for students of every level, from Primary (Class 1-5) to Entry Test prep (MDCAT/ECAT). Tell us your class when you sign up, and answers will match that level.',
+    faq3Q: 'Is this a replacement for tuition/academy?',
+    faq3A: "No — Rehnuma works alongside your tuition/academy, as an extra practice partner. It's available anytime you have a doubt or need practice.",
+    faq4Q: 'What do you get in the free trial?',
+    faq4A: 'The free plan gives you 5 doubts and 10 MCQs every day, free forever. The first 500 waitlist members get 1 month of Pro free at launch.',
+    waitlistEyebrow: 'Beta launching soon', waitlistTitle: 'Be among the first to try it',
+    waitlistDesc: "Give us your email — you'll be the first to know when we launch, and get 1 month of Pro free.",
+    waitlistNote: 'No spam — just launch updates.',
+    footerDesc: 'AI tutor for every class — solve doubts, practice MCQs, find your weak spots.',
+    footerProduct: 'Product', footerCompany: 'Company', footerAbout: 'About us', footerContact: 'Contact',
+    footerCopyright: '© 2026 Rehnuma. All rights reserved.',
   },
   ur: {
     navWhy: 'رحنما کیوں', navFeatures: 'خصوصیات', navSubjects: 'مضامین', navDemo: 'لائیو ڈیمو',
@@ -1016,6 +1093,83 @@ const translations = {
     loginSignupBtn: 'لاگ ان / سائن اپ',
     waitlistJoin: 'ویٹ لسٹ میں شامل ہوں', callEndBtn: 'کال ختم کریں',
     callIdle: 'بات کرنے کے لیے مائیک دبائیں', callListening: 'سن رہی ہوں...', callThinking: 'جاویریا سوچ رہی ہے...', callSpeaking: 'جاویریا بول رہی ہے...',
+    thinkingText: 'سوچ رہی ہوں...', editSave: 'محفوظ کریں', editCancel: 'منسوخ کریں', errorGeneric: 'کچھ مسئلہ ہو گیا۔ بیک اینڈ چیک کریں یا دوبارہ کوشش کریں۔',
+    imageGenerating: 'تصویر بن رہی ہے...', imageFailed: 'تصویر نہیں بن سکی۔ دوبارہ کوشش کریں۔',
+    heroEyebrow: 'ہر کلاس · ہر مضمون · اے آئی ٹیوٹر',
+    heroTitle: 'جہاں راستہ بھٹک جاؤ،<br>وہیں <span class="grad-text">رہنما</span> مل جائے۔',
+    heroSub: 'رہنما آپ کا concept سمجھاتا ہے، MCQs کی پریکٹس کرواتا ہے، اور بتاتا ہے کہ بالکل کہاں پریکٹس کی ضرورت ہے — پرائمری سے انٹری ٹیسٹ (MDCAT/ECAT) تک، سب ایک جگہ۔',
+    heroCta1: 'ویٹ لسٹ میں شامل ہوں', heroCta2: 'لائیو ڈیمو آزمائیں',
+    heroNote: 'ابھی بیٹا میں ہے · پہلے 500 لوگوں کو 1 مہینہ مفت ملے گا',
+    heroReportFlag: 'اس ہفتے <strong>الیکٹروسٹیٹکس</strong> پر توجہ دیں — سب سے کمزور موضوع ہے۔',
+    problemEyebrow: 'اصل مسئلہ', problemTitle: 'ٹیوشن اب بھی اندازے جیسی لگتی ہے',
+    compareOldLabel: 'پرانا طریقہ', compareOldTitle: 'ٹیوشن اکیڈمی + گیس پیپر',
+    compareOld1: 'پوری کلاس ایک ہی رفتار سے پڑھتی ہے، چاہے آپ کسی موضوع میں کمزور ہوں یا مضبوط',
+    compareOld2: 'سوال پوچھنے کے لیے اگلے لیکچر تک انتظار کرنا پڑتا ہے',
+    compareOld3: 'پتا نہیں چلتا بالکل کونسا موضوع دوبارہ پڑھنا ہے',
+    compareOld4: 'انگریزی بھاری مواد، concept سمجھنے میں وقت لگتا ہے',
+    compareNewLabel: 'رہنما کے ساتھ', compareNewTitle: 'اے آئی جو آپ کی کلاس اور رفتار سمجھے',
+    compareNew1: 'جو موضوع کمزور ہے اسی پر زیادہ MCQs ملتے ہیں — خودکار',
+    compareNew2: 'سوال رات 2 بجے بھی ہو، فوراً جواب ملتا ہے',
+    compareNew3: 'ہر موضوع کا اصل کمزور فیصد نظر آتا ہے — اندازہ نہیں، ڈیٹا',
+    compareNew4: 'رومن اردو + انگریزی ملا کر، آپ کی کلاس کے لیول پر سمجھایا جاتا ہے',
+    toolsEyebrow: 'کیا ملتا ہے', toolsTitle: 'تین ٹولز، جو ابھی سب سے زیادہ ضروری ہیں',
+    toolsSub: 'ہم ایک ساتھ سب کچھ نہیں بنا رہے — پہلے وہ تین چیزیں جو آپ کا سب سے زیادہ وقت بچاتی ہیں۔',
+    tool1Num: '01 — ڈاؤٹ سولور', tool1Title: 'کانسیپٹ ڈاؤٹ سولور',
+    tool1Desc: 'کوئی بھی بائیولوجی، کیمسٹری یا فزکس کا concept پوچھیں — اے آئی سادہ کر کے سمجھاتا ہے، مثالوں کے ساتھ۔',
+    tool1Example: '"ایکٹو ٹرانسپورٹ اور ڈفیوژن میں کیا فرق ہے؟"',
+    tool2Num: '02 — ایم سی کیو جنریٹر', tool2Title: 'ایم سی کیو پریکٹس جنریٹر',
+    tool2Desc: 'کوئی موضوع چنیں — اے آئی فوراً past-paper طرز کے MCQs بناتا ہے، مشکل لیول آپ کی پریکٹس سے خود ایڈجسٹ ہوتا ہے۔',
+    tool2Example: 'موضوع: "Enzyme Kinetics" → 10 MCQs، 3 منٹ میں',
+    tool3Num: '03 — ویک ایریا ٹریکر', tool3Title: 'ویک ایریا ٹریکر',
+    tool3Desc: 'ہر غلط جواب ریکارڈ ہوتا ہے۔ رہنما بتاتا ہے بالکل کونسا باب، کونسا concept دوبارہ پڑھنا ہے۔',
+    tool3Example: '"فزکس → الیکٹروسٹیٹکس: 41% — اس ہفتے یہیں توجہ دیں"',
+    subjectsEyebrow: 'کوریج', subjectsTitle: 'ہر کلاس، ہر لیول کے لیے',
+    subjectsSub: 'پرائمری سے لے کر انٹری ٹیسٹ تک — رہنما آپ کی کلاس کے حساب سے سمجھاتا ہے۔',
+    subjPrimaryTitle: 'پرائمری', subjPrimaryDesc: 'کلاس 1-5، تمام مضامین',
+    subjMiddleTitle: 'مڈل', subjMiddleDesc: 'کلاس 6-8، تمام مضامین',
+    subjMatricTitle: 'میٹرک / او لیولز', subjMatricDesc: 'کلاس 9-10، تمام مضامین',
+    subjInterTitle: 'انٹر / اے لیولز', subjInterDesc: 'کلاس 11-12، تمام مضامین',
+    subjEntryTitle: 'اینٹری ٹیسٹ', subjEntryDesc: 'MDCAT، ECAT کی تیاری',
+    demoEyebrow: 'آزمائیں، نمونہ نہیں', demoTitle: 'یہ اصل اے آئی ہے — ابھی ٹیسٹ کریں',
+    demoSub: 'نیچے کوئی بھی سوال پوچھیں یا MCQs کے لیے کوئی موضوع دیں — جواب آپ کے اپنے بیک اینڈ سے آ رہا ہے۔',
+    howEyebrow: 'طریقہ', howTitle: 'امتحان کے دن جیسا آسان، روز کے لیے',
+    how1Title: 'اپنا کمزور موضوع چنیں',
+    how1Desc: 'خود بتائیں، یا رہنما آپ کی پچھلی کوششوں سے تجویز کرے گا آج کونسا موضوع پریکٹس کرنا ہے۔',
+    how2Title: 'حل کریں، سوال پوچھیں',
+    how2Desc: 'MCQs حل کریں — جہاں اٹکیں، فوراً سوال پوچھیں۔ کوئی انتظار نہیں، کوئی judgement نہیں۔',
+    how3Title: 'اپنی پیش رفت دیکھیں',
+    how3Desc: 'ہر ہفتے ایک واضح رپورٹ — کونسے موضوعات مضبوط ہوئے، کونسوں پر ابھی بھی کام چاہیے۔',
+    progressEyebrow: 'صرف آپ کے لیے', progressTitle: 'اپنی کمزور جگہوں کی رپورٹ دیکھیں',
+    progressSub: 'یہ وہ چیز ہے جو کوئی عام اے آئی چیٹ بوٹ نہیں دیتا — آپ کی اپنی پریکٹس سے بنی، آپ کے اصل کمزور موضوعات کا ڈیٹا۔',
+    progressLoadingText: 'پیش رفت لوڈ ہو رہی ہے...',
+    progressEmptyText: 'ابھی تک کوئی MCQ کوشش نہیں ملی۔ "لائیو ڈیمو" میں جا کر کچھ MCQs حل کریں، پھر یہاں رپورٹ نظر آئے گی۔',
+    practiceNowBtn: 'MCQs پریکٹس کریں', progressSubjectWise: 'مضمون کے لحاظ سے کوششیں', progressRecent: 'حالیہ کوششیں',
+    leaderboardEyebrow: 'اپنی کلاس کے ساتھ مقابلہ کریں', leaderboardTitle: 'لیڈربورڈ',
+    leaderboardSub: 'جتنی پریکٹس کریں، اتنی رینک آگے — صرف اپنی کلاس کے طلبہ کے ساتھ منصفانہ مقابلہ۔',
+    leaderboardLoadingText: 'لیڈربورڈ لوڈ ہو رہا ہے...',
+    leaderboardEmptyText: 'ابھی آپ کی کلاس میں کوئی MCQ کوشش نہیں ملی۔ پہلے پریکٹس کریں — لیڈربورڈ میں آنے والے پہلے طالب علم بنیں!',
+    pricingEyebrow: 'قیمت', pricingTitle: 'اکیڈمی کے ایک مہینے سے سستا',
+    pricingSub: 'لانچ کے وقت یہ قیمت ہوگی — ویٹ لسٹ والوں کے لیے پہلا مہینہ مفت۔',
+    priceFreeTitle: 'مفت', priceFreeDesc: 'آزمانے کے لیے', pricePerMonth: '/مہینہ',
+    priceFree1: '5 سوالات / دن', priceFree2: '10 MCQs / دن', priceFree3: 'بنیادی ویک ایریا رپورٹ',
+    priceBadge: 'ویٹ لسٹ آفر', pricePro: 'پرو', priceProDesc: 'مکمل رسائی کے لیے',
+    pricePro1: 'لامحدود سوالات اور MCQs', pricePro2: 'تفصیلی ویک ایریا ٹریکنگ',
+    pricePro3: 'ہفتہ وار پیش رفت رپورٹ', pricePro4: 'مکمل past-paper MCQ بینک',
+    faqEyebrow: 'سوالات و جوابات',
+    faq1Q: 'رہنما کب لانچ ہوگا؟',
+    faq1A: 'ہم ابھی بیٹا بنا رہے ہیں۔ ویٹ لسٹ میں شامل ہونے والوں کو سب سے پہلے رسائی ملے گی، لانچ ڈیٹ کنفرم ہوتے ہی ای میل/ایس ایم ایس سے پتا چل جائے گا۔',
+    faq2Q: 'کونسی کلاسز کے لیے ہے؟',
+    faq2A: 'رہنما پرائمری (کلاس 1-5) سے لے کر اینٹری ٹیسٹ کی تیاری (MDCAT/ECAT) تک، ہر لیول کے طلبہ کے لیے ہے۔ سائن اپ کرتے وقت اپنی کلاس بتائیں، جواب اسی لیول کے مطابق ملے گا۔',
+    faq3Q: 'کیا یہ ٹیوشن/اکیڈمی کا متبادل ہے؟',
+    faq3A: 'نہیں — رہنما آپ کی ٹیوشن/اکیڈمی کے ساتھ، اضافی پریکٹس پارٹنر کے طور پر کام کرتا ہے۔ جب سوال ہو یا پریکٹس چاہیے ہو، کبھی بھی دستیاب ہے۔',
+    faq4Q: 'فری ٹرائل میں کیا ملتا ہے؟',
+    faq4A: 'فری پلان میں روز 5 سوالات اور 10 MCQs ملتے ہیں، ہمیشہ کے لیے مفت۔ ویٹ لسٹ کے پہلے 500 لوگوں کو لانچ پر 1 مہینہ پرو مفت ملے گا۔',
+    waitlistEyebrow: 'بیٹا جلد لانچ ہو رہا ہے', waitlistTitle: 'سب سے پہلے آزمانے والوں میں شامل ہوں',
+    waitlistDesc: 'اپنا ای میل دیں — لانچ ہوتے ہی سب سے پہلے پتا چلے گا، اور 1 مہینہ پرو مفت ملے گا۔',
+    waitlistNote: 'کوئی اسپیم نہیں — صرف لانچ اپڈیٹ۔',
+    footerDesc: 'ہر کلاس کے لیے اے آئی ٹیوٹر — سوالات حل کریں، MCQs پریکٹس کریں، اپنی کمزور جگہیں پکڑیں۔',
+    footerProduct: 'پروڈکٹ', footerCompany: 'کمپنی', footerAbout: 'ہمارے بارے میں', footerContact: 'رابطہ',
+    footerCopyright: '© 2026 رہنما۔ جملہ حقوق محفوظ ہیں۔',
   },
   roman: {
     navWhy: 'Kyun Rehnuma', navFeatures: 'Features', navSubjects: 'Subjects', navDemo: 'Live Demo',
@@ -1035,6 +1189,83 @@ const translations = {
     loginSignupBtn: 'Login / Sign up',
     waitlistJoin: 'Waitlist join karo', callEndBtn: 'Call khatam karein',
     callIdle: 'Tap the mic to start talking', callListening: 'Sun rahi hoon...', callThinking: 'Javeria soch rahi hai...', callSpeaking: 'Javeria bol rahi hai...',
+    thinkingText: 'Soch rahe hain...', editSave: 'Save', editCancel: 'Cancel', errorGeneric: 'Kuch masla ho gaya. Backend check karein ya dobara try karein.',
+    imageGenerating: 'Tasveer ban rahi hai...', imageFailed: 'Tasveer nahi ban saki. Dobara try karein.',
+    heroEyebrow: 'Har Class · Har Subject · AI Tutor',
+    heroTitle: 'Jahan raah bhatko,<br>wahi <span class="grad-text">rehnuma</span> mil jaye.',
+    heroSub: 'Rehnuma tumhara concept samjhata hai, MCQs practice karwata hai, aur bataata hai exactly kahan practice ki zaroorat hai — Primary se Entry Test (MDCAT/ECAT) tak, sab ek jagah.',
+    heroCta1: 'Waitlist mein shamil ho', heroCta2: 'Live demo try karo',
+    heroNote: 'Abhi beta mein hai · First 500 logon ko 1 mahina free milega',
+    heroReportFlag: 'Is hafte <strong>Electrostatics</strong> par focus karo — sabse weak topic hai.',
+    problemEyebrow: 'Asal masla', problemTitle: 'Tuition abhi bhi guess-work jaisi lagti hai',
+    compareOldLabel: 'Purana tareeqa', compareOldTitle: 'Tuition academy + Guess paper',
+    compareOld1: 'Poori class same pace par parhti hai, chahe tum kisi topic mein weak ho ya strong',
+    compareOld2: 'Doubt poochne ke liye agle lecture tak wait karna padta hai',
+    compareOld3: 'Pata nahi chalta exactly kaunsa topic revise karna hai',
+    compareOld4: 'English-heavy content, concept samajhne mein waqt lagta hai',
+    compareNewLabel: 'Rehnuma ke sath', compareNewTitle: 'AI jo tumhari class aur pace samjhe',
+    compareNew1: 'Jo topic weak hai usi pe zyada MCQs milte hain — automatic',
+    compareNew2: 'Doubt raat 2 baje bhi ho, foran jawab milta hai',
+    compareNew3: 'Har topic ka exact weak % dikhta hai — guess nahi, data',
+    compareNew4: 'Roman Urdu + English mix mein, tumhari class ke level par samjhaya jata hai',
+    toolsEyebrow: 'Kya milta hai', toolsTitle: 'Teen tools, jo abhi sabse zyada zaroori hain',
+    toolsSub: 'Hum poori cheez ek sath nahi bana rahe — pehle wo teen cheezein jo tumhara sabse zyada waqt bachati hain.',
+    tool1Num: '01 — Doubt Solver', tool1Title: 'Concept Doubt Solver',
+    tool1Desc: 'Koi bhi Biology, Chemistry ya Physics ka concept poocho — AI Roman Urdu mein simple kar ke samjhata hai, misalon ke sath.',
+    tool1Example: '"Active transport aur diffusion mein kya farq hai?"',
+    tool2Num: '02 — MCQ Generator', tool2Title: 'MCQ Practice Generator',
+    tool2Desc: 'Koi topic chuno — AI foran past-paper-style MCQs generate karta hai, mushkil level tumhari practice se khud adjust hota hai.',
+    tool2Example: 'Topic: "Enzyme Kinetics" → 10 MCQs, 3 minute mein',
+    tool3Num: '03 — Weak Area Tracker', tool3Title: 'Weak Area Tracker',
+    tool3Desc: 'Har ghalat jawab record hota hai. Rehnuma bataata hai exactly kaunsa chapter, kaunsa concept dobara parhna hai.',
+    tool3Example: '"Physics → Electrostatics: 41% — is week yahin focus karo"',
+    subjectsEyebrow: 'Coverage', subjectsTitle: 'Har class, har level ke liye',
+    subjectsSub: 'Primary se lekar entry test tak — Rehnuma tumhari class ke hisaab se samjhata hai.',
+    subjPrimaryTitle: 'Primary', subjPrimaryDesc: 'Class 1-5, sab subjects',
+    subjMiddleTitle: 'Middle', subjMiddleDesc: 'Class 6-8, sab subjects',
+    subjMatricTitle: 'Matric / O-Levels', subjMatricDesc: 'Class 9-10, sab subjects',
+    subjInterTitle: 'Inter / A-Levels', subjInterDesc: 'Class 11-12, sab subjects',
+    subjEntryTitle: 'Entry Test', subjEntryDesc: 'MDCAT, ECAT prep',
+    demoEyebrow: 'Try karo, mockup nahi', demoTitle: 'Ye asal AI hai — abhi test karo',
+    demoSub: 'Neeche koi bhi doubt poocho ya koi topic do MCQs ke liye — jawab tumhare apne backend se aa raha hai.',
+    howEyebrow: 'Tareeqa', howTitle: 'Exam-day jaisa simple, roz ke liye',
+    how1Title: 'Apna weak topic chuno',
+    how1Desc: 'Ya khud batao, ya Rehnuma tumhare pichle attempts se suggest karega kaunsa topic aaj practice karna hai.',
+    how2Title: 'Solve karo, doubt poocho',
+    how2Desc: 'MCQs solve karo — jahan atko, foran doubt poocho. Koi wait nahi, koi judgement nahi.',
+    how3Title: 'Apni progress dekho',
+    how3Desc: 'Har hafta ek clear report — kaunse topics strong ho gaye, kaunse abhi bhi kaam maangte hain.',
+    progressEyebrow: 'Sirf tumhare liye', progressTitle: 'Apna weak-area report dekho',
+    progressSub: 'Ye wo cheez hai jo koi general AI chatbot nahi deta — tumhari apni practice se banaya gaya, tumhare exact weak topics ka data.',
+    progressLoadingText: 'Progress load ho raha hai...',
+    progressEmptyText: 'Abhi tak koi MCQ attempt nahi mila. "Live Demo" mein jaake kuch MCQs solve karein, phir yahan report dikhega.',
+    practiceNowBtn: 'MCQs practice karo', progressSubjectWise: 'Subject-wise attempts', progressRecent: 'Recent attempts',
+    leaderboardEyebrow: 'Apni class ke sath compete karo', leaderboardTitle: 'Leaderboard',
+    leaderboardSub: 'Jitna practice karo, utna rank aage — sirf apni class ke students ke sath fair muqabla.',
+    leaderboardLoadingText: 'Leaderboard load ho raha hai...',
+    leaderboardEmptyText: 'Abhi koi MCQ attempt nahi mila tumhari class mein. Pehle practice karo — leaderboard mein aane wale pehle student bano!',
+    pricingEyebrow: 'Pricing', pricingTitle: 'Academy ke ek mahine se sasta',
+    pricingSub: 'Launch ke waqt ye pricing hogi — waitlist walon ke liye pehla mahina free.',
+    priceFreeTitle: 'Free', priceFreeDesc: 'Try karne ke liye', pricePerMonth: '/mahina',
+    priceFree1: '5 doubts / din', priceFree2: '10 MCQs / din', priceFree3: 'Basic weak-area report',
+    priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'Full access ke liye',
+    pricePro1: 'Unlimited doubts aur MCQs', pricePro2: 'Detailed weak-area tracking',
+    pricePro3: 'Weekly progress report', pricePro4: 'Full past-paper MCQ bank',
+    faqEyebrow: 'Sawal jawab',
+    faq1Q: 'Rehnuma kab launch hoga?',
+    faq1A: 'Hum abhi beta build kar rahe hain. Waitlist join karne walon ko sabse pehle access milega, launch date confirm hote hi email/SMS se pata chal jayega.',
+    faq2Q: 'Kaunsi classes ke liye hai?',
+    faq2A: 'Rehnuma Primary (Class 1-5) se lekar Entry Test prep (MDCAT/ECAT) tak, har level ke students ke liye hai. Sign up karte waqt apni class batao, jawab usi level ke mutabiq milega.',
+    faq3Q: 'Kya ye tuition/academy ka replacement hai?',
+    faq3A: 'Nahi — Rehnuma tumhari tuition/academy ke sath, extra practice partner ke tor par kaam karta hai. Jab doubt ho ya practice chahiye ho, kabhi bhi available hai.',
+    faq4Q: 'Free trial mein kya milta hai?',
+    faq4A: 'Free plan mein roz 5 doubts aur 10 MCQs milte hain, hamesha ke liye free. Waitlist ke pehle 500 logon ko launch par 1 mahina Pro free milega.',
+    waitlistEyebrow: 'Beta launching soon', waitlistTitle: 'Sabse pehle try karne walon mein shamil ho',
+    waitlistDesc: 'Apna email do — launch hote hi sabse pehle pata chalega, aur 1 mahina Pro free milega.',
+    waitlistNote: 'Koi spam nahi — sirf launch update.',
+    footerDesc: 'Har class ke liye AI tutor — doubts solve karo, MCQs practice karo, apni weak spots pakdo.',
+    footerProduct: 'Product', footerCompany: 'Company', footerAbout: 'Hamare baray mein', footerContact: 'Contact',
+    footerCopyright: '© 2026 Rehnuma. Sab huqooq mehfooz.',
   },
 };
 
@@ -1083,27 +1314,9 @@ applyLanguage(getCurrentLanguage());
 const seharWelcome = document.getElementById('seharWelcome');
 const seharWelcomeCard = document.getElementById('seharWelcomeCard');
 const seharEnterBtn = document.getElementById('seharEnterBtn');
-const seharReplayBtn = document.getElementById('seharReplayBtn');
 seharWelcome.style.transition = 'opacity .5s ease';
 
-function speakSeharWelcome() {
-  if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance('Welcome Sehar, and Sehar army!');
-  msg.rate = 0.92;
-  msg.pitch = 1.15;
-  const voices = window.speechSynthesis.getVoices();
-  const niceVoice = voices.find(v => v.lang === 'en-GB') || voices.find(v => v.lang === 'en-IN') || voices[0];
-  if (niceVoice) msg.voice = niceVoice;
-  window.speechSynthesis.speak(msg);
-}
-// Try right away; some browsers need voices to finish loading first
-setTimeout(speakSeharWelcome, 600);
-if (window.speechSynthesis) window.speechSynthesis.onvoiceschanged = () => {};
-seharReplayBtn.addEventListener('click', speakSeharWelcome);
-
 seharEnterBtn.addEventListener('click', () => {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
   seharWelcome.style.opacity = '0';
   setTimeout(() => { seharWelcome.style.display = 'none'; }, 500);
 });
@@ -1341,17 +1554,89 @@ function speakText(text) {
 let chatHistory = []; // [{role:'user'|'assistant', content:'...'}]
 let greetingShown = false;
 
-function appendMessage(role, text) {
+function appendMessage(role, text, opts) {
+  opts = opts || {};
   const bubble = document.createElement('div');
   const isUser = role === 'user';
   bubble.style.cssText =
-    'max-width:85%; margin-bottom:14px; padding:12px 16px; border-radius:14px; font-size:14.5px; line-height:1.65; white-space:pre-wrap; ' +
+    'position:relative; max-width:85%; margin-bottom:14px; padding:12px ' + (isUser ? '34px' : '16px') + ' 12px 16px; border-radius:14px; font-size:14.5px; line-height:1.65; white-space:pre-wrap; ' +
     (isUser
       ? 'margin-left:auto; background:var(--grad); color:#170D30; border-bottom-right-radius:4px;'
       : 'margin-right:auto; background:var(--bg-soft); color:var(--text); border:1.4px solid var(--border); border-bottom-left-radius:4px;');
-  bubble.textContent = text;
+
+  const textSpan = document.createElement('span');
+  textSpan.className = 'chat-bubble-text';
+  textSpan.textContent = text;
+  bubble.appendChild(textSpan);
+
+  if (isUser && !opts.noEdit) {
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'chat-edit-btn';
+    editBtn.setAttribute('aria-label', 'Edit message');
+    editBtn.textContent = '✏️';
+    editBtn.style.cssText = 'position:absolute; top:8px; right:8px; background:rgba(23,13,48,.14); border:none; border-radius:50%; width:22px; height:22px; font-size:11px; opacity:.6; cursor:pointer; color:#170D30; display:grid; place-items:center;';
+    editBtn.addEventListener('mouseenter', () => { editBtn.style.opacity = '1'; });
+    editBtn.addEventListener('mouseleave', () => { editBtn.style.opacity = '.6'; });
+    editBtn.addEventListener('click', () => startEditMessage(bubble, textSpan, editBtn));
+    bubble.appendChild(editBtn);
+  }
+
   chatMessages.appendChild(bubble);
   chatMessages.scrollTop = chatMessages.scrollHeight;
+  return bubble;
+}
+
+function startEditMessage(bubble, textSpan, editBtn) {
+  const dict = translations[getCurrentLanguage()] || translations.roman;
+  const originalText = textSpan.textContent;
+  editBtn.style.display = 'none';
+  textSpan.style.display = 'none';
+
+  const editArea = document.createElement('textarea');
+  editArea.value = originalText;
+  editArea.rows = 2;
+  editArea.style.cssText = 'width:100%; background:rgba(255,255,255,.2); border:1px solid rgba(23,13,48,.3); border-radius:8px; padding:8px; color:#170D30; font-size:14px; font-family:inherit; resize:none;';
+
+  const actions = document.createElement('div');
+  actions.style.cssText = 'display:flex; gap:8px; margin-top:8px; justify-content:flex-end;';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.textContent = dict.editCancel;
+  cancelBtn.style.cssText = 'font-size:12px; font-weight:700; padding:6px 13px; border-radius:8px; border:1px solid rgba(23,13,48,.3); background:none; color:#170D30; cursor:pointer;';
+
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.textContent = dict.editSave;
+  saveBtn.style.cssText = 'font-size:12px; font-weight:700; padding:6px 13px; border-radius:8px; border:none; background:#170D30; color:#fff; cursor:pointer;';
+
+  actions.appendChild(cancelBtn);
+  actions.appendChild(saveBtn);
+  bubble.appendChild(editArea);
+  bubble.appendChild(actions);
+  editArea.focus();
+
+  cancelBtn.addEventListener('click', () => {
+    editArea.remove();
+    actions.remove();
+    textSpan.style.display = '';
+    editBtn.style.display = '';
+  });
+
+  saveBtn.addEventListener('click', () => {
+    const newText = editArea.value.trim();
+    if (!newText) return;
+    const idx = parseInt(bubble.dataset.historyIndex, 10) || 0;
+    chatHistory = chatHistory.slice(0, idx);
+    let node = bubble;
+    while (node) {
+      const next = node.nextSibling;
+      node.remove();
+      node = next;
+    }
+    submitUserMessage(newText);
+  });
 }
 
 async function showTutorGreeting() {
@@ -1373,18 +1658,19 @@ async function showTutorGreeting() {
   }
 }
 
-async function askDoubt() {
-  const q = doubtInput.value.trim();
-  if (!q) return;
-  appendMessage('user', q);
-  chatHistory.push({ role: 'user', content: q });
-  doubtInput.value = '';
+async function submitUserMessage(question) {
+  const dict = translations[getCurrentLanguage()] || translations.roman;
+  const historyIndexAtSend = chatHistory.length;
+  const bubble = appendMessage('user', question);
+  bubble.dataset.historyIndex = historyIndexAtSend;
+  chatHistory.push({ role: 'user', content: question });
+
   doubtBtn.disabled = true; doubtBtn.textContent = '...';
 
   const thinking = document.createElement('div');
   thinking.id = 'thinkingBubble';
   thinking.style.cssText = 'max-width:85%; margin-bottom:14px; padding:12px 16px; border-radius:14px; font-size:14px; background:var(--bg-soft); border:1.4px solid var(--border); color:var(--text-faint);';
-  thinking.textContent = 'Soch rahe hain...';
+  thinking.textContent = dict.thinkingText;
   chatMessages.appendChild(thinking);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
@@ -1393,7 +1679,7 @@ async function askDoubt() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        question: q,
+        question,
         userId: localStorage.getItem('nishaan_user_id'),
         studentClass: localStorage.getItem('nishaan_student_class'),
         history: chatHistory.slice(0, -1),
@@ -1408,11 +1694,61 @@ async function askDoubt() {
     if (callActive) speakText(data.answer);
   } catch (e) {
     document.getElementById('thinkingBubble')?.remove();
-    appendMessage('assistant', 'Kuch masla ho gaya. Backend check karein ya dobara try karein.');
+    appendMessage('assistant', dict.errorGeneric, { noEdit: true });
   } finally {
-    doubtBtn.disabled = false; doubtBtn.textContent = 'Poocho';
+    doubtBtn.disabled = false; doubtBtn.textContent = dict.askButton;
   }
 }
+
+async function askDoubt() {
+  const q = doubtInput.value.trim();
+  if (!q) return;
+  doubtInput.value = '';
+  await submitUserMessage(q);
+}
+
+// ============ AI Image Generation (Pollinations — free, no API key) ============
+const imageGenBtn = document.getElementById('imageGenBtn');
+imageGenBtn.addEventListener('click', async () => {
+  const prompt = doubtInput.value.trim();
+  if (!prompt) return;
+  const dict = translations[getCurrentLanguage()] || translations.roman;
+  doubtInput.value = '';
+
+  const historyIndexAtSend = chatHistory.length;
+  const bubble = appendMessage('user', prompt);
+  bubble.dataset.historyIndex = historyIndexAtSend;
+  chatHistory.push({ role: 'user', content: '[Image request] ' + prompt });
+
+  const loadingBubble = document.createElement('div');
+  loadingBubble.style.cssText = 'max-width:85%; margin-bottom:14px; padding:12px 16px; border-radius:14px; font-size:14px; background:var(--bg-soft); border:1.4px solid var(--border); color:var(--text-faint);';
+  loadingBubble.textContent = dict.imageGenerating;
+  chatMessages.appendChild(loadingBubble);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  const seed = Math.floor(Math.random() * 100000);
+  const imgUrl = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=512&height=512&seed=' + seed + '&nologo=true';
+
+  const img = new Image();
+  img.onload = () => {
+    loadingBubble.remove();
+    const imgBubble = document.createElement('div');
+    imgBubble.style.cssText = 'max-width:85%; margin-bottom:14px; margin-right:auto;';
+    const imgEl = document.createElement('img');
+    imgEl.src = imgUrl;
+    imgEl.alt = prompt;
+    imgEl.style.cssText = 'width:100%; max-width:280px; border-radius:14px; border:1.4px solid var(--border); display:block;';
+    imgBubble.appendChild(imgEl);
+    chatMessages.appendChild(imgBubble);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    chatHistory.push({ role: 'assistant', content: '[Generated an image for: ' + prompt + ']' });
+  };
+  img.onerror = () => {
+    loadingBubble.remove();
+    appendMessage('assistant', dict.imageFailed, { noEdit: true });
+  };
+  img.src = imgUrl;
+});
 
 const mcqInput = document.getElementById('mcqInput');
 const mcqBtn = document.getElementById('mcqBtn');
