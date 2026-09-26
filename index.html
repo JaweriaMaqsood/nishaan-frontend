@@ -654,7 +654,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
             <button class="btn btn-primary" id="doubtBtn" data-i18n="askButton" style="flex-shrink:0;">Poocho</button>
           </div>
           <p id="micStatus" style="font-family:var(--font-mono); font-size:11.5px; color:var(--cyan); margin-top:10px; display:none;">🎙️ Sun rahe hain... bolein</p>
-          <p style="font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-top:10px;">Tumhare apne backend se jawab aata hai</p>
+          <p data-i18n="doubtHelper" style="font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-top:10px;">Tumhare apne backend se jawab aata hai</p>
         </div>
       </div>
 
@@ -667,7 +667,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </div>
         <button class="btn btn-primary" id="mcqBtn" data-i18n="generateButton">Generate</button>
         <div id="mcqAnswer"></div>
-        <p style="font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-top:14px;">Tumhare apne backend se MCQs generate hote hain</p>
+        <p data-i18n="mcqHelper" style="font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); margin-top:14px;">Tumhare apne backend se MCQs generate hote hain</p>
       </div>
     </div>
   </div>
@@ -894,8 +894,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 <!-- ============================= CLASS FIX MODAL (for older accounts missing class) ============================= -->
 <div id="classFixOverlay" style="display:none; position:fixed; inset:0; z-index:200; background:rgba(10,5,25,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px;">
   <div style="width:100%; max-width:400px; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); padding:32px 28px;">
-    <h3 style="font-size:19px; margin-bottom:8px;">Apni class batayein</h3>
-    <p style="color:var(--text-dim); font-size:14px; margin-bottom:20px;">Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.</p>
+    <h3 data-i18n="classFixTitle" style="font-size:19px; margin-bottom:8px;">Apni class batayein</h3>
+    <p data-i18n="classFixDesc" style="color:var(--text-dim); font-size:14px; margin-bottom:20px;">Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.</p>
     <select id="classFixSelect" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;">
       <option value="">Class select karein</option>
       <option value="primary">Class 1-5 (Primary)</option>
@@ -915,7 +915,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <option value="entry_test">Entry Test (MDCAT, ECAT, etc.)</option>
     </select>
     <p id="classFixError" style="display:none; font-size:13px; color:var(--pink); margin-bottom:12px;"></p>
-    <button type="button" class="btn btn-primary btn-block" id="classFixSaveBtn">Save karein</button>
+    <button type="button" class="btn btn-primary btn-block" id="classFixSaveBtn" data-i18n="classFixSave">Save karein</button>
   </div>
 </div>
 
@@ -1074,6 +1074,8 @@ const translations = {
     footerDesc: 'AI tutor for every class — solve doubts, practice MCQs, find your weak spots.',
     footerProduct: 'Product', footerCompany: 'Company', footerAbout: 'About us', footerContact: 'Contact',
     footerCopyright: '© 2026 Rehnuma. All rights reserved.',
+    classFixTitle: 'Tell us your class', classFixDesc: 'Your account was created without a class — select one so Progress and Leaderboard work properly.', classFixSave: 'Save',
+    doubtHelper: "Answers come from your own backend", mcqHelper: "MCQs are generated from your own backend",
   },
   ur: {
     navWhy: 'رحنما کیوں', navFeatures: 'خصوصیات', navSubjects: 'مضامین', navDemo: 'لائیو ڈیمو',
@@ -1170,6 +1172,8 @@ const translations = {
     footerDesc: 'ہر کلاس کے لیے اے آئی ٹیوٹر — سوالات حل کریں، MCQs پریکٹس کریں، اپنی کمزور جگہیں پکڑیں۔',
     footerProduct: 'پروڈکٹ', footerCompany: 'کمپنی', footerAbout: 'ہمارے بارے میں', footerContact: 'رابطہ',
     footerCopyright: '© 2026 رہنما۔ جملہ حقوق محفوظ ہیں۔',
+    classFixTitle: 'اپنی کلاس بتائیں', classFixDesc: 'آپ کا اکاؤنٹ کلاس کے بغیر بنا تھا — ایک دفعہ منتخب کر لیں تاکہ پیش رفت اور لیڈربورڈ ٹھیک سے کام کریں۔', classFixSave: 'محفوظ کریں',
+    doubtHelper: 'جواب آپ کے اپنے بیک اینڈ سے آتا ہے', mcqHelper: 'MCQs آپ کے اپنے بیک اینڈ سے بنتے ہیں',
   },
   roman: {
     navWhy: 'Kyun Rehnuma', navFeatures: 'Features', navSubjects: 'Subjects', navDemo: 'Live Demo',
@@ -1266,6 +1270,8 @@ const translations = {
     footerDesc: 'Har class ke liye AI tutor — doubts solve karo, MCQs practice karo, apni weak spots pakdo.',
     footerProduct: 'Product', footerCompany: 'Company', footerAbout: 'Hamare baray mein', footerContact: 'Contact',
     footerCopyright: '© 2026 Rehnuma. Sab huqooq mehfooz.',
+    classFixTitle: 'Apni class batayein', classFixDesc: 'Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.', classFixSave: 'Save karein',
+    doubtHelper: 'Tumhare apne backend se jawab aata hai', mcqHelper: 'Tumhare apne backend se MCQs generate hote hain',
   },
 };
 
