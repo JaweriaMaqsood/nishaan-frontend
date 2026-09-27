@@ -645,10 +645,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           </div>
           <div style="display:flex; gap:8px; align-items:flex-end;">
             <textarea id="doubtInput" rows="2" data-i18n-placeholder="doubtInputPlaceholder" placeholder="Apna sawal likhein..." style="flex:1; resize:none; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:14px; padding:12px 14px; color:var(--text); font-size:14.5px; font-family:var(--font-body);"></textarea>
-            <button type="button" class="btn btn-outline" id="micBtn" style="flex-shrink:0; padding:14px 16px;" title="Bol kar poocho" aria-label="Voice input">
+            <button type="button" class="btn btn-outline" id="micBtn" style="flex-shrink:0; padding:14px 16px;" data-i18n-title="micTitle" title="Bol kar poocho" aria-label="Voice input">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             </button>
-            <button type="button" class="btn btn-outline" id="imageGenBtn" style="flex-shrink:0; padding:14px 16px;" title="AI se pic banwayein" aria-label="Generate image">
+            <button type="button" class="btn btn-outline" id="imageGenBtn" style="flex-shrink:0; padding:14px 16px;" data-i18n-title="imageGenTitle" title="AI se pic banwayein" aria-label="Generate image">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.8" stroke="currentColor" stroke-width="1.6"/><path d="m4 17 5-5 3.5 3.5L16 11l4 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <button class="btn btn-primary" id="doubtBtn" data-i18n="askButton" style="flex-shrink:0;">Poocho</button>
@@ -1076,6 +1076,7 @@ const translations = {
     footerCopyright: '© 2026 Rehnuma. All rights reserved.',
     classFixTitle: 'Tell us your class', classFixDesc: 'Your account was created without a class — select one so Progress and Leaderboard work properly.', classFixSave: 'Save',
     doubtHelper: "Answers come from your own backend", mcqHelper: "MCQs are generated from your own backend",
+    micTitle: 'Ask by speaking', imageGenTitle: 'Generate an image with AI',
   },
   ur: {
     navWhy: 'رحنما کیوں', navFeatures: 'خصوصیات', navSubjects: 'مضامین', navDemo: 'لائیو ڈیمو',
@@ -1174,6 +1175,7 @@ const translations = {
     footerCopyright: '© 2026 رہنما۔ جملہ حقوق محفوظ ہیں۔',
     classFixTitle: 'اپنی کلاس بتائیں', classFixDesc: 'آپ کا اکاؤنٹ کلاس کے بغیر بنا تھا — ایک دفعہ منتخب کر لیں تاکہ پیش رفت اور لیڈربورڈ ٹھیک سے کام کریں۔', classFixSave: 'محفوظ کریں',
     doubtHelper: 'جواب آپ کے اپنے بیک اینڈ سے آتا ہے', mcqHelper: 'MCQs آپ کے اپنے بیک اینڈ سے بنتے ہیں',
+    micTitle: 'بول کر پوچھیں', imageGenTitle: 'اے آئی سے تصویر بنوائیں',
   },
   roman: {
     navWhy: 'Kyun Rehnuma', navFeatures: 'Features', navSubjects: 'Subjects', navDemo: 'Live Demo',
@@ -1272,6 +1274,7 @@ const translations = {
     footerCopyright: '© 2026 Rehnuma. Sab huqooq mehfooz.',
     classFixTitle: 'Apni class batayein', classFixDesc: 'Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.', classFixSave: 'Save karein',
     doubtHelper: 'Tumhare apne backend se jawab aata hai', mcqHelper: 'Tumhare apne backend se MCQs generate hote hain',
+    micTitle: 'Bol kar poocho', imageGenTitle: 'AI se pic banwayein',
   },
 };
 
@@ -1295,6 +1298,10 @@ function applyLanguage(lang) {
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (dict[key]) el.placeholder = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    if (dict[key]) el.title = dict[key];
   });
   document.body.classList.toggle('lang-ur', lang === 'ur');
   const label = lang === 'en' ? 'EN' : (lang === 'ur' ? 'اردو' : 'Roman');
