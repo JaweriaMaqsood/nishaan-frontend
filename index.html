@@ -879,7 +879,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     </div>
 
     <h3 style="font-size:22px; margin-bottom:6px;">Javeria</h3>
-    <p style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); margin-bottom:34px; letter-spacing:0.04em;">AI TUTOR · REHNUMA</p>
+    <p data-i18n="callSubtitle" style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); margin-bottom:34px; letter-spacing:0.04em;">AI TUTOR · REHNUMA</p>
 
     <p id="callStatusText" style="color:var(--text-dim); font-size:15px; margin-bottom:38px; min-height:22px;">Tap the mic to start talking</p>
 
@@ -1077,6 +1077,12 @@ const translations = {
     classFixTitle: 'Tell us your class', classFixDesc: 'Your account was created without a class — select one so Progress and Leaderboard work properly.', classFixSave: 'Save',
     doubtHelper: "Answers come from your own backend", mcqHelper: "MCQs are generated from your own backend",
     micTitle: 'Ask by speaking', imageGenTitle: 'Generate an image with AI',
+    authLoggingIn: 'Logging in...', authSigningUp: 'Creating account...',
+    callSubtitle: 'AI TUTOR · REHNUMA',
+    classFixRequired: 'Selecting a class is required', classFixSaving: 'Saving...', classFixError: 'Something went wrong, try again',
+    waitlistAlready: "Thanks! You've already joined the waitlist. 🎉", waitlistSending: 'Sending...',
+    waitlistSuccess: "Thanks! You've joined the waitlist. 🎉", waitlistError: 'Something went wrong, please try again.',
+    waitlistNetError: 'Check your internet and try again.',
   },
   ur: {
     navWhy: 'رحنما کیوں', navFeatures: 'خصوصیات', navSubjects: 'مضامین', navDemo: 'لائیو ڈیمو',
@@ -1176,6 +1182,12 @@ const translations = {
     classFixTitle: 'اپنی کلاس بتائیں', classFixDesc: 'آپ کا اکاؤنٹ کلاس کے بغیر بنا تھا — ایک دفعہ منتخب کر لیں تاکہ پیش رفت اور لیڈربورڈ ٹھیک سے کام کریں۔', classFixSave: 'محفوظ کریں',
     doubtHelper: 'جواب آپ کے اپنے بیک اینڈ سے آتا ہے', mcqHelper: 'MCQs آپ کے اپنے بیک اینڈ سے بنتے ہیں',
     micTitle: 'بول کر پوچھیں', imageGenTitle: 'اے آئی سے تصویر بنوائیں',
+    authLoggingIn: 'لاگ ان ہو رہے ہیں...', authSigningUp: 'اکاؤنٹ بن رہا ہے...',
+    callSubtitle: 'اے آئی ٹیوٹر · رہنما',
+    classFixRequired: 'کلاس منتخب کرنا ضروری ہے', classFixSaving: 'محفوظ ہو رہا ہے...', classFixError: 'کچھ مسئلہ ہو گیا، دوبارہ کوشش کریں',
+    waitlistAlready: 'شکریہ! آپ پہلے سے ویٹ لسٹ میں شامل ہیں۔ 🎉', waitlistSending: 'بھیجا جا رہا ہے...',
+    waitlistSuccess: 'شکریہ! آپ ویٹ لسٹ میں شامل ہو گئے ہیں۔ 🎉', waitlistError: 'کچھ مسئلہ ہو گیا، دوبارہ کوشش کریں۔',
+    waitlistNetError: 'انٹرنیٹ چیک کریں اور دوبارہ کوشش کریں۔',
   },
   roman: {
     navWhy: 'Kyun Rehnuma', navFeatures: 'Features', navSubjects: 'Subjects', navDemo: 'Live Demo',
@@ -1275,6 +1287,12 @@ const translations = {
     classFixTitle: 'Apni class batayein', classFixDesc: 'Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.', classFixSave: 'Save karein',
     doubtHelper: 'Tumhare apne backend se jawab aata hai', mcqHelper: 'Tumhare apne backend se MCQs generate hote hain',
     micTitle: 'Bol kar poocho', imageGenTitle: 'AI se pic banwayein',
+    authLoggingIn: 'Login ho rahe hain...', authSigningUp: 'Account bann raha hai...',
+    callSubtitle: 'AI TUTOR · REHNUMA',
+    classFixRequired: 'Class select karna zaroori hai', classFixSaving: 'Save ho raha hai...', classFixError: 'Kuch masla ho gaya, dobara try karein',
+    waitlistAlready: 'Shukriya! Aap waitlist mein pehle se shamil hain. 🎉', waitlistSending: 'Bhej rahe hain...',
+    waitlistSuccess: 'Shukriya! Aap waitlist mein shamil ho gaye hain. 🎉', waitlistError: 'Kuch masla ho gaya, dobara try karein.',
+    waitlistNetError: 'Internet check karein aur dobara try karein.',
   },
 };
 
@@ -1951,8 +1969,9 @@ backfillStudentClassIfMissing();
 classFixSaveBtn.addEventListener('click', async () => {
   const studentClass = classFixSelect.value;
   classFixError.style.display = 'none';
+  const cfDict = translations[getCurrentLanguage()] || translations.roman;
   if (!studentClass) {
-    classFixError.textContent = 'Class select karna zaroori hai';
+    classFixError.textContent = cfDict.classFixRequired;
     classFixError.style.display = 'block';
     return;
   }
@@ -1960,7 +1979,7 @@ classFixSaveBtn.addEventListener('click', async () => {
   const email = localStorage.getItem('nishaan_user_email');
 
   classFixSaveBtn.disabled = true;
-  classFixSaveBtn.textContent = 'Save ho raha hai...';
+  classFixSaveBtn.textContent = cfDict.classFixSaving;
   try {
     const res = await fetch(BACKEND_URL + '/api/profile/' + userId, {
       method: 'POST',
@@ -1975,11 +1994,11 @@ classFixSaveBtn.addEventListener('click', async () => {
     renderLeaderboard();
     renderProgressSection();
   } catch (e) {
-    classFixError.textContent = 'Kuch masla ho gaya, dobara try karein';
+    classFixError.textContent = cfDict.classFixError;
     classFixError.style.display = 'block';
   } finally {
     classFixSaveBtn.disabled = false;
-    classFixSaveBtn.textContent = 'Save karein';
+    classFixSaveBtn.textContent = cfDict.classFixSave;
   }
 });
 
@@ -1998,7 +2017,8 @@ authForm.addEventListener('submit', async (e) => {
   }
 
   authSubmitBtn.disabled = true;
-  authSubmitBtn.textContent = authMode === 'login' ? 'Login ho rahe hain...' : 'Account bann raha hai...';
+  const authDict = translations[getCurrentLanguage()] || translations.roman;
+  authSubmitBtn.textContent = authMode === 'login' ? authDict.authLoggingIn : authDict.authSigningUp;
 
   try {
     const body = authMode === 'login'
@@ -2221,17 +2241,19 @@ const waitlistSuccess = document.getElementById('waitlistSuccess');
 
 // If this student already joined before (saved in this browser), hide the form on load
 if (localStorage.getItem('nishaan_waitlist_joined') === 'true') {
+  const wlDict0 = translations[getCurrentLanguage()] || translations.roman;
   waitlistForm.style.display = 'none';
-  waitlistSuccess.textContent = 'Shukriya! Aap waitlist mein pehle se shamil hain. 🎉';
+  waitlistSuccess.textContent = wlDict0.waitlistAlready;
   waitlistSuccess.style.color = '';
   waitlistSuccess.classList.add('show');
 }
 
 waitlistForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const wlDict = translations[getCurrentLanguage()] || translations.roman;
   const submitBtn = waitlistForm.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Bhej rahe hain...';
+  submitBtn.textContent = wlDict.waitlistSending;
   try {
     const res = await fetch(waitlistForm.action, {
       method: 'POST',
@@ -2241,20 +2263,20 @@ waitlistForm.addEventListener('submit', async (e) => {
     if (res.ok) {
       localStorage.setItem('nishaan_waitlist_joined', 'true');
       waitlistForm.style.display = 'none';
-      waitlistSuccess.textContent = 'Shukriya! Aap waitlist mein shamil ho gaye hain. 🎉';
+      waitlistSuccess.textContent = wlDict.waitlistSuccess;
       waitlistSuccess.style.color = '';
       waitlistSuccess.classList.add('show');
     } else {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Waitlist join karo';
-      waitlistSuccess.textContent = 'Kuch masla ho gaya, dobara try karein.';
+      submitBtn.textContent = wlDict.waitlistJoin;
+      waitlistSuccess.textContent = wlDict.waitlistError;
       waitlistSuccess.style.color = '#FF2E9A';
       waitlistSuccess.classList.add('show');
     }
   } catch (err) {
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Waitlist join karo';
-    waitlistSuccess.textContent = 'Internet check karein aur dobara try karein.';
+    submitBtn.textContent = wlDict.waitlistJoin;
+    waitlistSuccess.textContent = wlDict.waitlistNetError;
     waitlistSuccess.style.color = '#FF2E9A';
     waitlistSuccess.classList.add('show');
   }
