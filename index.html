@@ -1077,6 +1077,7 @@ const translations = {
     classFixTitle: 'Tell us your class', classFixDesc: 'Your account was created without a class — select one so Progress and Leaderboard work properly.', classFixSave: 'Save',
     doubtHelper: "Answers come from your own backend", mcqHelper: "MCQs are generated from your own backend",
     micTitle: 'Ask by speaking', imageGenTitle: 'Generate an image with AI',
+    imageNeedsPrompt: 'First type what image you want (for example: "a cell with labelled parts"), then tap the image button.',
     authLoggingIn: 'Logging in...', authSigningUp: 'Creating account...',
     callSubtitle: 'AI TUTOR · REHNUMA',
     classFixRequired: 'Selecting a class is required', classFixSaving: 'Saving...', classFixError: 'Something went wrong, try again',
@@ -1182,6 +1183,7 @@ const translations = {
     classFixTitle: 'اپنی کلاس بتائیں', classFixDesc: 'آپ کا اکاؤنٹ کلاس کے بغیر بنا تھا — ایک دفعہ منتخب کر لیں تاکہ پیش رفت اور لیڈربورڈ ٹھیک سے کام کریں۔', classFixSave: 'محفوظ کریں',
     doubtHelper: 'جواب آپ کے اپنے بیک اینڈ سے آتا ہے', mcqHelper: 'MCQs آپ کے اپنے بیک اینڈ سے بنتے ہیں',
     micTitle: 'بول کر پوچھیں', imageGenTitle: 'اے آئی سے تصویر بنوائیں',
+    imageNeedsPrompt: 'پہلے لکھیں کہ آپ کو کیسی تصویر چاہیے (مثلاً: "لیبل شدہ حصوں کے ساتھ ایک خلیہ")، پھر تصویر کے بٹن پر کلک کریں۔',
     authLoggingIn: 'لاگ ان ہو رہے ہیں...', authSigningUp: 'اکاؤنٹ بن رہا ہے...',
     callSubtitle: 'اے آئی ٹیوٹر · رہنما',
     classFixRequired: 'کلاس منتخب کرنا ضروری ہے', classFixSaving: 'محفوظ ہو رہا ہے...', classFixError: 'کچھ مسئلہ ہو گیا، دوبارہ کوشش کریں',
@@ -1287,6 +1289,7 @@ const translations = {
     classFixTitle: 'Apni class batayein', classFixDesc: 'Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.', classFixSave: 'Save karein',
     doubtHelper: 'Tumhare apne backend se jawab aata hai', mcqHelper: 'Tumhare apne backend se MCQs generate hote hain',
     micTitle: 'Bol kar poocho', imageGenTitle: 'AI se pic banwayein',
+    imageNeedsPrompt: 'Pehle likhein ke aapko kaisi tasveer chahiye (jaise: "ek cell jis ke parts labelled hon"), phir image wale button pe click karein.',
     authLoggingIn: 'Login ho rahe hain...', authSigningUp: 'Account bann raha hai...',
     callSubtitle: 'AI TUTOR · REHNUMA',
     classFixRequired: 'Class select karna zaroori hai', classFixSaving: 'Save ho raha hai...', classFixError: 'Kuch masla ho gaya, dobara try karein',
@@ -1745,16 +1748,59 @@ async function askDoubt() {
   await submitUserMessage(q);
 }
 
-// ============ AI Image Generation (Pollinations — free, no API key) ============
+// ============ AI Image Generation (Pollinations) ============
 const imageGenBtn = document.getElementById('imageGenBtn');
+
+// Tries each URL in order; moves to the next if one errors or takes too long
+function loadImageWithFallback(urls, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    let i = 0;
+    const tryNext = () => {
+      if (i >= urls.length) return reject(new Error('all image sources failed'));
+      const url = urls[i++];
+      const probe = new Image();
+      let finished = false;
+      const timer = setTimeout(() => {
+        if (finished) return;
+        finished = true;
+        probe.onload = probe.onerror = null;
+        tryNext();
+      }, timeoutMs);
+      probe.onload = () => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        resolve(url);
+      };
+      probe.onerror = () => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        tryNext();
+      };
+      probe.src = url;
+    };
+    tryNext();
+  });
+}
+
 imageGenBtn.addEventListener('click', async () => {
-  const prompt = doubtInput.value.trim();
-  if (!prompt) return;
   const dict = translations[getCurrentLanguage()] || translations.roman;
+  const prompt = doubtInput.value.trim();
+
+  // Empty input: tell the student what to do instead of silently doing nothing
+  if (!prompt) {
+    appendMessage('assistant', dict.imageNeedsPrompt, { noEdit: true });
+    doubtInput.focus();
+    return;
+  }
+
   doubtInput.value = '';
+  imageGenBtn.disabled = true;
+  imageGenBtn.style.opacity = '.5';
 
   const historyIndexAtSend = chatHistory.length;
-  const bubble = appendMessage('user', prompt);
+  const bubble = appendMessage('user', prompt, { noEdit: true });
   bubble.dataset.historyIndex = historyIndexAtSend;
   chatHistory.push({ role: 'user', content: '[Image request] ' + prompt });
 
@@ -1765,27 +1811,32 @@ imageGenBtn.addEventListener('click', async () => {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
   const seed = Math.floor(Math.random() * 100000);
-  const imgUrl = 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt) + '?width=512&height=512&seed=' + seed + '&nologo=true';
+  const encoded = encodeURIComponent(prompt);
+  const candidateUrls = [
+    'https://image.pollinations.ai/prompt/' + encoded + '?width=512&height=512&seed=' + seed + '&nologo=true',
+    'https://gen.pollinations.ai/image/' + encoded + '?width=512&height=512&seed=' + seed
+  ];
 
-  const img = new Image();
-  img.onload = () => {
+  try {
+    const workingUrl = await loadImageWithFallback(candidateUrls, 45000);
     loadingBubble.remove();
     const imgBubble = document.createElement('div');
     imgBubble.style.cssText = 'max-width:85%; margin-bottom:14px; margin-right:auto;';
     const imgEl = document.createElement('img');
-    imgEl.src = imgUrl;
+    imgEl.src = workingUrl;
     imgEl.alt = prompt;
     imgEl.style.cssText = 'width:100%; max-width:280px; border-radius:14px; border:1.4px solid var(--border); display:block;';
     imgBubble.appendChild(imgEl);
     chatMessages.appendChild(imgBubble);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     chatHistory.push({ role: 'assistant', content: '[Generated an image for: ' + prompt + ']' });
-  };
-  img.onerror = () => {
+  } catch (err) {
     loadingBubble.remove();
     appendMessage('assistant', dict.imageFailed, { noEdit: true });
-  };
-  img.src = imgUrl;
+  } finally {
+    imageGenBtn.disabled = false;
+    imageGenBtn.style.opacity = '';
+  }
 });
 
 const mcqInput = document.getElementById('mcqInput');
