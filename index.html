@@ -780,8 +780,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     </div>
 
     <div id="chatPhoneVerify" style="display:none; max-width:420px; margin:0 auto; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); padding:32px 28px;">
-      <h3 data-i18n="chatVerifyTitle" style="font-size:18px; margin-bottom:8px;">Apna number verify karein</h3>
-      <p data-i18n="chatVerifyDesc" style="color:var(--text-dim); font-size:13.5px; margin-bottom:20px;">Dost sirf tumhara verified number se request bhej sakenge — number kisi ko dikhta nahi.</p>
+      <h3 data-i18n="chatVerifyTitle" style="font-size:18px; margin-bottom:8px;">Apna number set karein</h3>
+      <p data-i18n="chatVerifyDesc" style="color:var(--text-dim); font-size:13.5px; margin-bottom:20px;">Dost isi number se aapko request bhej sakenge — number kisi ko dikhta nahi.</p>
 
       <div id="chatPhoneStep">
         <label data-i18n="chatNameLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:6px;">Naam (doston ko yahi dikhega)</label>
@@ -789,16 +789,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <label data-i18n="chatPhoneLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:6px;">Phone number</label>
         <input type="tel" id="chatPhoneInput" data-i18n-placeholder="chatPhonePlaceholder" placeholder="0300 1234567" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:12px 14px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;" />
         <p id="chatPhoneError" style="display:none; font-size:13px; color:var(--pink); margin-bottom:12px;"></p>
-        <button type="button" class="btn btn-primary btn-block" id="chatSendOtpBtn" data-i18n="chatSendCode">Code bhejein</button>
-      </div>
-
-      <div id="chatCodeStep" style="display:none;">
-        <p id="chatCodeSentTo" style="color:var(--text-dim); font-size:13.5px; margin-bottom:16px;"></p>
-        <label data-i18n="chatCodeLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:6px;">6-digit code</label>
-        <input type="text" inputmode="numeric" id="chatCodeInput" maxlength="8" placeholder="123456" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:12px 14px; color:var(--text); font-size:18px; letter-spacing:0.2em; text-align:center; font-family:var(--font-mono); margin-bottom:16px;" />
-        <p id="chatCodeError" style="display:none; font-size:13px; color:var(--pink); margin-bottom:12px;"></p>
-        <button type="button" class="btn btn-primary btn-block" id="chatVerifyOtpBtn" data-i18n="chatVerifyCode" style="margin-bottom:10px;">Verify karein</button>
-        <button type="button" id="chatBackToPhoneBtn" data-i18n="chatChangeNumber" style="display:block; margin:0 auto; font-size:13px; color:var(--text-faint); background:none; border:none; padding:6px;">Number badlein</button>
+        <button type="button" class="btn btn-primary btn-block" id="chatSendOtpBtn" data-i18n="chatSaveNumber">Save karein</button>
       </div>
     </div>
 
@@ -1167,7 +1158,8 @@ const translations = {
     chatEyebrow: 'With friends', chatTitle: 'Friends Chat',
     chatSub: 'Verify your number, add friends, and chat with them — just like WhatsApp, only between Rehnuma students.',
     chatLoginPrompt: 'Login first to see Friends Chat.',
-    chatVerifyTitle: 'Verify your number', chatVerifyDesc: "Friends can only send you a request from your verified number — your number is never shown to anyone.",
+    chatVerifyTitle: 'Set your number', chatVerifyDesc: "Friends can send you a request using this number — your number is never shown to anyone.",
+    chatSaveNumber: 'Save', chatSavingNumber: 'Saving...',
     chatNameLabel: "Name (friends will see this)", chatPhoneLabel: 'Phone number', chatPhonePlaceholder: '0300 1234567',
     chatSendCode: 'Send code', chatCodeLabel: '6-digit code', chatVerifyCode: 'Verify', chatChangeNumber: 'Change number',
     chatAddFriendPlaceholder: "Friend's number (0300...)", chatAddFriendBtn: 'Add',
@@ -1288,7 +1280,8 @@ const translations = {
     chatEyebrow: 'دوستوں کے ساتھ', chatTitle: 'دوستوں سے بات چیت',
     chatSub: 'اپنا نمبر تصدیق کریں، دوست شامل کریں، اور ان سے بات کریں — بالکل واٹس ایپ کی طرح، صرف رہنما کے طلبہ کے درمیان۔',
     chatLoginPrompt: 'دوستوں سے بات چیت دیکھنے کے لیے پہلے لاگ ان کریں۔',
-    chatVerifyTitle: 'اپنا نمبر تصدیق کریں', chatVerifyDesc: 'دوست صرف آپ کے تصدیق شدہ نمبر سے درخواست بھیج سکیں گے — نمبر کسی کو نظر نہیں آتا۔',
+    chatVerifyTitle: 'اپنا نمبر سیٹ کریں', chatVerifyDesc: 'دوست اسی نمبر سے آپ کو درخواست بھیج سکیں گے — نمبر کسی کو نظر نہیں آتا۔',
+    chatSaveNumber: 'محفوظ کریں', chatSavingNumber: 'محفوظ ہو رہا ہے...',
     chatNameLabel: 'نام (دوستوں کو یہی نظر آئے گا)', chatPhoneLabel: 'فون نمبر', chatPhonePlaceholder: '0300 1234567',
     chatSendCode: 'کوڈ بھیجیں', chatCodeLabel: '6 ہندسوں کا کوڈ', chatVerifyCode: 'تصدیق کریں', chatChangeNumber: 'نمبر تبدیل کریں',
     chatAddFriendPlaceholder: 'دوست کا نمبر (0300...)', chatAddFriendBtn: 'شامل کریں',
@@ -1409,7 +1402,8 @@ const translations = {
     chatEyebrow: 'Doston ke sath', chatTitle: 'Friends Chat',
     chatSub: 'Apna number verify karo, dost add karo, aur unse baat karo — bilkul WhatsApp jaisa, sirf Rehnuma students ke darmiyan.',
     chatLoginPrompt: 'Friends chat dekhne ke liye pehle login karein.',
-    chatVerifyTitle: 'Apna number verify karein', chatVerifyDesc: 'Dost sirf tumhara verified number se request bhej sakenge — number kisi ko dikhta nahi.',
+    chatVerifyTitle: 'Apna number set karein', chatVerifyDesc: 'Dost isi number se aapko request bhej sakenge — number kisi ko dikhta nahi.',
+    chatSaveNumber: 'Save karein', chatSavingNumber: 'Save ho raha hai...',
     chatNameLabel: 'Naam (doston ko yahi dikhega)', chatPhoneLabel: 'Phone number', chatPhonePlaceholder: '0300 1234567',
     chatSendCode: 'Code bhejein', chatCodeLabel: '6-digit code', chatVerifyCode: 'Verify karein', chatChangeNumber: 'Number badlein',
     chatAddFriendPlaceholder: "Dost ka number (0300...)", chatAddFriendBtn: 'Add karein',
@@ -2437,16 +2431,10 @@ const chatLoginBtn = document.getElementById('chatLoginBtn');
 if (chatLoginBtn) chatLoginBtn.addEventListener('click', openAuthModal);
 
 const chatPhoneStep = document.getElementById('chatPhoneStep');
-const chatCodeStep = document.getElementById('chatCodeStep');
 const chatNameInput = document.getElementById('chatNameInput');
 const chatPhoneInput = document.getElementById('chatPhoneInput');
 const chatPhoneError = document.getElementById('chatPhoneError');
 const chatSendOtpBtn = document.getElementById('chatSendOtpBtn');
-const chatCodeSentTo = document.getElementById('chatCodeSentTo');
-const chatCodeInput = document.getElementById('chatCodeInput');
-const chatCodeError = document.getElementById('chatCodeError');
-const chatVerifyOtpBtn = document.getElementById('chatVerifyOtpBtn');
-const chatBackToPhoneBtn = document.getElementById('chatBackToPhoneBtn');
 
 const chatAddFriendInput = document.getElementById('chatAddFriendInput');
 const chatAddFriendBtn = document.getElementById('chatAddFriendBtn');
@@ -2472,7 +2460,6 @@ let chatOpenFriendship = null; // { friendshipId, name }
 let chatPollTimer = null;
 let chatFriendsPollTimer = null;
 let chatLastMsgId = 0;
-let chatPendingPhone = null;
 
 function chatDict() { return translations[getCurrentLanguage()] || translations.roman; }
 
@@ -2542,8 +2529,6 @@ async function renderChatSection() {
     }
     if (!data.verified) {
       chatShow('phoneVerify');
-      chatPhoneStep.style.display = 'block';
-      chatCodeStep.style.display = 'none';
       return;
     }
     chatShow('main');
@@ -2554,7 +2539,7 @@ async function renderChatSection() {
   }
 }
 
-// ---- Phone verify flow ----
+// ---- Phone save (free, OTP nahi) ----
 chatSendOtpBtn.addEventListener('click', async () => {
   const d = chatDict();
   chatPhoneError.style.display = 'none';
@@ -2564,52 +2549,18 @@ chatSendOtpBtn.addEventListener('click', async () => {
   if (!phone) { chatPhoneError.textContent = d.chatPhoneRequired; chatPhoneError.style.display = 'block'; return; }
 
   chatSendOtpBtn.disabled = true;
-  chatSendOtpBtn.textContent = d.chatSendingCode;
+  chatSendOtpBtn.textContent = d.chatSavingNumber;
   try {
-    const res = await chatFetch('/api/chat/phone/send-otp', { method: 'POST', body: { phone, displayName: name } });
+    const res = await chatFetch('/api/chat/phone/set', { method: 'POST', body: { phone, displayName: name } });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || d.errorGeneric);
-    chatPendingPhone = phone;
-    chatCodeSentTo.textContent = (d.chatCodeSentTo || '') + ' ' + (data.phone || '');
-    chatPhoneStep.style.display = 'none';
-    chatCodeStep.style.display = 'block';
-    chatCodeInput.focus();
+    await renderChatSection();
   } catch (e) {
     chatPhoneError.textContent = e.message;
     chatPhoneError.style.display = 'block';
   } finally {
     chatSendOtpBtn.disabled = false;
-    chatSendOtpBtn.textContent = d.chatSendCode;
-  }
-});
-
-chatBackToPhoneBtn.addEventListener('click', () => {
-  chatCodeStep.style.display = 'none';
-  chatPhoneStep.style.display = 'block';
-  chatCodeInput.value = '';
-  chatCodeError.style.display = 'none';
-});
-
-chatVerifyOtpBtn.addEventListener('click', async () => {
-  const d = chatDict();
-  chatCodeError.style.display = 'none';
-  const code = chatCodeInput.value.trim();
-  const name = chatNameInput.value.trim();
-  if (!code) return;
-
-  chatVerifyOtpBtn.disabled = true;
-  chatVerifyOtpBtn.textContent = d.chatVerifying;
-  try {
-    const res = await chatFetch('/api/chat/phone/verify', { method: 'POST', body: { phone: chatPendingPhone, code, displayName: name } });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || d.errorGeneric);
-    await renderChatSection();
-  } catch (e) {
-    chatCodeError.textContent = e.message;
-    chatCodeError.style.display = 'block';
-  } finally {
-    chatVerifyOtpBtn.disabled = false;
-    chatVerifyOtpBtn.textContent = d.chatVerifyCode;
+    chatSendOtpBtn.textContent = d.chatSaveNumber;
   }
 });
 
