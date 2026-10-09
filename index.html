@@ -778,6 +778,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <div id="chatIneligible" style="display:none; max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
       <p id="chatIneligibleText" style="color:var(--text-dim); font-size:15px; margin-bottom:16px;"></p>
       <button type="button" id="chatRetryBtn" style="display:none;" class="btn btn-outline" data-i18n="chatRetry">Dobara try karein</button>
+      <button type="button" id="chatReloginBtn" style="display:none;" class="btn btn-primary">Dobara login karein</button>
     </div>
 
     <div id="chatPhoneVerify" style="display:none; max-width:420px; margin:0 auto; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); padding:32px 28px;">
@@ -2227,6 +2228,11 @@ authForm.addEventListener('submit', async (e) => {
         if (lr.ok && ld.session) data.session = ld.session;
       } catch (e) {}
     }
+    if (authMode === 'signup' && !(data.session && data.session.access_token)) {
+      authError.textContent = 'Account ban gaya! Aapki email par confirmation link bheja gaya hai — pehle usay click karein, phir Login karein.';
+      authError.style.display = 'block';
+      return;
+    }
 
     localStorage.setItem('nishaan_user_email', email);
     if (data.session && data.session.access_token) {
@@ -2519,16 +2525,23 @@ function chatShow(view) {
 
 async function renderChatSection() {
   clearInterval(chatFriendsPollTimer);
+  document.getElementById('chatReloginBtn').style.display = 'none';
   const userId = localStorage.getItem('nishaan_user_id');
   if (!userId) { chatShow('loggedOut'); return; }
 
   try {
     const res = await chatFetch('/api/chat/me');
     if (res.status === 401) {
-      console.warn('chat/me 401');
+      let code401 = '';
+      try { code401 = (await res.json()).code || ''; } catch (e) {}
       ['nishaan_user_email','nishaan_access_token','nishaan_refresh_token','nishaan_user_id'].forEach(k => localStorage.removeItem(k));
       refreshAuthButtonLabel();
-      chatShow('loggedOut');
+      renderProgressSection();
+      renderLeaderboard();
+      chatIneligibleText.textContent = 'Aapka login session nahi mila ya khatam ho gaya (' + (code401 || '401') + '). Dobara login karein.';
+      document.getElementById('chatRetryBtn').style.display = 'none';
+      document.getElementById('chatReloginBtn').style.display = 'inline-flex';
+      chatShow('ineligible');
       return;
     }
     const data = await res.json();
@@ -2564,6 +2577,7 @@ async function renderChatSection() {
 }
 
 document.getElementById('chatRetryBtn').addEventListener('click', renderChatSection);
+document.getElementById('chatReloginBtn').addEventListener('click', openAuthModal);
 
 // ---- Phone save (free, OTP nahi) ----
 chatSendOtpBtn.addEventListener('click', async () => {
