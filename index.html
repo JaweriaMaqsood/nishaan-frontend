@@ -479,7 +479,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <div class="report-card">
         <div class="report-top">
           <span class="report-top-label">WEEKLY REPORT</span>
-          <span class="report-top-title">Student</span>
+          <span class="report-top-title">Sehar J.</span>
         </div>
         <div class="report-body">
           <div class="report-row">
@@ -778,7 +778,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <div id="chatIneligible" style="display:none; max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
       <p id="chatIneligibleText" style="color:var(--text-dim); font-size:15px; margin-bottom:16px;"></p>
       <button type="button" id="chatRetryBtn" style="display:none;" class="btn btn-outline" data-i18n="chatRetry">Dobara try karein</button>
-      <button type="button" id="chatReloginBtn" style="display:none;" class="btn btn-primary">Dobara login karein</button>
     </div>
 
     <div id="chatPhoneVerify" style="display:none; max-width:420px; margin:0 auto; background:var(--surface); border:1.6px solid var(--border-strong); border-radius:var(--radius-lg); padding:32px 28px;">
@@ -1438,7 +1437,6 @@ function getCurrentLanguage() {
 }
 
 const i18nHtmlKeys = new Set(['heroTitle', 'heroReportFlag']);
-function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 function applyLanguage(lang) {
   const dict = translations[lang] || translations.roman;
@@ -1491,7 +1489,6 @@ const seharWelcome = document.getElementById('seharWelcome');
 const seharWelcomeCard = document.getElementById('seharWelcomeCard');
 const seharEnterBtn = document.getElementById('seharEnterBtn');
 seharWelcome.style.transition = 'opacity .5s ease';
-if (new URLSearchParams(location.search).get('for') !== 'sehar') seharWelcome.style.display = 'none';
 
 seharEnterBtn.addEventListener('click', () => {
   seharWelcome.style.opacity = '0';
@@ -2221,18 +2218,6 @@ authForm.addEventListener('submit', async (e) => {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Kuch masla ho gaya');
-    if (authMode === 'signup' && !(data.session && data.session.access_token)) {
-      try {
-        const lr = await fetch(BACKEND_URL + '/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
-        const ld = await lr.json();
-        if (lr.ok && ld.session) data.session = ld.session;
-      } catch (e) {}
-    }
-    if (authMode === 'signup' && !(data.session && data.session.access_token)) {
-      authError.textContent = 'Account ban gaya! Aapki email par confirmation link bheja gaya hai — pehle usay click karein, phir Login karein.';
-      authError.style.display = 'block';
-      return;
-    }
 
     localStorage.setItem('nishaan_user_email', email);
     if (data.session && data.session.access_token) {
@@ -2337,7 +2322,7 @@ async function renderProgressSection() {
         const row = document.createElement('div');
         row.style.cssText = 'margin-bottom:16px;';
         row.innerHTML =
-          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + esc(topic) + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + percent + '% (' + correct + '/' + total + ')</span></div>' +
+          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + topic + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + percent + '% (' + correct + '/' + total + ')</span></div>' +
           '<div style="height:9px; border-radius:99px; background:var(--surface-2); overflow:hidden;"><span style="display:block; height:100%; border-radius:99px; width:' + percent + '%; background:' + barColor + ';"></span></div>';
         progressBars.appendChild(row);
       });
@@ -2356,7 +2341,7 @@ async function renderProgressSection() {
         const row = document.createElement('div');
         row.style.cssText = 'margin-bottom:16px;';
         row.innerHTML =
-          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + esc(topic) + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + count + ' attempt' + (count > 1 ? 's' : '') + '</span></div>' +
+          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + topic + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + count + ' attempt' + (count > 1 ? 's' : '') + '</span></div>' +
           '<div style="height:9px; border-radius:99px; background:var(--surface-2); overflow:hidden;"><span style="display:block; height:100%; border-radius:99px; width:' + pct + '%; background:' + color + ';"></span></div>';
         progressBars.appendChild(row);
       });
@@ -2367,7 +2352,7 @@ async function renderProgressSection() {
       const date = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       const item = document.createElement('div');
       item.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:14px;';
-      item.innerHTML = '<span style="color:var(--text);">' + esc(a.topic) + '</span><span style="color:var(--text-faint); font-family:var(--font-mono); font-size:12px;">' + date + '</span>';
+      item.innerHTML = '<span style="color:var(--text);">' + a.topic + '</span><span style="color:var(--text-faint); font-family:var(--font-mono); font-size:12px;">' + date + '</span>';
       progressList.appendChild(item);
     });
 
@@ -2427,7 +2412,7 @@ async function renderLeaderboard() {
         (isMe ? ' background:rgba(0,229,255,.1); border:1.4px solid var(--cyan);' : '');
       row.innerHTML =
         '<span style="width:28px; text-align:center; font-size:15px; font-weight:700; color:var(--text-faint); font-family:var(--font-mono);">' + (medals[i] || (i + 1)) + '</span>' +
-        '<span style="flex:1; font-size:14.5px; font-weight:700; color:var(--text);">' + esc(entry.displayName) + (isMe ? ' (Aap)' : '') + '</span>' +
+        '<span style="flex:1; font-size:14.5px; font-weight:700; color:var(--text);">' + entry.displayName + (isMe ? ' (Aap)' : '') + '</span>' +
         '<span style="font-family:var(--font-mono); font-size:13px; color:var(--text-dim);">' + entry.score + ' sahi</span>';
       leaderboardRows.appendChild(row);
     });
@@ -2525,25 +2510,12 @@ function chatShow(view) {
 
 async function renderChatSection() {
   clearInterval(chatFriendsPollTimer);
-  document.getElementById('chatReloginBtn').style.display = 'none';
   const userId = localStorage.getItem('nishaan_user_id');
   if (!userId) { chatShow('loggedOut'); return; }
 
   try {
     const res = await chatFetch('/api/chat/me');
-    if (res.status === 401) {
-      let code401 = '';
-      try { code401 = (await res.json()).code || ''; } catch (e) {}
-      ['nishaan_user_email','nishaan_access_token','nishaan_refresh_token','nishaan_user_id'].forEach(k => localStorage.removeItem(k));
-      refreshAuthButtonLabel();
-      renderProgressSection();
-      renderLeaderboard();
-      chatIneligibleText.textContent = 'Aapka login session nahi mila ya khatam ho gaya (' + (code401 || '401') + '). Dobara login karein.';
-      document.getElementById('chatRetryBtn').style.display = 'none';
-      document.getElementById('chatReloginBtn').style.display = 'inline-flex';
-      chatShow('ineligible');
-      return;
-    }
+    if (res.status === 401) { chatShow('loggedOut'); return; }
     const data = await res.json();
     document.getElementById('chatRetryBtn').style.display = 'none';
     if (!res.ok) {
@@ -2577,7 +2549,6 @@ async function renderChatSection() {
 }
 
 document.getElementById('chatRetryBtn').addEventListener('click', renderChatSection);
-document.getElementById('chatReloginBtn').addEventListener('click', openAuthModal);
 
 // ---- Phone save (free, OTP nahi) ----
 chatSendOtpBtn.addEventListener('click', async () => {
@@ -2643,8 +2614,8 @@ async function loadChatRequests() {
       const row = document.createElement('div');
       row.style.cssText = 'display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--surface); border:1.6px solid var(--border); border-radius:12px; margin-bottom:8px;';
       row.innerHTML =
-        '<div style="width:36px; height:36px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:14px; color:#170D30; flex-shrink:0;">' + esc((r.name || '?').charAt(0).toUpperCase()) + '</div>' +
-        '<span style="flex:1; font-size:14px; font-weight:600; color:var(--text);">' + esc(r.name) + '</span>';
+        '<div style="width:36px; height:36px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:14px; color:#170D30; flex-shrink:0;">' + (r.name || '?').charAt(0).toUpperCase() + '</div>' +
+        '<span style="flex:1; font-size:14px; font-weight:600; color:var(--text);">' + r.name + '</span>';
       const acceptBtn = document.createElement('button');
       acceptBtn.type = 'button';
       acceptBtn.textContent = d.chatAccept;
@@ -2687,10 +2658,10 @@ async function loadChatFriends() {
       row.style.cssText = 'display:flex; align-items:center; gap:12px; padding:14px; background:var(--surface); border:1.6px solid var(--border); border-radius:14px; margin-bottom:8px; cursor:pointer;';
       const preview = f.lastMessage ? ((f.lastMessage.mine ? 'You: ' : '') + f.lastMessage.body) : '';
       row.innerHTML =
-        '<div style="width:44px; height:44px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:16px; color:#170D30; flex-shrink:0;">' + esc((f.name || '?').charAt(0).toUpperCase()) + '</div>' +
+        '<div style="width:44px; height:44px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:16px; color:#170D30; flex-shrink:0;">' + (f.name || '?').charAt(0).toUpperCase() + '</div>' +
         '<div style="flex:1; min-width:0;">' +
-          '<p style="font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:2px;">' + esc(f.name) + '</p>' +
-          '<p style="font-size:12.5px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + esc(preview) + '</p>' +
+          '<p style="font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:2px;">' + f.name + '</p>' +
+          '<p style="font-size:12.5px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + preview + '</p>' +
         '</div>' +
         (f.unread > 0 ? '<span style="background:var(--pink); color:#fff; font-size:11px; font-weight:700; min-width:20px; height:20px; border-radius:10px; display:grid; place-items:center; padding:0 6px; flex-shrink:0;">' + f.unread + '</span>' : '');
       row.addEventListener('click', () => openChatWindow(f.friendshipId, f.name));
