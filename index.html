@@ -811,6 +811,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       </div>
       <div id="chatFriendsList"></div>
     </div>
+    <p id="chatDebugLine" style="text-align:center; font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint); margin-top:22px; word-break:break-word;"></p>
   </div>
 </section>
 
@@ -838,7 +839,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
   <div style="display:flex; gap:10px; padding:14px 16px; border-top:1.6px solid var(--border); background:var(--surface); flex-shrink:0;">
     <textarea id="chatWindowInput" rows="1" data-i18n-placeholder="chatMessagePlaceholder" placeholder="Message likhein..." style="flex:1; resize:none; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:14px; padding:12px 14px; color:var(--text); font-size:14.5px; font-family:var(--font-body); max-height:100px;"></textarea>
-    <button type="button" class="btn btn-primary" id="chatWindowSendBtn" data-i18n="askButton" style="flex-shrink:0;">Poocho</button>
+    <button type="button" class="btn btn-primary" id="chatWindowSendBtn" data-i18n="chatSendBtn" style="flex-shrink:0;">Bhejein</button>
   </div>
 </div>
 
@@ -1161,11 +1162,17 @@ const translations = {
     chatLoginPrompt: 'Login first to see Friends Chat.',
     chatVerifyTitle: 'Set your number', chatVerifyDesc: "Friends can send you a request using this number — your number is never shown to anyone.",
     chatSaveNumber: 'Save', chatSavingNumber: 'Saving...',
+    authConfirmEmail: 'Account created! We sent a confirmation link to your email — click it, then login here.',
+    authConfirmEmailLogin: 'Please confirm your email first (check inbox and spam for the link), then login.',
+    authNoSession: 'Login did not complete. Please try again.', authGenericError: 'Something went wrong',
+    authClassRequired: 'Please select your class or level',
+    chatSessionRejected: "Your login session isn't valid on the chat server. Please logout and login again.",
     chatRetry: 'Try again', chatConnectionError: "Couldn't reach the server. Check your internet or try again in a moment.",
     chatNameLabel: "Name (friends will see this)", chatPhoneLabel: 'Phone number', chatPhonePlaceholder: '0300 1234567',
     chatSendCode: 'Send code', chatCodeLabel: '6-digit code', chatVerifyCode: 'Verify', chatChangeNumber: 'Change number',
     chatAddFriendPlaceholder: "Friend's number (0300...)", chatAddFriendBtn: 'Add',
     chatRequestsTitle: 'Friend Requests', chatFriendsEmptyText: "No friends yet. Type a number above to send a friend request.",
+    chatSendBtn: 'Send',
     chatBlockBtn: 'Block', chatReportBtn: 'Report', chatMessagePlaceholder: 'Type a message...',
     chatNeedClass: 'Please set your class first.', chatNoPrimary: 'Chat is not available for Class 1-5 students.',
     chatNameRequired: 'Please enter your name (at least 2 letters).', chatPhoneRequired: 'Please enter a phone number.',
@@ -1284,11 +1291,17 @@ const translations = {
     chatLoginPrompt: 'دوستوں سے بات چیت دیکھنے کے لیے پہلے لاگ ان کریں۔',
     chatVerifyTitle: 'اپنا نمبر سیٹ کریں', chatVerifyDesc: 'دوست اسی نمبر سے آپ کو درخواست بھیج سکیں گے — نمبر کسی کو نظر نہیں آتا۔',
     chatSaveNumber: 'محفوظ کریں', chatSavingNumber: 'محفوظ ہو رہا ہے...',
+    authConfirmEmail: 'اکاؤنٹ بن گیا! آپ کی ای میل پر تصدیقی لنک بھیجا گیا ہے — اس پر کلک کریں، پھر یہاں لاگ ان کریں۔',
+    authConfirmEmailLogin: 'پہلے اپنی ای میل کی تصدیق کریں (ان باکس اور اسپیم میں لنک دیکھیں)، پھر لاگ ان کریں۔',
+    authNoSession: 'لاگ ان مکمل نہیں ہوا۔ دوبارہ کوشش کریں۔', authGenericError: 'کچھ مسئلہ ہو گیا',
+    authClassRequired: 'اپنی کلاس یا لیول منتخب کریں',
+    chatSessionRejected: 'چیٹ سرور کو آپ کا لاگ ان سیشن درست نہیں لگا۔ لاگ آؤٹ کر کے دوبارہ لاگ ان کریں۔',
     chatRetry: 'دوبارہ کوشش کریں', chatConnectionError: 'سرور سے رابطہ نہیں ہو سکا۔ انٹرنیٹ چیک کریں یا تھوڑی دیر بعد دوبارہ کوشش کریں۔',
     chatNameLabel: 'نام (دوستوں کو یہی نظر آئے گا)', chatPhoneLabel: 'فون نمبر', chatPhonePlaceholder: '0300 1234567',
     chatSendCode: 'کوڈ بھیجیں', chatCodeLabel: '6 ہندسوں کا کوڈ', chatVerifyCode: 'تصدیق کریں', chatChangeNumber: 'نمبر تبدیل کریں',
     chatAddFriendPlaceholder: 'دوست کا نمبر (0300...)', chatAddFriendBtn: 'شامل کریں',
     chatRequestsTitle: 'فرینڈ ریکویسٹس', chatFriendsEmptyText: 'ابھی کوئی دوست شامل نہیں۔ اوپر نمبر لکھ کر فرینڈ ریکویسٹ بھیجیں۔',
+    chatSendBtn: 'بھیجیں',
     chatBlockBtn: 'بلاک کریں', chatReportBtn: 'رپورٹ کریں', chatMessagePlaceholder: 'پیغام لکھیں...',
     chatNeedClass: 'پہلے اپنی کلاس سیٹ کریں۔', chatNoPrimary: 'چیٹ کلاس 1-5 کے طلبہ کے لیے دستیاب نہیں ہے۔',
     chatNameRequired: 'اپنا نام لکھیں (کم از کم 2 حروف)۔', chatPhoneRequired: 'فون نمبر لکھیں۔',
@@ -1407,11 +1420,17 @@ const translations = {
     chatLoginPrompt: 'Friends chat dekhne ke liye pehle login karein.',
     chatVerifyTitle: 'Apna number set karein', chatVerifyDesc: 'Dost isi number se aapko request bhej sakenge — number kisi ko dikhta nahi.',
     chatSaveNumber: 'Save karein', chatSavingNumber: 'Save ho raha hai...',
+    authConfirmEmail: 'Account ban gaya! Aap ki email par confirmation link bheja gaya hai — us par click karein, phir yahan login karein.',
+    authConfirmEmailLogin: 'Pehle apni email confirm karein (inbox aur spam mein link dekhein), phir login karein.',
+    authNoSession: 'Login mukammal nahi hua. Dobara try karein.', authGenericError: 'Kuch masla ho gaya',
+    authClassRequired: 'Apni class ya level select karein',
+    chatSessionRejected: 'Chat server ko aap ka login session durust nahi laga. Logout karke dobara login karein.',
     chatRetry: 'Dobara try karein', chatConnectionError: 'Server se rabta nahi ho saka. Internet check karein ya thori der baad dobara try karein.',
     chatNameLabel: 'Naam (doston ko yahi dikhega)', chatPhoneLabel: 'Phone number', chatPhonePlaceholder: '0300 1234567',
     chatSendCode: 'Code bhejein', chatCodeLabel: '6-digit code', chatVerifyCode: 'Verify karein', chatChangeNumber: 'Number badlein',
     chatAddFriendPlaceholder: "Dost ka number (0300...)", chatAddFriendBtn: 'Add karein',
     chatRequestsTitle: 'Friend Requests', chatFriendsEmptyText: 'Abhi koi dost add nahi hai. Upar number likh kar friend request bhejein.',
+    chatSendBtn: 'Bhejein',
     chatBlockBtn: 'Block karein', chatReportBtn: 'Report karein', chatMessagePlaceholder: 'Message likhein...',
     chatNeedClass: 'Pehle apni class set karein.', chatNoPrimary: 'Chat Class 1-5 ke students ke liye available nahi hai.',
     chatNameRequired: 'Apna naam likhein (kam se kam 2 huroof).', chatPhoneRequired: 'Phone number likhein.',
@@ -1520,6 +1539,10 @@ document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 // ============ Live AI demo — calls your own backend ============
 const BACKEND_URL = "https://nishaan-backend-production.up.railway.app";
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 const tabDoubtBtn = document.getElementById('tabDoubtBtn');
 const tabMcqBtn = document.getElementById('tabMcqBtn');
@@ -1816,14 +1839,8 @@ function startEditMessage(bubble, textSpan, editBtn) {
 async function showTutorGreeting() {
   if (greetingShown) return;
   greetingShown = true;
-  const userId = localStorage.getItem('nishaan_user_id');
-  const studentClass = localStorage.getItem('nishaan_student_class');
   try {
-    const res = await fetch(BACKEND_URL + '/api/tutor-greeting', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, studentClass, language: getCurrentLanguage() })
-    });
+    const res = await chatFetch('/api/tutor-greeting', { method: 'POST', body: { language: getCurrentLanguage() } });
     const data = await res.json();
     appendMessage('assistant', data.greeting);
     chatHistory.push({ role: 'assistant', content: data.greeting });
@@ -1849,26 +1866,24 @@ async function submitUserMessage(question) {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
   try {
-    const res = await fetch(BACKEND_URL + '/api/doubt', {
+    const res = await chatFetch('/api/doubt', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      body: {
         question,
-        userId: localStorage.getItem('nishaan_user_id'),
         studentClass: localStorage.getItem('nishaan_student_class'),
         history: chatHistory.slice(0, -1),
         language: getCurrentLanguage()
-      })
+      }
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Request failed');
+    if (!res.ok) { const err = new Error(data.error || 'Request failed'); err.status = res.status; throw err; }
     document.getElementById('thinkingBubble')?.remove();
     appendMessage('assistant', data.answer);
     chatHistory.push({ role: 'assistant', content: data.answer });
     if (callActive) speakText(data.answer);
   } catch (e) {
     document.getElementById('thinkingBubble')?.remove();
-    appendMessage('assistant', dict.errorGeneric, { noEdit: true });
+    appendMessage('assistant', e.status === 429 ? e.message : dict.errorGeneric, { noEdit: true });
   } finally {
     doubtBtn.disabled = false; doubtBtn.textContent = dict.askButton;
   }
@@ -1986,16 +2001,15 @@ async function generateMcq() {
   mcqBtn.disabled = true; mcqBtn.textContent = 'Bana rahe hain...';
   mcqAnswer.innerHTML = '';
   try {
-    const res = await fetch(BACKEND_URL + '/api/mcq', {
+    const res = await chatFetch('/api/mcq', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ topic, userId: localStorage.getItem('nishaan_user_id'), studentClass: localStorage.getItem('nishaan_student_class'), language: getCurrentLanguage() })
+      body: { topic, studentClass: localStorage.getItem('nishaan_student_class'), language: getCurrentLanguage() }
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Request failed');
+    if (!res.ok) { const err = new Error(data.error || 'Request failed'); err.status = res.status; throw err; }
     renderMcqs(data.questions || [], topic);
   } catch (e) {
-    mcqAnswer.innerHTML = '<div style="margin-top:18px; padding:18px; border-radius:14px; background:var(--bg-soft); border:1.4px solid var(--border); font-size:14px; color:var(--pink);">Kuch masla ho gaya. Backend check karein ya dobara try karein.</div>';
+    mcqAnswer.innerHTML = '<div style="margin-top:18px; padding:18px; border-radius:14px; background:var(--bg-soft); border:1.4px solid var(--border); font-size:14px; color:var(--pink);">' + escapeHtml(e.status === 429 ? e.message : 'Kuch masla ho gaya. Backend check karein ya dobara try karein.') + '</div>';
   } finally {
     mcqBtn.disabled = false; mcqBtn.textContent = 'Generate';
   }
@@ -2024,12 +2038,10 @@ function renderMcqs(questions, topic) {
         });
 
         // Track this answer's result so Progress Dashboard can show real accuracy
-        const userId = localStorage.getItem('nishaan_user_id');
-        if (userId) {
-          fetch(BACKEND_URL + '/api/mcq-result', {
+        if (localStorage.getItem('nishaan_user_id')) {
+          chatFetch('/api/mcq-result', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId, topic, question: q.question, isCorrect })
+            body: { topic, question: q.question, isCorrect }
           }).catch(() => {});
         }
       });
@@ -2132,7 +2144,7 @@ async function backfillStudentClassIfMissing() {
   if (!userId || existingClass) return;
 
   try {
-    const res = await fetch(BACKEND_URL + '/api/profile/' + userId);
+    const res = await chatFetch('/api/profile');
     if (res.ok) {
       const data = await res.json();
       if (data.studentClass) {
@@ -2166,11 +2178,7 @@ classFixSaveBtn.addEventListener('click', async () => {
   classFixSaveBtn.disabled = true;
   classFixSaveBtn.textContent = cfDict.classFixSaving;
   try {
-    const res = await fetch(BACKEND_URL + '/api/profile/' + userId, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ studentClass, email })
-    });
+    const res = await chatFetch('/api/profile', { method: 'POST', body: { studentClass } });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Save failed');
 
@@ -2197,7 +2205,8 @@ authForm.addEventListener('submit', async (e) => {
   const endpoint = authMode === 'login' ? '/api/login' : '/api/signup';
 
   if (authMode === 'signup' && !studentClass) {
-    authError.textContent = 'Apni class ya level select karein';
+    authError.textContent = (translations[getCurrentLanguage()] || translations.roman).authClassRequired;
+    authError.style.color = 'var(--pink)';
     authError.style.display = 'block';
     return;
   }
@@ -2217,7 +2226,21 @@ authForm.addEventListener('submit', async (e) => {
       body: JSON.stringify(body)
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Kuch masla ho gaya');
+    if (!res.ok) {
+      throw new Error(data.code === 'EMAIL_NOT_CONFIRMED' ? authDict.authConfirmEmailLogin : (data.error || authDict.authGenericError));
+    }
+
+    // Email confirmation ON hone par signup ke baad session nahi milta: login ka dikhawa nahi karna
+    if (!data.session || !data.session.access_token) {
+      if (authMode === 'signup') {
+        setAuthMode('login');
+        authError.textContent = authDict.authConfirmEmail;
+        authError.style.color = 'var(--cyan)';
+        authError.style.display = 'block';
+        return;
+      }
+      throw new Error(authDict.authNoSession);
+    }
 
     localStorage.setItem('nishaan_user_email', email);
     if (data.session && data.session.access_token) {
@@ -2243,10 +2266,11 @@ authForm.addEventListener('submit', async (e) => {
     if (typeof renderChatSection === 'function') renderChatSection();
   } catch (err) {
     authError.textContent = err.message;
+    authError.style.color = 'var(--pink)';
     authError.style.display = 'block';
   } finally {
     authSubmitBtn.disabled = false;
-    authSubmitBtn.textContent = authMode === 'login' ? 'Login karein' : 'Sign up karein';
+    authSubmitBtn.textContent = authMode === 'login' ? authDict.authSubmitLogin : authDict.authSubmitSignup;
   }
 });
 
@@ -2299,7 +2323,7 @@ async function renderProgressSection() {
   progressContent.style.display = 'none';
 
   try {
-    const res = await fetch(BACKEND_URL + '/api/weak-areas/' + userId);
+    const res = await chatFetch('/api/weak-areas');
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Load failed');
 
@@ -2322,7 +2346,7 @@ async function renderProgressSection() {
         const row = document.createElement('div');
         row.style.cssText = 'margin-bottom:16px;';
         row.innerHTML =
-          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + topic + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + percent + '% (' + correct + '/' + total + ')</span></div>' +
+          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + escapeHtml(topic) + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + percent + '% (' + correct + '/' + total + ')</span></div>' +
           '<div style="height:9px; border-radius:99px; background:var(--surface-2); overflow:hidden;"><span style="display:block; height:100%; border-radius:99px; width:' + percent + '%; background:' + barColor + ';"></span></div>';
         progressBars.appendChild(row);
       });
@@ -2341,7 +2365,7 @@ async function renderProgressSection() {
         const row = document.createElement('div');
         row.style.cssText = 'margin-bottom:16px;';
         row.innerHTML =
-          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + topic + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + count + ' attempt' + (count > 1 ? 's' : '') + '</span></div>' +
+          '<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:700; color:var(--text);">' + escapeHtml(topic) + '</span><span style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-dim);">' + count + ' attempt' + (count > 1 ? 's' : '') + '</span></div>' +
           '<div style="height:9px; border-radius:99px; background:var(--surface-2); overflow:hidden;"><span style="display:block; height:100%; border-radius:99px; width:' + pct + '%; background:' + color + ';"></span></div>';
         progressBars.appendChild(row);
       });
@@ -2352,7 +2376,7 @@ async function renderProgressSection() {
       const date = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       const item = document.createElement('div');
       item.style.cssText = 'display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); font-size:14px;';
-      item.innerHTML = '<span style="color:var(--text);">' + a.topic + '</span><span style="color:var(--text-faint); font-family:var(--font-mono); font-size:12px;">' + date + '</span>';
+      item.innerHTML = '<span style="color:var(--text);">' + escapeHtml(a.topic) + '</span><span style="color:var(--text-faint); font-family:var(--font-mono); font-size:12px;">' + date + '</span>';
       progressList.appendChild(item);
     });
 
@@ -2390,7 +2414,7 @@ async function renderLeaderboard() {
   leaderboardContent.style.display = 'none';
 
   try {
-    const res = await fetch(BACKEND_URL + '/api/leaderboard/' + studentClass);
+    const res = await chatFetch('/api/leaderboard');
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Load failed');
 
@@ -2405,14 +2429,14 @@ async function renderLeaderboard() {
     leaderboardRows.innerHTML = '';
     const medals = ['🥇', '🥈', '🥉'];
     list.forEach((entry, i) => {
-      const isMe = entry.userId === userId;
+      const isMe = entry.isMe;
       const row = document.createElement('div');
       row.style.cssText =
         'display:flex; align-items:center; gap:14px; padding:13px 16px; border-radius:12px; margin-bottom:4px;' +
         (isMe ? ' background:rgba(0,229,255,.1); border:1.4px solid var(--cyan);' : '');
       row.innerHTML =
         '<span style="width:28px; text-align:center; font-size:15px; font-weight:700; color:var(--text-faint); font-family:var(--font-mono);">' + (medals[i] || (i + 1)) + '</span>' +
-        '<span style="flex:1; font-size:14.5px; font-weight:700; color:var(--text);">' + entry.displayName + (isMe ? ' (Aap)' : '') + '</span>' +
+        '<span style="flex:1; font-size:14.5px; font-weight:700; color:var(--text);">' + escapeHtml(entry.displayName) + (isMe ? ' (Aap)' : '') + '</span>' +
         '<span style="font-family:var(--font-mono); font-size:13px; color:var(--text-dim);">' + entry.score + ' sahi</span>';
       leaderboardRows.appendChild(row);
     });
@@ -2508,42 +2532,71 @@ function chatShow(view) {
   chatMain.style.display = view === 'main' ? 'block' : 'none';
 }
 
+function chatDebug(result) {
+  const el = document.getElementById('chatDebugLine');
+  if (!el) return;
+  const has = (k) => (localStorage.getItem(k) ? 'yes' : 'no');
+  el.textContent = '[chat-debug v5] userId=' + has('nishaan_user_id') + ' token=' + has('nishaan_access_token') +
+    ' refresh=' + has('nishaan_refresh_token') + ' class=' + (localStorage.getItem('nishaan_student_class') || 'no') + ' -> ' + result;
+}
+
 async function renderChatSection() {
   clearInterval(chatFriendsPollTimer);
+  const d = chatDict();
+  const retryBtn = document.getElementById('chatRetryBtn');
+  retryBtn.style.display = 'none';
+
   const userId = localStorage.getItem('nishaan_user_id');
-  if (!userId) { chatShow('loggedOut'); return; }
+  if (!userId) { chatDebug('no-user-id'); chatShow('loggedOut'); return; }
+
+  // User id hai lekin token nahi: purana ya adhoora session. Login screen dikhane ki bajaye saaf wajah batao.
+  if (!localStorage.getItem('nishaan_access_token')) {
+    chatDebug('no-token');
+    chatIneligibleText.textContent = d.chatSessionRejected;
+    chatShow('ineligible');
+    return;
+  }
 
   try {
     const res = await chatFetch('/api/chat/me');
-    if (res.status === 401) { chatShow('loggedOut'); return; }
-    const data = await res.json();
-    document.getElementById('chatRetryBtn').style.display = 'none';
+    let data = {};
+    try { data = await res.json(); } catch (e) { /* non-JSON reply */ }
+
+    if (res.status === 401) {
+      chatDebug('http-401 ' + (data.code || ''));
+      chatIneligibleText.textContent = d.chatSessionRejected;
+      chatShow('ineligible');
+      return;
+    }
     if (!res.ok) {
-      const d = chatDict();
+      chatDebug('http-' + res.status + ' ' + (data.code || ''));
       if (data.code === 'CLASS_REQUIRED') chatIneligibleText.textContent = d.chatNeedClass;
       else if (data.code === 'PRIMARY_NOT_ALLOWED') chatIneligibleText.textContent = d.chatNoPrimary;
       else chatIneligibleText.textContent = data.error || d.errorGeneric;
+      retryBtn.style.display = 'inline-flex';
       chatShow('ineligible');
       return;
     }
     if (!data.eligible) {
-      const d = chatDict();
+      chatDebug('not-eligible ' + (data.reason || ''));
       chatIneligibleText.textContent = data.reason === 'PRIMARY_NOT_ALLOWED' ? d.chatNoPrimary : d.chatNeedClass;
       chatShow('ineligible');
       return;
     }
     if (!data.verified) {
+      chatDebug('phone-not-set');
       chatShow('phoneVerify');
       return;
     }
+    chatDebug('ok');
     chatShow('main');
     await Promise.all([loadChatRequests(), loadChatFriends()]);
     chatFriendsPollTimer = setInterval(loadChatFriends, 20000);
   } catch (e) {
     console.error('renderChatSection error:', e.message);
-    const d = chatDict();
+    chatDebug('network-error ' + e.message);
     chatIneligibleText.textContent = d.chatConnectionError;
-    document.getElementById('chatRetryBtn').style.display = 'inline-flex';
+    retryBtn.style.display = 'inline-flex';
     chatShow('ineligible');
   }
 }
@@ -2614,8 +2667,8 @@ async function loadChatRequests() {
       const row = document.createElement('div');
       row.style.cssText = 'display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--surface); border:1.6px solid var(--border); border-radius:12px; margin-bottom:8px;';
       row.innerHTML =
-        '<div style="width:36px; height:36px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:14px; color:#170D30; flex-shrink:0;">' + (r.name || '?').charAt(0).toUpperCase() + '</div>' +
-        '<span style="flex:1; font-size:14px; font-weight:600; color:var(--text);">' + r.name + '</span>';
+        '<div style="width:36px; height:36px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:14px; color:#170D30; flex-shrink:0;">' + escapeHtml((r.name || '?').charAt(0).toUpperCase()) + '</div>' +
+        '<span style="flex:1; font-size:14px; font-weight:600; color:var(--text);">' + escapeHtml(r.name) + '</span>';
       const acceptBtn = document.createElement('button');
       acceptBtn.type = 'button';
       acceptBtn.textContent = d.chatAccept;
@@ -2658,10 +2711,10 @@ async function loadChatFriends() {
       row.style.cssText = 'display:flex; align-items:center; gap:12px; padding:14px; background:var(--surface); border:1.6px solid var(--border); border-radius:14px; margin-bottom:8px; cursor:pointer;';
       const preview = f.lastMessage ? ((f.lastMessage.mine ? 'You: ' : '') + f.lastMessage.body) : '';
       row.innerHTML =
-        '<div style="width:44px; height:44px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:16px; color:#170D30; flex-shrink:0;">' + (f.name || '?').charAt(0).toUpperCase() + '</div>' +
+        '<div style="width:44px; height:44px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:16px; color:#170D30; flex-shrink:0;">' + escapeHtml((f.name || '?').charAt(0).toUpperCase()) + '</div>' +
         '<div style="flex:1; min-width:0;">' +
-          '<p style="font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:2px;">' + f.name + '</p>' +
-          '<p style="font-size:12.5px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + preview + '</p>' +
+          '<p style="font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:2px;">' + escapeHtml(f.name) + '</p>' +
+          '<p style="font-size:12.5px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(preview) + '</p>' +
         '</div>' +
         (f.unread > 0 ? '<span style="background:var(--pink); color:#fff; font-size:11px; font-weight:700; min-width:20px; height:20px; border-radius:10px; display:grid; place-items:center; padding:0 6px; flex-shrink:0;">' + f.unread + '</span>' : '');
       row.addEventListener('click', () => openChatWindow(f.friendshipId, f.name));
