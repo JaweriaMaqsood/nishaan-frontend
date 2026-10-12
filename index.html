@@ -1173,6 +1173,13 @@ const translations = {
     chatAddFriendPlaceholder: "Friend's number (0300...)", chatAddFriendBtn: 'Add',
     chatRequestsTitle: 'Friend Requests', chatFriendsEmptyText: "No friends yet. Type a number above to send a friend request.",
     chatSendBtn: 'Send',
+    micListening: '🎙️ Listening... speak now',
+    micNoSpeech: "Couldn't hear anything. Speak a little louder or closer to the mic.",
+    micBlocked: 'Microphone is blocked. Click the lock icon next to the address bar and allow the microphone.',
+    micNoDevice: 'No microphone found on this device.',
+    micNetwork: 'Voice service could not connect. Check your internet.',
+    noUrduVoice: "This device has no Urdu voice, so the reply can't be read aloud. Try the Edge browser.",
+    imageNeedsLogin: 'Please login first to generate images.',
     chatBlockBtn: 'Block', chatReportBtn: 'Report', chatMessagePlaceholder: 'Type a message...',
     chatNeedClass: 'Please set your class first.', chatNoPrimary: 'Chat is not available for Class 1-5 students.',
     chatNameRequired: 'Please enter your name (at least 2 letters).', chatPhoneRequired: 'Please enter a phone number.',
@@ -1302,6 +1309,13 @@ const translations = {
     chatAddFriendPlaceholder: 'دوست کا نمبر (0300...)', chatAddFriendBtn: 'شامل کریں',
     chatRequestsTitle: 'فرینڈ ریکویسٹس', chatFriendsEmptyText: 'ابھی کوئی دوست شامل نہیں۔ اوپر نمبر لکھ کر فرینڈ ریکویسٹ بھیجیں۔',
     chatSendBtn: 'بھیجیں',
+    micListening: '🎙️ سن رہی ہوں... بولیں',
+    micNoSpeech: 'کچھ سنائی نہیں دیا۔ تھوڑا بلند یا مائیک کے قریب بولیں۔',
+    micBlocked: 'مائیک بلاک ہے۔ ایڈریس بار کے ساتھ تالے کے نشان پر کلک کر کے مائیک کی اجازت دیں۔',
+    micNoDevice: 'اس ڈیوائس پر مائیک نہیں ملا۔',
+    micNetwork: 'وائس سروس سے رابطہ نہیں ہو سکا۔ انٹرنیٹ چیک کریں۔',
+    noUrduVoice: 'اس ڈیوائس میں اردو آواز موجود نہیں، اس لیے جواب بول کر نہیں سنایا جا سکتا۔ Edge براؤزر آزمائیں۔',
+    imageNeedsLogin: 'تصویر بنانے کے لیے پہلے لاگ ان کریں۔',
     chatBlockBtn: 'بلاک کریں', chatReportBtn: 'رپورٹ کریں', chatMessagePlaceholder: 'پیغام لکھیں...',
     chatNeedClass: 'پہلے اپنی کلاس سیٹ کریں۔', chatNoPrimary: 'چیٹ کلاس 1-5 کے طلبہ کے لیے دستیاب نہیں ہے۔',
     chatNameRequired: 'اپنا نام لکھیں (کم از کم 2 حروف)۔', chatPhoneRequired: 'فون نمبر لکھیں۔',
@@ -1431,6 +1445,13 @@ const translations = {
     chatAddFriendPlaceholder: "Dost ka number (0300...)", chatAddFriendBtn: 'Add karein',
     chatRequestsTitle: 'Friend Requests', chatFriendsEmptyText: 'Abhi koi dost add nahi hai. Upar number likh kar friend request bhejein.',
     chatSendBtn: 'Bhejein',
+    micListening: '🎙️ Sun rahi hoon... bolein',
+    micNoSpeech: 'Kuch sunai nahi diya. Thora buland ya mic ke qareeb bolein.',
+    micBlocked: 'Microphone block hai. Address bar ke sath wale lock icon par click karke microphone allow karein.',
+    micNoDevice: 'Is device par microphone nahi mila.',
+    micNetwork: 'Voice service se rabta nahi ho saka. Internet check karein.',
+    noUrduVoice: 'Is device mein Urdu awaaz nahi hai, is liye jawab bol kar nahi sunaya ja sakta. Edge browser try karein.',
+    imageNeedsLogin: 'Tasveer banane ke liye pehle login karein.',
     chatBlockBtn: 'Block karein', chatReportBtn: 'Report karein', chatMessagePlaceholder: 'Message likhein...',
     chatNeedClass: 'Pehle apni class set karein.', chatNoPrimary: 'Chat Class 1-5 ke students ke liye available nahi hai.',
     chatNameRequired: 'Apna naam likhein (kam se kam 2 huroof).', chatPhoneRequired: 'Phone number likhein.',
@@ -1571,74 +1592,9 @@ doubtInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); askDoubt(); }
 });
 
-// ============ Voice Input (Mic) ============
+// ============ Voice (Mic input + Call Mode) ============
 const micBtn = document.getElementById('micBtn');
 const micStatus = document.getElementById('micStatus');
-const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-if (!SpeechRecognitionAPI) {
-  // Browser doesn't support voice input (e.g. Firefox) — hide the mic button
-  micBtn.style.display = 'none';
-} else {
-  const recognition = new SpeechRecognitionAPI();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-  let isListening = false;
-
-  micBtn.addEventListener('click', () => {
-    if (isListening) {
-      recognition.stop();
-      return;
-    }
-    try {
-      recognition.start();
-    } catch (e) {
-      // recognition may already be running; ignore
-    }
-  });
-
-  recognition.addEventListener('start', () => {
-    isListening = true;
-    micStatus.style.display = 'block';
-    micBtn.style.borderColor = 'var(--pink)';
-    micBtn.style.color = 'var(--pink)';
-  });
-
-  recognition.addEventListener('end', () => {
-    isListening = false;
-    micStatus.style.display = 'none';
-    micBtn.style.borderColor = '';
-    micBtn.style.color = '';
-  });
-
-  recognition.addEventListener('result', (event) => {
-    const transcript = event.results[0][0].transcript;
-    if (callActive) {
-      handleCallTranscript(transcript);
-    } else {
-      doubtInput.value = doubtInput.value ? doubtInput.value + ' ' + transcript : transcript;
-    }
-  });
-
-  recognition.addEventListener('error', () => {
-    isListening = false;
-    micStatus.style.display = 'none';
-    micBtn.style.borderColor = '';
-    micBtn.style.color = '';
-    if (callActive) setCallState('idle');
-  });
-
-  // Expose so call mode can restart listening after the tutor finishes speaking
-  window.__rehnumaStartListening = () => {
-    try { recognition.start(); } catch (e) {}
-  };
-  window.__rehnumaStopListening = () => {
-    try { recognition.stop(); } catch (e) {}
-  };
-}
-
-// ============ Call Mode (professional full-screen voice call) ============
 const callModeBtn = document.getElementById('callModeBtn');
 const callOverlay = document.getElementById('callOverlay');
 const callCloseX = document.getElementById('callCloseX');
@@ -1646,30 +1602,190 @@ const callEndBtn = document.getElementById('callEndBtn');
 const callMicBtn = document.getElementById('callMicBtn');
 const callStatusText = document.getElementById('callStatusText');
 const callPulse = document.getElementById('callPulse');
+const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
 const SpeechSynthesisAPI = window.speechSynthesis;
+
 let callActive = false;
+let isListening = false;
+let recognition = null;
+let micMode = 'dictate'; // 'dictate' (mic button) | 'call'
+let callSilentRetries = 0;
+let recLangOverride = null;
 
-// Pick the best available voice: prefer an Urdu voice if the device has one, else a clear English one
-let selectedVoice = null;
-function pickBestVoice() {
-  if (!SpeechSynthesisAPI) return;
+function voiceDict() { return translations[getCurrentLanguage()] || translations.roman; }
+
+// Urdu bolne walon ke liye ur-PK; English mode mein en-PK (Pakistani accent)
+function recognitionLang() {
+  if (recLangOverride) return recLangOverride;
+  return getCurrentLanguage() === 'en' ? 'en-PK' : 'ur-PK';
+}
+
+function setMicUi(on) {
+  micBtn.style.borderColor = on ? 'var(--pink)' : '';
+  micBtn.style.color = on ? 'var(--pink)' : '';
+}
+function showMicMessage(text) {
+  micStatus.textContent = text;
+  micStatus.style.display = text ? 'block' : 'none';
+}
+
+function startListening(mode) {
+  if (!SpeechRecognitionAPI || isListening) return;
+  micMode = mode;
+  const d = voiceDict();
+  const baseText = mode === 'dictate' ? doubtInput.value.trim() : '';
+  let finalText = '';
+  let lastInterim = '';
+  let errorCode = null;
+
+  const rec = new SpeechRecognitionAPI();
+  recognition = rec;
+  rec.lang = recognitionLang();
+  rec.interimResults = true;
+  rec.continuous = mode === 'dictate';
+  rec.maxAlternatives = 1;
+
+  rec.onstart = () => {
+    isListening = true;
+    if (mode === 'dictate') { setMicUi(true); showMicMessage(d.micListening); }
+  };
+
+  rec.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const t = event.results[i][0].transcript;
+      if (event.results[i].isFinal) finalText += t + ' ';
+      else interim += t;
+    }
+    lastInterim = interim;
+    const shown = (finalText + interim).trim();
+    if (mode === 'dictate') {
+      doubtInput.value = (baseText + ' ' + shown).trim();
+    } else if (shown) {
+      callStatusText.textContent = shown;
+    }
+  };
+
+  rec.onerror = (event) => { errorCode = event.error; };
+
+  rec.onend = () => {
+    isListening = false;
+    if (recognition === rec) recognition = null;
+    setMicUi(false);
+
+    // Browser ko ye language samajh na aaye to English par wapas
+    if (errorCode === 'language-not-supported' && !recLangOverride) {
+      recLangOverride = 'en-US';
+      if (mode === 'call' && callActive) startListening('call');
+      return;
+    }
+
+    const fatalMsg =
+      errorCode === 'not-allowed' || errorCode === 'service-not-allowed' ? d.micBlocked :
+      errorCode === 'audio-capture' ? d.micNoDevice :
+      errorCode === 'network' ? d.micNetwork : null;
+
+    if (mode === 'dictate') {
+      if (fatalMsg) { showMicMessage(fatalMsg); setTimeout(() => showMicMessage(''), 6000); }
+      else if (errorCode === 'no-speech' && !finalText && !lastInterim) { showMicMessage(d.micNoSpeech); setTimeout(() => showMicMessage(''), 4000); }
+      else showMicMessage('');
+      return;
+    }
+
+    // call mode
+    if (!callActive) return;
+    const text = (finalText || lastInterim).trim();
+    if (text) { callSilentRetries = 0; handleCallTranscript(text); return; }
+    if (fatalMsg) { setCallState('idle'); callStatusText.textContent = fatalMsg; return; }
+    if (callSilentRetries < 2) {
+      callSilentRetries += 1;
+      setTimeout(() => { if (callActive && !isListening) { setCallState('listening'); startListening('call'); } }, 300);
+    } else {
+      callSilentRetries = 0;
+      setCallState('idle');
+      callStatusText.textContent = d.micNoSpeech;
+    }
+  };
+
+  try { rec.start(); } catch (e) { isListening = false; }
+}
+
+function stopListening() {
+  if (recognition) { try { recognition.stop(); } catch (e) {} }
+}
+
+if (!SpeechRecognitionAPI) {
+  micBtn.style.display = 'none';
+} else {
+  micBtn.addEventListener('click', () => {
+    if (isListening) stopListening();
+    else startListening('dictate');
+  });
+}
+
+// ---------- Text-to-speech ----------
+function pickVoice() {
+  if (!SpeechSynthesisAPI) return null;
   const voices = SpeechSynthesisAPI.getVoices();
-  if (!voices.length) return;
-  selectedVoice =
-    voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ur')) ||
-    voices.find(v => v.lang && v.lang.toLowerCase().startsWith('hi')) || // Hindi voice often pronounces Roman Urdu words more naturally than English voices
-    voices.find(v => v.lang === 'en-IN') ||
-    voices.find(v => v.lang === 'en-GB') ||
-    voices[0];
+  if (!voices.length) return null;
+  const lang = getCurrentLanguage();
+  const starts = (p) => (v) => (v.lang || '').toLowerCase().replace('_', '-').startsWith(p);
+  const best = (list) => list.find((v) => /natural|online|google/i.test(v.name)) || list[0] || null;
+  const group = (...prefixes) => {
+    for (const p of prefixes) { const g = voices.filter(starts(p)); if (g.length) return best(g); }
+    return null;
+  };
+  if (lang === 'ur') return group('ur');
+  if (lang === 'en') return group('en-pk', 'en-in', 'en-gb', 'en') || voices[0];
+  return group('en-in', 'hi', 'en-gb', 'en') || voices[0];
 }
-if (SpeechSynthesisAPI) {
-  pickBestVoice();
-  SpeechSynthesisAPI.onvoiceschanged = pickBestVoice;
+if (SpeechSynthesisAPI) { SpeechSynthesisAPI.getVoices(); SpeechSynthesisAPI.onvoiceschanged = () => {}; }
+
+function speakText(text) {
+  if (!SpeechSynthesisAPI) return;
+  SpeechSynthesisAPI.cancel();
+  const d = voiceDict();
+  const voice = pickVoice();
+
+  const afterSpeaking = () => {
+    if (!callActive) return;
+    setTimeout(() => {
+      if (!callActive) return;
+      setCallState('listening');
+      startListening('call');
+    }, 400);
+  };
+
+  if (getCurrentLanguage() === 'ur' && !voice) {
+    setCallState('idle');
+    callStatusText.textContent = d.noUrduVoice;
+    setTimeout(afterSpeaking, 2500);
+    return;
+  }
+
+  const clean = String(text).replace(/https?:\/\/\S+/g, ' ').replace(/[*_#`>~|]/g, ' ').replace(/\s+/g, ' ').trim();
+  // Chhote tukron mein, taake Chrome beech mein na ruk jaye
+  const chunks = clean.split(/(?<=[.!?۔؟])\s+/).reduce((acc, part) => {
+    const last = acc[acc.length - 1];
+    if (last && (last + ' ' + part).length < 180) acc[acc.length - 1] = last + ' ' + part;
+    else acc.push(part);
+    return acc;
+  }, []);
+  if (!chunks.length) { afterSpeaking(); return; }
+
+  if (callActive) setCallState('speaking');
+  chunks.forEach((chunk, i) => {
+    const u = new SpeechSynthesisUtterance(chunk);
+    if (voice) { u.voice = voice; u.lang = voice.lang; }
+    u.rate = 0.95;
+    if (i === chunks.length - 1) { u.onend = afterSpeaking; u.onerror = afterSpeaking; }
+    SpeechSynthesisAPI.speak(u);
+  });
 }
 
+// ---------- Call Mode ----------
 function setCallState(state) {
-  // state: 'idle' | 'listening' | 'speaking' | 'thinking'
-  const dict = translations[getCurrentLanguage()] || translations.roman;
+  const dict = voiceDict();
   if (state === 'listening') {
     callStatusText.textContent = dict.callListening;
     callPulse.style.background = 'var(--cyan)';
@@ -1698,6 +1814,7 @@ function openCall() {
     return;
   }
   callActive = true;
+  callSilentRetries = 0;
   callOverlay.style.display = 'flex';
   setCallState('idle');
 }
@@ -1705,7 +1822,8 @@ function openCall() {
 function closeCall() {
   callActive = false;
   SpeechSynthesisAPI.cancel();
-  if (window.__rehnumaStopListening) window.__rehnumaStopListening();
+  if (recognition) { try { recognition.abort(); } catch (e) {} }
+  isListening = false;
   callOverlay.style.display = 'none';
   setCallState('idle');
 }
@@ -1714,7 +1832,11 @@ callModeBtn.addEventListener('click', openCall);
 callCloseX.addEventListener('click', closeCall);
 callEndBtn.addEventListener('click', closeCall);
 callMicBtn.addEventListener('click', () => {
-  if (window.__rehnumaStartListening) window.__rehnumaStartListening();
+  if (!callActive || isListening) return;
+  SpeechSynthesisAPI.cancel();
+  callSilentRetries = 0;
+  setCallState('listening');
+  startListening('call');
 });
 
 if (!SpeechRecognitionAPI || !SpeechSynthesisAPI) {
@@ -1724,28 +1846,7 @@ if (!SpeechRecognitionAPI || !SpeechSynthesisAPI) {
 async function handleCallTranscript(transcript) {
   setCallState('thinking');
   doubtInput.value = transcript;
-  await askDoubt(); // appendMessage + speakText happen inside askDoubt via callActive check
-}
-
-function speakText(text) {
-  if (!SpeechSynthesisAPI) return;
-  SpeechSynthesisAPI.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  if (selectedVoice) utterance.voice = selectedVoice;
-  utterance.lang = selectedVoice ? selectedVoice.lang : 'en-US';
-  utterance.rate = 0.95;
-  utterance.pitch = 1.05;
-  if (callActive) setCallState('speaking');
-  utterance.onend = () => {
-    // After the tutor finishes speaking, listen again if the call is still open
-    if (callActive) {
-      setTimeout(() => {
-        setCallState('listening');
-        if (window.__rehnumaStartListening) window.__rehnumaStartListening();
-      }, 400);
-    }
-  };
-  SpeechSynthesisAPI.speak(utterance);
+  await askDoubt(); // jawab aane par speakText() submitUserMessage se chalta hai
 }
 
 let chatHistory = []; // [{role:'user'|'assistant', content:'...'}]
@@ -1872,7 +1973,8 @@ async function submitUserMessage(question) {
         question,
         studentClass: localStorage.getItem('nishaan_student_class'),
         history: chatHistory.slice(0, -1),
-        language: getCurrentLanguage()
+        language: getCurrentLanguage(),
+        voice: callActive
       }
     });
     const data = await res.json();
@@ -1884,12 +1986,14 @@ async function submitUserMessage(question) {
   } catch (e) {
     document.getElementById('thinkingBubble')?.remove();
     appendMessage('assistant', e.status === 429 ? e.message : dict.errorGeneric, { noEdit: true });
+    if (callActive) { setCallState('idle'); callStatusText.textContent = e.status === 429 ? e.message : dict.errorGeneric; }
   } finally {
     doubtBtn.disabled = false; doubtBtn.textContent = dict.askButton;
   }
 }
 
 async function askDoubt() {
+  if (isListening && micMode === 'dictate') stopListening();
   const q = doubtInput.value.trim();
   if (!q) return;
   doubtInput.value = '';
@@ -1936,10 +2040,13 @@ imageGenBtn.addEventListener('click', async () => {
   const dict = translations[getCurrentLanguage()] || translations.roman;
   const prompt = doubtInput.value.trim();
 
-  // Empty input: tell the student what to do instead of silently doing nothing
   if (!prompt) {
     appendMessage('assistant', dict.imageNeedsPrompt, { noEdit: true });
     doubtInput.focus();
+    return;
+  }
+  if (!localStorage.getItem('nishaan_user_id')) {
+    appendMessage('assistant', dict.imageNeedsLogin, { noEdit: true });
     return;
   }
 
@@ -1958,20 +2065,15 @@ imageGenBtn.addEventListener('click', async () => {
   chatMessages.appendChild(loadingBubble);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
-  const seed = Math.floor(Math.random() * 100000);
-  const encoded = encodeURIComponent(prompt);
-  const candidateUrls = [
-    'https://image.pollinations.ai/prompt/' + encoded + '?width=512&height=512&seed=' + seed + '&nologo=true',
-    'https://gen.pollinations.ai/image/' + encoded + '?width=512&height=512&seed=' + seed
-  ];
-
   try {
-    const workingUrl = await loadImageWithFallback(candidateUrls, 45000);
+    const res = await chatFetch('/api/image', { method: 'POST', body: { prompt } });
+    const data = await res.json();
+    if (!res.ok || !data.image) { const err = new Error(data.error || 'Image failed'); err.status = res.status; throw err; }
     loadingBubble.remove();
     const imgBubble = document.createElement('div');
     imgBubble.style.cssText = 'max-width:85%; margin-bottom:14px; margin-right:auto;';
     const imgEl = document.createElement('img');
-    imgEl.src = workingUrl;
+    imgEl.src = data.image;
     imgEl.alt = prompt;
     imgEl.style.cssText = 'width:100%; max-width:280px; border-radius:14px; border:1.4px solid var(--border); display:block;';
     imgBubble.appendChild(imgEl);
@@ -1980,7 +2082,7 @@ imageGenBtn.addEventListener('click', async () => {
     chatHistory.push({ role: 'assistant', content: '[Generated an image for: ' + prompt + ']' });
   } catch (err) {
     loadingBubble.remove();
-    appendMessage('assistant', dict.imageFailed, { noEdit: true });
+    appendMessage('assistant', err.status === 429 ? err.message : dict.imageFailed, { noEdit: true });
   } finally {
     imageGenBtn.disabled = false;
     imageGenBtn.style.opacity = '';
