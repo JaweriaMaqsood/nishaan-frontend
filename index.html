@@ -1629,6 +1629,23 @@ function showMicMessage(text) {
   micStatus.style.display = text ? 'block' : 'none';
 }
 
+// Roman Urdu mode mein browser Urdu script likhta hai; use Roman Urdu mein badalte hain
+function needsRoman(text) {
+  return getCurrentLanguage() === 'roman' && /[\u0600-\u06FF]/.test(text);
+}
+async function toRomanIfNeeded(text) {
+  if (!needsRoman(text)) return text;
+  try {
+    const call = chatFetch('/api/transliterate', { method: 'POST', body: { text } })
+      .then((r) => r.json())
+      .then((d) => (d && d.text ? d.text : text));
+    const timeout = new Promise((resolve) => setTimeout(() => resolve(text), 6000));
+    return await Promise.race([call, timeout]);
+  } catch (e) {
+    return text;
+  }
+}
+
 function startListening(mode) {
   if (!SpeechRecognitionAPI || isListening) return;
   micMode = mode;
@@ -1688,7 +1705,17 @@ function startListening(mode) {
     if (mode === 'dictate') {
       if (fatalMsg) { showMicMessage(fatalMsg); setTimeout(() => showMicMessage(''), 6000); }
       else if (errorCode === 'no-speech' && !finalText && !lastInterim) { showMicMessage(d.micNoSpeech); setTimeout(() => showMicMessage(''), 4000); }
-      else showMicMessage('');
+      else {
+        showMicMessage('');
+        const spoken = (finalText || lastInterim).trim();
+        if (spoken && needsRoman(spoken)) {
+          showMicMessage('✍️ ...');
+          toRomanIfNeeded(spoken).then((converted) => {
+            doubtInput.value = (baseText + ' ' + converted).trim();
+            showMicMessage('');
+          });
+        }
+      }
       return;
     }
 
@@ -1845,6 +1872,8 @@ if (!SpeechRecognitionAPI || !SpeechSynthesisAPI) {
 
 async function handleCallTranscript(transcript) {
   setCallState('thinking');
+  transcript = await toRomanIfNeeded(transcript);
+  if (!callActive) return;
   doubtInput.value = transcript;
   await askDoubt(); // jawab aane par speakText() submitUserMessage se chalta hai
 }
@@ -2077,6 +2106,12 @@ imageGenBtn.addEventListener('click', async () => {
     imgEl.alt = prompt;
     imgEl.style.cssText = 'width:100%; max-width:280px; border-radius:14px; border:1.4px solid var(--border); display:block;';
     imgBubble.appendChild(imgEl);
+    if (data.prompt) {
+      const cap = document.createElement('p');
+      cap.textContent = data.prompt;
+      cap.style.cssText = 'font-size:11.5px; color:var(--text-faint); margin-top:6px; max-width:280px; line-height:1.5;';
+      imgBubble.appendChild(cap);
+    }
     chatMessages.appendChild(imgBubble);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     chatHistory.push({ role: 'assistant', content: '[Generated an image for: ' + prompt + ']' });
