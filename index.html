@@ -426,7 +426,8 @@ section{ padding:40px 0; }
 
 /* ===== Call mode (matches new look) ===== */
 #callOverlay{ background:radial-gradient(ellipse 70% 50% at 50% 15%, rgba(0,229,255,.10), transparent 65%), #0E1020 !important; }
-#callOverlay h3{ font-size:24px !important; }
+#callOverlay h3{ font-family:var(--font-body) !important; font-size:24px !important; font-weight:700 !important; letter-spacing:-.01em; }
+#callAvatarWrap > div:nth-child(2){ font-family:var(--font-body) !important; }
 #callAvatarWrap > div:nth-child(2){ background:var(--surface-2) !important; border:2px solid var(--cyan); color:var(--cyan) !important; box-shadow:0 0 0 8px rgba(0,229,255,.07), 0 24px 60px -22px rgba(0,229,255,.45) !important; }
 #callPulse{ background:var(--cyan) !important; }
 .call-timer{ font-family:var(--font-mono); font-size:13px; color:var(--cyan); letter-spacing:.12em; margin:-18px 0 22px; opacity:0; transition:opacity .3s; }
@@ -936,7 +937,7 @@ section{ padding:40px 0; }
     <div class="section-head center reveal">
       <span class="eyebrow" data-i18n="chatEyebrow">Doston ke sath</span>
       <h2 data-i18n="chatTitle">Friends Chat</h2>
-      <p data-i18n="chatSub">Apna number verify karo, dost add karo, aur unse baat karo — bilkul WhatsApp jaisa, sirf Rehnuma students ke darmiyan.</p>
+      <p data-i18n="chatSub">Apna number set karo, dost add karo, aur unse baat karo — bilkul WhatsApp jaisa, sirf Rehnuma students ke darmiyan.</p>
     </div>
 
     <div id="chatLoggedOut" style="max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
@@ -1331,7 +1332,7 @@ const translations = {
     footerProduct: 'Product', footerCompany: 'Company', footerAbout: 'About us', footerContact: 'Contact',
     footerCopyright: '© 2026 Rehnuma. All rights reserved.',
     chatEyebrow: 'With friends', chatTitle: 'Friends Chat',
-    chatSub: 'Verify your number, add friends, and chat with them — just like WhatsApp, only between Rehnuma students.',
+    chatSub: 'Set your number, add friends, and chat with them — just like WhatsApp, only between Rehnuma students.',
     chatLoginPrompt: 'Login first to see Friends Chat.',
     chatVerifyTitle: 'Set your number', chatVerifyDesc: "Friends can send you a request using this number — your number is never shown to anyone.",
     chatSaveNumber: 'Save', chatSavingNumber: 'Saving...',
@@ -1467,7 +1468,7 @@ const translations = {
     footerProduct: 'پروڈکٹ', footerCompany: 'کمپنی', footerAbout: 'ہمارے بارے میں', footerContact: 'رابطہ',
     footerCopyright: '© 2026 رہنما۔ جملہ حقوق محفوظ ہیں۔',
     chatEyebrow: 'دوستوں کے ساتھ', chatTitle: 'دوستوں سے بات چیت',
-    chatSub: 'اپنا نمبر تصدیق کریں، دوست شامل کریں، اور ان سے بات کریں — بالکل واٹس ایپ کی طرح، صرف رہنما کے طلبہ کے درمیان۔',
+    chatSub: 'اپنا نمبر سیٹ کریں، دوست شامل کریں، اور ان سے بات کریں — بالکل واٹس ایپ کی طرح، صرف رہنما کے طلبہ کے درمیان۔',
     chatLoginPrompt: 'دوستوں سے بات چیت دیکھنے کے لیے پہلے لاگ ان کریں۔',
     chatVerifyTitle: 'اپنا نمبر سیٹ کریں', chatVerifyDesc: 'دوست اسی نمبر سے آپ کو درخواست بھیج سکیں گے — نمبر کسی کو نظر نہیں آتا۔',
     chatSaveNumber: 'محفوظ کریں', chatSavingNumber: 'محفوظ ہو رہا ہے...',
@@ -1603,7 +1604,7 @@ const translations = {
     footerProduct: 'Product', footerCompany: 'Company', footerAbout: 'Hamare baray mein', footerContact: 'Contact',
     footerCopyright: '© 2026 Rehnuma. Sab huqooq mehfooz.',
     chatEyebrow: 'Doston ke sath', chatTitle: 'Friends Chat',
-    chatSub: 'Apna number verify karo, dost add karo, aur unse baat karo — bilkul WhatsApp jaisa, sirf Rehnuma students ke darmiyan.',
+    chatSub: 'Apna number set karo, dost add karo, aur unse baat karo — bilkul WhatsApp jaisa, sirf Rehnuma students ke darmiyan.',
     chatLoginPrompt: 'Friends chat dekhne ke liye pehle login karein.',
     chatVerifyTitle: 'Apna number set karein', chatVerifyDesc: 'Dost isi number se aapko request bhej sakenge — number kisi ko dikhta nahi.',
     chatSaveNumber: 'Save karein', chatSavingNumber: 'Save ho raha hai...',
