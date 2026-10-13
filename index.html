@@ -1698,21 +1698,20 @@ document.querySelectorAll('.lang-option, .lang-option-mobile').forEach(btn => {
 applyLanguage(getCurrentLanguage());
 
 
-// Call timer: overlay khulne par chalta hai, band hone par ruk jata hai
+// Call timer: jab Javeria call utha leti hai tab chalna shuru hota hai
 (function(){
   const ov = document.getElementById('callOverlay'), tm = document.getElementById('callTimer');
   if (!ov || !tm) return;
   let iv = null, t0 = 0;
   const fmt = (n) => String(n).padStart(2, '0');
-  const sync = () => {
-    const open = ov.style.display !== 'none';
-    if (open && !iv) {
-      t0 = Date.now(); tm.classList.add('on'); tm.textContent = '00:00';
-      iv = setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); tm.textContent = fmt(Math.floor(s / 60)) + ':' + fmt(s % 60); }, 1000);
-    } else if (!open && iv) { clearInterval(iv); iv = null; tm.classList.remove('on'); }
-  };
-  new MutationObserver(sync).observe(ov, { attributes: true, attributeFilter: ['style'] });
+  const stop = () => { if (iv) { clearInterval(iv); iv = null; } tm.classList.remove('on'); };
+  document.addEventListener('call:connected', () => {
+    stop(); t0 = Date.now(); tm.classList.add('on'); tm.textContent = '00:00';
+    iv = setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); tm.textContent = fmt(Math.floor(s / 60)) + ':' + fmt(s % 60); }, 1000);
+  });
+  new MutationObserver(() => { if (ov.style.display === 'none') stop(); }).observe(ov, { attributes: true, attributeFilter: ['style'] });
 })();
+
 // ============ Sehar's Welcome Screen ============
 const seharWelcome = document.getElementById('seharWelcome');
 if (/[?&]sehar\b/.test(location.search)) { seharWelcome.style.display = 'block'; }
@@ -2025,19 +2024,74 @@ function setCallState(state) {
   }
 }
 
-function openCall() {
+let callRinging = false, callToken = 0, ringCtx = null;
+
+const CALL_TEXT = {
+  en: { ringing: 'Ringing...', intro: "Hello! I'm Javeria, your Rehnuma tutor. Which topic would you like help with today? Just ask me out loud." },
+  roman: { ringing: 'Ring ho rahi hai...', intro: 'Assalam o Alaikum! Main Javeria hoon, aapki Rehnuma tutor. Aaj aap kaun sa topic parhna chahte hain? Bas bol kar apna sawal poochh lein.' },
+  ur: { ringing: 'گھنٹی بج رہی ہے...', intro: 'السلام علیکم! میں جاویریا ہوں، آپ کی رہنما ٹیوٹر۔ آج آپ کون سا موضوع پڑھنا چاہتے ہیں؟ بس بول کر اپنا سوال پوچھ لیں۔' },
+};
+
+// Phone jaisi ring tone (Web Audio) — 3 baar, phir call uth jati hai
+function playRingTone(token) {
+  return new Promise((resolve) => {
+    let ctx;
+    try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { setTimeout(resolve, 3500); return; }
+    ringCtx = ctx;
+    const t = ctx.currentTime + 0.05;
+    const master = ctx.createGain(); master.gain.value = 0.18; master.connect(ctx.destination);
+    for (let i = 0; i < 3; i++) {
+      const start = t + i * 2.2;
+      [440, 480].forEach((f) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.frequency.value = f; o.connect(g); g.connect(master);
+        g.gain.setValueAtTime(0, start);
+        g.gain.linearRampToValueAtTime(1, start + 0.05);
+        g.gain.setValueAtTime(1, start + 1.35);
+        g.gain.linearRampToValueAtTime(0, start + 1.4);
+        o.start(start); o.stop(start + 1.45);
+      });
+    }
+    const total = 3 * 2.2 * 1000 - 400;
+    const timer = setTimeout(() => { try { ctx.close(); } catch (e) {} if (ringCtx === ctx) ringCtx = null; resolve(); }, total);
+    ringCtx._cancel = () => { clearTimeout(timer); try { ctx.close(); } catch (e) {} resolve(); };
+  });
+}
+
+function stopRingTone() {
+  if (ringCtx && ringCtx._cancel) { const c = ringCtx; ringCtx = null; c._cancel(); }
+}
+
+async function openCall() {
   if (!SpeechRecognitionAPI || !SpeechSynthesisAPI) {
     appendMessage('assistant', 'Ye feature Chrome ya Edge browser mein kaam karta hai. Apna browser check karein.');
     return;
   }
+  const token = ++callToken;
   callActive = true;
   callSilentRetries = 0;
   callOverlay.style.display = 'flex';
-  setCallState('idle');
+
+  // 1) Pehle ring ho
+  const T = CALL_TEXT[getCurrentLanguage()] || CALL_TEXT.roman;
+  callRinging = true;
+  callStatusText.textContent = T.ringing;
+  callPulse.style.background = 'var(--cyan)';
+  callPulse.style.animation = 'callPulseAnim 1.4s ease-out infinite';
+  await playRingTone(token);
+  callRinging = false;
+  if (!callActive || token !== callToken) return;
+
+  // 2) Call uth gayi — Javeria salam kare, intro de, phir student ki baat suney
+  document.dispatchEvent(new Event('call:connected'));
+  speakText(T.intro);
 }
 
 function closeCall() {
   callActive = false;
+  callRinging = false;
+  callToken++;
+  stopRingTone();
   SpeechSynthesisAPI.cancel();
   if (recognition) { try { recognition.abort(); } catch (e) {} }
   isListening = false;
@@ -2049,7 +2103,7 @@ callModeBtn.addEventListener('click', openCall);
 callCloseX.addEventListener('click', closeCall);
 callEndBtn.addEventListener('click', closeCall);
 callMicBtn.addEventListener('click', () => {
-  if (!callActive || isListening) return;
+  if (!callActive || isListening || callRinging) return;
   SpeechSynthesisAPI.cancel();
   callSilentRetries = 0;
   setCallState('listening');
