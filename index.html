@@ -423,6 +423,20 @@ section{ padding:40px 0; }
 .chat-msg-user:hover .chat-edit-btn,.chat-edit-btn:focus-visible{ opacity:1; }
 .chat-edit-btn:hover{ background:rgba(255,255,255,.1); color:var(--text); }
 @media(hover:none){ .chat-edit-btn{ opacity:.7; } }
+
+/* ===== Call mode (matches new look) ===== */
+#callOverlay{ background:radial-gradient(ellipse 70% 50% at 50% 15%, rgba(0,229,255,.10), transparent 65%), #0E1020 !important; }
+#callOverlay h3{ font-size:24px !important; }
+#callAvatarWrap > div:nth-child(2){ background:var(--surface-2) !important; border:2px solid var(--cyan); color:var(--cyan) !important; box-shadow:0 0 0 8px rgba(0,229,255,.07), 0 24px 60px -22px rgba(0,229,255,.45) !important; }
+#callPulse{ background:var(--cyan) !important; }
+.call-timer{ font-family:var(--font-mono); font-size:13px; color:var(--cyan); letter-spacing:.12em; margin:-18px 0 22px; opacity:0; transition:opacity .3s; }
+.call-timer.on{ opacity:1; }
+#callStatusText{ display:inline-block; padding:8px 18px; border:1px solid var(--border-strong); border-radius:999px; background:rgba(255,255,255,.04); font-size:14px !important; margin-bottom:40px !important; }
+#callMicBtn{ background:var(--cyan) !important; color:#06101c !important; box-shadow:0 14px 40px -14px rgba(0,229,255,.6) !important; width:78px !important; height:78px !important; transition:transform .15s; }
+#callMicBtn:hover{ transform:scale(1.05); }
+#callEndBtn{ display:inline-block !important; margin-top:34px !important; padding:11px 26px !important; border:1px solid rgba(255,90,110,.55) !important; border-radius:10px; color:#ff8a9a !important; font-weight:600; background:rgba(255,90,110,.08) !important; cursor:pointer; }
+#callEndBtn:hover{ background:rgba(255,90,110,.16) !important; }
+#callCloseX{ border-radius:10px !important; }
 </style>
 
 
@@ -1121,6 +1135,8 @@ section{ padding:40px 0; }
     <h3 style="font-size:22px; margin-bottom:6px;">Javeria</h3>
     <p data-i18n="callSubtitle" style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); margin-bottom:34px; letter-spacing:0.04em;">AI TUTOR · REHNUMA</p>
 
+    <div id="callTimer" class="call-timer">00:00</div>
+
     <p id="callStatusText" style="color:var(--text-dim); font-size:15px; margin-bottom:38px; min-height:22px;">Tap the mic to start talking</p>
 
     <button type="button" id="callMicBtn" style="width:72px; height:72px; border-radius:50%; background:var(--grad); border:none; display:grid; place-items:center; margin:0 auto; box-shadow:0 16px 44px -14px rgba(255,46,154,.6); color:#170D30;">
@@ -1681,6 +1697,22 @@ document.querySelectorAll('.lang-option, .lang-option-mobile').forEach(btn => {
 });
 applyLanguage(getCurrentLanguage());
 
+
+// Call timer: overlay khulne par chalta hai, band hone par ruk jata hai
+(function(){
+  const ov = document.getElementById('callOverlay'), tm = document.getElementById('callTimer');
+  if (!ov || !tm) return;
+  let iv = null, t0 = 0;
+  const fmt = (n) => String(n).padStart(2, '0');
+  const sync = () => {
+    const open = ov.style.display !== 'none';
+    if (open && !iv) {
+      t0 = Date.now(); tm.classList.add('on'); tm.textContent = '00:00';
+      iv = setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); tm.textContent = fmt(Math.floor(s / 60)) + ':' + fmt(s % 60); }, 1000);
+    } else if (!open && iv) { clearInterval(iv); iv = null; tm.classList.remove('on'); }
+  };
+  new MutationObserver(sync).observe(ov, { attributes: true, attributeFilter: ['style'] });
+})();
 // ============ Sehar's Welcome Screen ============
 const seharWelcome = document.getElementById('seharWelcome');
 if (/[?&]sehar\b/.test(location.search)) { seharWelcome.style.display = 'block'; }
