@@ -492,6 +492,20 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .mcq-result .row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .btn-wa{ background:#25D366; color:#06210f; border:none; font-weight:700; }
 .btn-wa:hover{ filter:brightness(1.08); }
+.notes-ov{ position:fixed; inset:0; z-index:550; background:rgba(5,8,18,.72); display:flex; align-items:center; justify-content:center; padding:16px; }
+.notes-card{ width:100%; max-width:640px; max-height:90vh; overflow-y:auto; background:var(--surface-2,var(--bg-soft)); border:1px solid var(--border-strong); border-radius:18px; padding:24px 24px 20px; color:var(--text); }
+.notes-card h3{ font-size:20px; font-weight:800; margin:0 0 4px; }
+.notes-card .nt-by{ font-size:12px; color:var(--text-faint); margin-bottom:14px; }
+.notes-card h4{ font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--cyan); margin:18px 0 8px; }
+.notes-card p{ font-size:14.5px; line-height:1.65; margin:0; }
+.notes-card ul{ margin:0; padding-left:20px; list-style:disc; } .notes-card li{ font-size:14.5px; line-height:1.6; margin-bottom:6px; } .notes-card li::marker{ color:var(--cyan); }
+.nt-term{ font-size:14px; line-height:1.55; margin-bottom:6px; } .nt-term b{ color:var(--text); }
+.nt-fc{ border:1.4px solid var(--border); border-radius:12px; padding:12px 14px; margin-bottom:8px; background:var(--bg-soft); cursor:pointer; }
+.nt-fc .q{ font-weight:700; font-size:14px; } .nt-fc .a{ display:none; margin-top:8px; font-size:14px; color:var(--cyan); } .nt-fc.open .a{ display:block; } .nt-fc .hint{ font-size:11.5px; color:var(--text-faint); margin-top:4px; }
+.nt-fc.open .hint{ display:none; }
+.nt-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; position:sticky; bottom:-20px; padding:12px 0 4px; background:var(--surface-2,var(--bg-soft)); }
+.nt-actions button{ font-size:13px; font-weight:700; padding:9px 15px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft); }
+.nt-actions button.primary{ background:var(--cyan); color:#04101a; border-color:var(--cyan); }
 .rn-toast{ position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--surface-2); border:1px solid var(--cyan); color:var(--text); padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600; opacity:0; transition:all .3s; z-index:600; pointer-events:none; }
 .rn-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
 
@@ -881,7 +895,11 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 
       <div style="padding:0;" id="doubtPanel">
         <div class="tutor-bar" id="tutorBar" role="tablist" aria-label="Subject tutors"></div>
-        <div style="display:flex; justify-content:flex-end; padding:14px 26px 0;">
+        <div style="display:flex; justify-content:flex-end; gap:8px; flex-wrap:wrap; padding:14px 26px 0;">
+          <button type="button" id="notesBtn" style="display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            <span id="notesBtnLabel" data-i18n="notesBtnLabel">Notes banao</span>
+          </button>
           <button type="button" id="callModeBtn" style="display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft);">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
             <span id="callModeLabel" data-i18n="callModeLabel">Call Mode</span>
@@ -1353,7 +1371,7 @@ const translations = {
     authFormTitleLogin: 'Login to your account', authFormTitleSignup: 'Create a new account',
     authSubmitLogin: 'Login', authSubmitSignup: 'Sign up',
     tabDoubtSolver: 'Doubt Solver', tabMcqGenerator: 'MCQ Generator',
-    callModeLabel: 'Call Mode', askButton: 'Ask', generateButton: 'Generate',
+    notesBtnLabel: 'Make notes', callModeLabel: 'Call Mode', askButton: 'Ask', generateButton: 'Generate',
     doubtInputPlaceholder: 'Type your question...', mcqLabel: 'Type a topic to generate MCQs',
     mcqInputPlaceholder: 'e.g. Genetics',
     progressLoginPrompt: 'Login first to see your progress.', leaderboardLoginPrompt: 'Login first to see the leaderboard.',
@@ -1489,7 +1507,7 @@ const translations = {
     authFormTitleLogin: 'اپنے اکاؤنٹ میں لاگ ان کریں', authFormTitleSignup: 'نیا اکاؤنٹ بنائیں',
     authSubmitLogin: 'لاگ ان کریں', authSubmitSignup: 'سائن اپ کریں',
     tabDoubtSolver: 'سوال حل کریں', tabMcqGenerator: 'ایم سی کیوز بنائیں',
-    callModeLabel: 'کال موڈ', askButton: 'پوچھیں', generateButton: 'بنائیں',
+    notesBtnLabel: 'نوٹس بنائیں', callModeLabel: 'کال موڈ', askButton: 'پوچھیں', generateButton: 'بنائیں',
     doubtInputPlaceholder: 'اپنا سوال لکھیں...', mcqLabel: 'موضوع لکھیں، ایم سی کیوز بنیں گے',
     mcqInputPlaceholder: 'مثلاً: جینیات',
     progressLoginPrompt: 'اپنی پیش رفت دیکھنے کے لیے پہلے لاگ ان کریں۔', leaderboardLoginPrompt: 'لیڈربورڈ دیکھنے کے لیے پہلے لاگ ان کریں۔',
@@ -1625,7 +1643,7 @@ const translations = {
     authFormTitleLogin: 'Apne account mein login karein', authFormTitleSignup: 'Naya account banayein',
     authSubmitLogin: 'Login karein', authSubmitSignup: 'Sign up karein',
     tabDoubtSolver: 'Doubt Solver', tabMcqGenerator: 'MCQ Generator',
-    callModeLabel: 'Call Mode', askButton: 'Poocho', generateButton: 'Generate',
+    notesBtnLabel: 'Notes banao', callModeLabel: 'Call Mode', askButton: 'Poocho', generateButton: 'Generate',
     doubtInputPlaceholder: 'Apna sawal likhein...', mcqLabel: 'Topic likhein, MCQs generate honge',
     mcqInputPlaceholder: 'Jaise: Genetics',
     progressLoginPrompt: 'Apna progress dekhne ke liye pehle login karein.', leaderboardLoginPrompt: 'Leaderboard dekhne ke liye pehle login karein.',
@@ -3694,6 +3712,75 @@ const DAILY_GOAL = 10;
 function rnDayKey(d) { const x = d || new Date(); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); }
 function rnActKey() { return 'nishaan_activity_' + (localStorage.getItem('nishaan_user_id') || 'guest'); }
 function rnLoadAct() { try { return JSON.parse(localStorage.getItem(rnActKey())) || {}; } catch (e) { return {}; } }
+// ---- Notes banao ----
+let lastNotes = null;
+function notesToText(n) {
+  const L = [n.title, '', n.summary, ''];
+  if (n.points.length) { L.push('KEY POINTS'); n.points.forEach((p) => L.push('- ' + p)); L.push(''); }
+  if (n.terms.length) { L.push('TERMS'); n.terms.forEach((t) => L.push(t.term + ': ' + t.meaning)); L.push(''); }
+  if (n.flashcards.length) { L.push('FLASHCARDS'); n.flashcards.forEach((f, i) => L.push((i + 1) + '. Q: ' + f.q + '\n   A: ' + f.a)); L.push(''); }
+  L.push('Made with Rehnuma');
+  return L.join('\n');
+}
+function closeNotes() { document.getElementById('notesOv')?.remove(); }
+function showNotes(n, by) {
+  closeNotes(); lastNotes = n;
+  const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card';
+  const add = (tag, text) => { const e = document.createElement(tag); e.textContent = text; card.appendChild(e); return e; };
+  add('h3', n.title);
+  add('div', by + ' • Rehnuma').className = 'nt-by';
+  if (n.summary) { add('h4', 'Summary'); add('p', n.summary); }
+  if (n.points.length) { add('h4', 'Key points'); const ul = document.createElement('ul'); n.points.forEach((p) => { const li = document.createElement('li'); li.textContent = p; ul.appendChild(li); }); card.appendChild(ul); }
+  if (n.terms.length) { add('h4', 'Terms'); n.terms.forEach((t) => { const d = document.createElement('div'); d.className = 'nt-term'; const b = document.createElement('b'); b.textContent = t.term + ': '; d.appendChild(b); d.appendChild(document.createTextNode(t.meaning)); card.appendChild(d); }); }
+  if (n.flashcards.length) {
+    add('h4', 'Flashcards');
+    n.flashcards.forEach((f) => {
+      const d = document.createElement('div'); d.className = 'nt-fc';
+      const q = document.createElement('div'); q.className = 'q'; q.textContent = f.q;
+      const a = document.createElement('div'); a.className = 'a'; a.textContent = f.a;
+      const h = document.createElement('div'); h.className = 'hint'; h.textContent = 'Tap for answer';
+      d.append(q, h, a); d.addEventListener('click', () => d.classList.toggle('open')); card.appendChild(d);
+    });
+  }
+  const act = document.createElement('div'); act.className = 'nt-actions';
+  const mk = (label, fn, cls) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
+  mk('Copy', async () => { try { await navigator.clipboard.writeText(notesToText(n)); rnToast('Copy ho gaya'); } catch (e) { rnToast('Copy nahi ho saka'); } }, 'primary');
+  mk('Download', () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([notesToText(n)], { type: 'text/plain;charset=utf-8' }));
+    a.download = (n.title.replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-') || 'notes') + '.txt';
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+  mk('Print / PDF', () => {
+    const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const w = window.open('', '_blank');
+    if (!w) { rnToast('Popup block ho gaya, allow kar dein'); return; }
+    w.document.write('<!doctype html><meta charset="utf-8"><title>' + esc(n.title) + '</title><style>body{font:15px/1.6 Arial,sans-serif;max-width:720px;margin:28px auto;padding:0 18px;color:#111}h1{font-size:22px;margin:0 0 4px}h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#0a6e8a;margin:20px 0 6px}small{color:#666}li{margin-bottom:4px}.fc{border:1px solid #ccc;border-radius:8px;padding:8px 12px;margin-bottom:8px}</style><h1>' + esc(n.title) + '</h1><small>' + esc(by) + ' • Rehnuma</small>' +
+      (n.summary ? '<h2>Summary</h2><p>' + esc(n.summary) + '</p>' : '') +
+      (n.points.length ? '<h2>Key points</h2><ul>' + n.points.map((p) => '<li>' + esc(p) + '</li>').join('') + '</ul>' : '') +
+      (n.terms.length ? '<h2>Terms</h2>' + n.terms.map((t) => '<p><b>' + esc(t.term) + ':</b> ' + esc(t.meaning) + '</p>').join('') : '') +
+      (n.flashcards.length ? '<h2>Flashcards</h2>' + n.flashcards.map((f) => '<div class="fc"><b>Q:</b> ' + esc(f.q) + '<br><b>A:</b> ' + esc(f.a) + '</div>').join('') : ''));
+    w.document.close(); w.focus(); setTimeout(() => w.print(), 300);
+  });
+  mk('Close', closeNotes);
+  card.appendChild(act); ov.appendChild(card);
+  ov.addEventListener('click', (e) => { if (e.target === ov) closeNotes(); });
+  document.body.appendChild(ov);
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNotes(); });
+document.getElementById('notesBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('notesBtn'), label = document.getElementById('notesBtnLabel');
+  if (!hasUserMsg(chatHistory)) { rnToast('Pehle tutor se kuch poochein, phir notes banenge'); return; }
+  const orig = label.textContent; btn.disabled = true; label.textContent = '...';
+  try {
+    const res = await chatFetch('/api/notes', { method: 'POST', body: { history: chatHistory.filter((m) => m && typeof m.content === 'string'), subject: currentSubject, language: getCurrentLanguage(), studentClass: localStorage.getItem('nishaan_student_class') } });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed');
+    showNotes(data.notes, data.tutor || tutorName());
+  } catch (e) { rnToast(e.message || 'Notes nahi ban sake'); }
+  finally { btn.disabled = false; label.textContent = orig; }
+});
 function rnToast(msg) {
   let t = document.getElementById('rnToast');
   if (!t) { t = document.createElement('div'); t.id = 'rnToast'; t.className = 'rn-toast'; document.body.appendChild(t); }
