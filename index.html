@@ -494,6 +494,15 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .btn-wa:hover{ filter:brightness(1.08); }
 .rn-toast{ position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--surface-2); border:1px solid var(--cyan); color:var(--text); padding:12px 20px; border-radius:12px; font-size:14px; font-weight:600; opacity:0; transition:all .3s; z-index:600; pointer-events:none; }
 .rn-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ===== Subject tutors ===== */
+.tutor-bar{ display:flex; gap:8px; overflow-x:auto; padding:14px 20px 4px; scrollbar-width:thin; }
+.tutor-chip{ flex-shrink:0; display:flex; flex-direction:column; align-items:flex-start; gap:1px; padding:9px 14px; border-radius:12px; border:1px solid var(--border); background:rgba(255,255,255,.03); color:var(--text-dim); cursor:pointer; text-align:left; font-family:var(--font-body); }
+.tutor-chip b{ font-size:13.5px; color:var(--text); font-weight:700; }
+.tutor-chip span{ font-size:11.5px; }
+.tutor-chip:hover{ border-color:var(--border-strong); }
+.tutor-chip.active{ border-color:var(--cyan); background:rgba(0,229,255,.1); }
+.tutor-chip.active span{ color:var(--cyan); }
 </style>
 
 
@@ -871,6 +880,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
 
       <div style="padding:0;" id="doubtPanel">
+        <div class="tutor-bar" id="tutorBar" role="tablist" aria-label="Subject tutors"></div>
         <div style="display:flex; justify-content:flex-end; padding:14px 26px 0;">
           <button type="button" id="callModeBtn" style="display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft);">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
@@ -1269,11 +1279,16 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       <h3 id="authFormTitle" style="font-size:20px; margin-bottom:20px;">Apne account mein login karein</h3>
 
       <form id="authForm">
+        <div id="authNameField" style="display:none;">
+          <label data-i18n="authNameLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:8px;">Aapka naam</label>
+          <input type="text" id="authName" maxlength="30" autocomplete="given-name" data-i18n-placeholder="authNamePlaceholder" placeholder="Jaise: Ayesha" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;" />
+        </div>
+
         <label data-i18n="authEmailLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:8px;">Email</label>
         <input type="email" id="authEmail" required placeholder="you@example.com" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;" />
 
         <label data-i18n="authPasswordLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:8px;">Password</label>
-        <input type="password" id="authPassword" required minlength="6" data-i18n-placeholder="authPasswordPlaceholder" placeholder="Kam se kam 6 characters" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;" />
+        <div style="position:relative;"><input type="password" id="authPassword" autocomplete="current-password" required minlength="6" data-i18n-placeholder="authPasswordPlaceholder" placeholder="Kam se kam 6 characters" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 52px 13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;" /><button type="button" id="authPwToggle" aria-label="Password dikhayein" title="Password dikhayein" style="position:absolute; right:10px; top:9px; width:34px; height:34px; display:grid; place-items:center; background:none; border:none; color:var(--text-dim); cursor:pointer; border-radius:8px;"><svg id="authPwEyeOn" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><svg id="authPwEyeOff" style="display:none" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.9 10.9 0 0 1 12 19c-6.5 0-10-7-10-7a18.4 18.4 0 0 1 5.06-5.94M9.9 4.24A9.1 9.1 0 0 1 12 4c6.5 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22"/><path d="M14.12 14.12A3 3 0 1 1 9.88 9.88"/></svg></button></div>
 
         <div id="authClassField" style="display:none;">
           <label data-i18n="authClassLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:8px;">Aap kis class mein hain?</label>
@@ -1317,7 +1332,8 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
     <div id="authLoggedInView" style="display:none; text-align:center;">
       <div style="width:56px; height:56px; border-radius:50%; background:var(--grad); display:grid; place-items:center; margin:0 auto 16px; font-family:var(--font-display); font-weight:700; font-size:20px; color:#170D30;" id="authAvatarInitial">S</div>
       <h3 data-i18n="authWelcomeBack" style="font-size:19px; margin-bottom:6px;">Khush amdeed!</h3>
-      <p style="color:var(--text-dim); font-size:14px; margin-bottom:22px;" id="authLoggedInEmail"></p>
+      <p style="color:var(--text-dim); font-size:14px; margin-bottom:6px;" id="authLoggedInEmail"></p>
+      <button type="button" id="authRenameBtn" style="background:none; border:none; color:var(--cyan); font-size:13px; font-weight:600; cursor:pointer; margin-bottom:20px;">Naam badlein</button>
       <button type="button" class="btn btn-outline btn-block" id="authLogoutBtn" data-i18n="authLogout">Logout</button>
     </div>
   </div>
@@ -1331,7 +1347,7 @@ const translations = {
     navProgress: 'Progress', navLeaderboard: 'Leaderboard', navFriends: 'Friends', navPricing: 'Pricing', navFaq: 'FAQ',
     navWaitlist: 'Join Waitlist',
     authTabLogin: 'Login', authTabSignup: 'Sign up',
-    authEmailLabel: 'Email', authPasswordLabel: 'Password', authPasswordPlaceholder: 'At least 6 characters',
+    authNameLabel: 'Your name', authNamePlaceholder: 'e.g. Ayesha', authEmailLabel: 'Email', authPasswordLabel: 'Password', authPasswordPlaceholder: 'At least 6 characters',
     authClassLabel: 'Which class are you in?', authClassPlaceholder: 'Select your class or level',
     authWelcomeBack: 'Welcome back!', authLogout: 'Logout',
     authFormTitleLogin: 'Login to your account', authFormTitleSignup: 'Create a new account',
@@ -1467,7 +1483,7 @@ const translations = {
     navProgress: 'پیش رفت', navLeaderboard: 'لیڈربورڈ', navFriends: 'دوست', navPricing: 'قیمت', navFaq: 'سوالات',
     navWaitlist: 'ویٹ لسٹ میں شامل ہوں',
     authTabLogin: 'لاگ ان', authTabSignup: 'سائن اپ',
-    authEmailLabel: 'ای میل', authPasswordLabel: 'پاس ورڈ', authPasswordPlaceholder: 'کم از کم 6 حروف',
+    authNameLabel: 'آپ کا نام', authNamePlaceholder: 'مثلاً: عائشہ', authEmailLabel: 'ای میل', authPasswordLabel: 'پاس ورڈ', authPasswordPlaceholder: 'کم از کم 6 حروف',
     authClassLabel: 'آپ کس کلاس میں ہیں؟', authClassPlaceholder: 'اپنی کلاس یا لیول منتخب کریں',
     authWelcomeBack: 'خوش آمدید!', authLogout: 'لاگ آؤٹ',
     authFormTitleLogin: 'اپنے اکاؤنٹ میں لاگ ان کریں', authFormTitleSignup: 'نیا اکاؤنٹ بنائیں',
@@ -1603,7 +1619,7 @@ const translations = {
     navProgress: 'Progress', navLeaderboard: 'Leaderboard', navFriends: 'Friends', navPricing: 'Pricing', navFaq: 'FAQ',
     navWaitlist: 'Waitlist join karein',
     authTabLogin: 'Login', authTabSignup: 'Sign up',
-    authEmailLabel: 'Email', authPasswordLabel: 'Password', authPasswordPlaceholder: 'Kam se kam 6 characters',
+    authNameLabel: 'Aapka naam', authNamePlaceholder: 'Jaise: Ayesha', authEmailLabel: 'Email', authPasswordLabel: 'Password', authPasswordPlaceholder: 'Kam se kam 6 characters',
     authClassLabel: 'Aap kis class mein hain?', authClassPlaceholder: 'Class ya level select karein',
     authWelcomeBack: 'Khush amdeed!', authLogout: 'Logout',
     authFormTitleLogin: 'Apne account mein login karein', authFormTitleSignup: 'Naya account banayein',
@@ -2099,11 +2115,11 @@ function setCallState(state) {
     callPulse.style.animation = 'callPulseAnim 1.4s ease-out infinite';
     callMicBtn.style.boxShadow = '0 16px 44px -14px rgba(0,229,255,.6)';
   } else if (state === 'thinking') {
-    callStatusText.textContent = dict.callThinking;
+    callStatusText.textContent = dict.callThinking.replace('Javeria', tutorName()).replace('جاویریا', tutorName());
     callPulse.style.animation = 'none';
     callPulse.style.opacity = '0';
   } else if (state === 'speaking') {
-    callStatusText.textContent = dict.callSpeaking;
+    callStatusText.textContent = dict.callSpeaking.replace('Javeria', tutorName()).replace('جاویریا', tutorName());
     callPulse.style.background = 'var(--grad)';
     callPulse.style.animation = 'callPulseAnim 1.1s ease-out infinite';
     callMicBtn.style.boxShadow = '0 16px 44px -14px rgba(255,46,154,.6)';
@@ -2175,7 +2191,7 @@ async function openCall() {
 
   // 2) Call uth gayi — Javeria salam kare, intro de, phir student ki baat suney
   document.dispatchEvent(new Event('call:connected'));
-  speakText(T.intro);
+  speakText(currentSubject === 'general' ? T.intro : tutorIntroText(getCurrentLanguage()) + ' ' + ({ en: 'Just ask me out loud.', ur: 'بس بول کر اپنا سوال پوچھ لیں۔', roman: 'Bas bol kar apna sawal poochh lein.' }[getCurrentLanguage()] || ''));
 }
 
 function closeCall() {
@@ -2213,8 +2229,96 @@ async function handleCallTranscript(transcript) {
   await askDoubt(); // jawab aane par speakText() submitUserMessage se chalta hai
 }
 
+
+// ============ Subject tutors + saved chats ============
+const TUTORS = {
+  general: { name: 'Javeria', label: 'Sab subjects', en: 'all subjects', ur: 'تمام مضامین', chips: [['Active transport vs diffusion', 'Active transport aur diffusion mein kya farq hai?'], ['Mole concept', 'Mole concept ka formula samjhao']] },
+  math: { name: 'Sir Hamza', label: 'Maths', en: 'Mathematics', ur: 'ریاضی', chips: [['Quadratic formula', 'Quadratic formula kaise banta hai aur use kaise karte hain?'], ['Percentage', 'Percentage ke sawal kaise hal karte hain?']] },
+  physics: { name: 'Sir Bilal', label: 'Physics', en: 'Physics', ur: 'فزکس', chips: [["Newton's laws", "Newton ke teen laws example ke sath samjhao"], ['Ohm\'s law', "Ohm's law kya hai?"]] },
+  chemistry: { name: 'Miss Hira', label: 'Chemistry', en: 'Chemistry', ur: 'کیمسٹری', chips: [['Mole concept', 'Mole concept ka formula samjhao'], ['Periodic table trends', 'Periodic table ke trends samjhao']] },
+  biology: { name: 'Miss Sana', label: 'Biology', en: 'Biology', ur: 'بائیولوجی', chips: [['Active transport vs diffusion', 'Active transport aur diffusion mein kya farq hai?'], ['Photosynthesis', 'Photosynthesis step by step samjhao']] },
+  english: { name: 'Miss Ayesha', label: 'English', en: 'English', ur: 'انگریزی', chips: [['Tenses', 'Tenses ko aasan tareeqe se samjhao'], ['Write an application', 'Chutti ki application kaise likhte hain?']] },
+  urdu: { name: 'Sir Faisal', label: 'Urdu', en: 'Urdu', ur: 'اردو', chips: [['Muhavare', 'Aham muhavare maani aur jumle ke sath batao'], ['Mazmoon likhna', 'Mazmoon kaise likhte hain?']] },
+  computer: { name: 'Sir Usman', label: 'Computer', en: 'Computer Science', ur: 'کمپیوٹر سائنس', chips: [['What is CPU?', 'CPU kya hota hai?'], ['Binary numbers', 'Binary number system samjhao']] },
+  islamiat: { name: 'Miss Maryam', label: 'Islamiat', en: 'Islamiat', ur: 'اسلامیات', chips: [['Arkan-e-Islam', 'Islam ke paanch arkan samjhao'], ['Seerat topic', 'Seerat-un-Nabi ka khulasa batao']] },
+  pakstudies: { name: 'Sir Imran', label: 'Pak Studies', en: 'Pakistan Studies', ur: 'مطالعہ پاکستان', chips: [['Pakistan Movement', 'Tehreek-e-Pakistan ka khulasa batao'], ['Geography', 'Pakistan ke daryaon ke bare mein batao']] },
+};
+let currentSubject = (function () { const s0 = localStorage.getItem('nishaan_subject'); return TUTORS[s0] ? s0 : 'general'; })();
 let chatHistory = []; // [{role:'user'|'assistant', content:'...'}]
-let greetingShown = false;
+
+function chatStoreKey(subj) { return 'nishaan_chat_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + subj; }
+function loadSavedChat(subj) { try { const a = JSON.parse(localStorage.getItem(chatStoreKey(subj))); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function persistChat() { try { localStorage.setItem(chatStoreKey(currentSubject), JSON.stringify(chatHistory.slice(-60))); } catch (e) { /* storage full / blocked */ } }
+function tutorName() { return TUTORS[currentSubject].name; }
+
+function tutorIntroText(lang) {
+  const t = TUTORS[currentSubject];
+  if (currentSubject === 'general') return null;
+  if (lang === 'en') return "Hello! I'm " + t.name + ", your " + t.en + " teacher on Rehnuma. What would you like to learn today?";
+  if (lang === 'ur') return 'السلام علیکم! میں ' + t.name + ' ہوں، آپ کا ' + t.ur + ' کا ٹیوٹر۔ آج آپ کیا پڑھنا چاہتے ہیں؟';
+  return 'Assalam o Alaikum! Main ' + t.name + ' hoon, aapka ' + t.en + ' ka tutor. Aaj aap kya parhna chahte hain?';
+}
+
+function buildTutorBar() {
+  const bar = document.getElementById('tutorBar'); if (!bar) return;
+  bar.innerHTML = '';
+  Object.keys(TUTORS).forEach((id) => {
+    const t = TUTORS[id];
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'tutor-chip' + (id === currentSubject ? ' active' : ''); b.setAttribute('role', 'tab');
+    b.innerHTML = '<b></b><span></span>'; b.firstChild.textContent = t.name; b.lastChild.textContent = t.label;
+    b.addEventListener('click', () => switchSubject(id));
+    bar.appendChild(b);
+  });
+}
+
+function renderSubjectChips() {
+  const box = document.getElementById('doubtChips'); if (!box) return;
+  box.innerHTML = '';
+  TUTORS[currentSubject].chips.forEach(([label, q]) => {
+    const c = document.createElement('button');
+    c.className = 'demo-chip'; c.type = 'button'; c.textContent = label;
+    c.style.cssText = 'font-size:12.5px; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border); color:var(--text-dim); background:var(--bg-soft);';
+    c.addEventListener('click', () => { doubtInput.value = q; askDoubt(); });
+    box.appendChild(c);
+  });
+}
+
+function updateCallIdentity() {
+  const h = document.querySelector('#callOverlay h3'); if (h) h.textContent = tutorName();
+  const av = document.querySelector('#callAvatarWrap > div:nth-child(2)'); if (av) av.textContent = tutorName().split(' ').pop().charAt(0).toUpperCase();
+}
+
+function renderSavedChat() {
+  chatMessages.innerHTML = '';
+  chatHistory.forEach((m, i) => {
+    if (m.role === 'user') {
+      const isImg = /^\[Image request\] /.test(m.content);
+      const b = appendMessage('user', m.content.replace(/^\[Image request\] /, ''), { noEdit: isImg });
+      b.dataset.historyIndex = i;
+    } else if (/^\[Generated an image for: /.test(m.content)) {
+      appendMessage('assistant', 'Tasveer bana di gayi thi: ' + m.content.replace(/^\[Generated an image for: /, '').replace(/\]$/, ''), { noEdit: true });
+    } else {
+      appendMessage('assistant', m.content);
+    }
+  });
+}
+
+function initSubjectChat() {
+  chatHistory = loadSavedChat(currentSubject);
+  buildTutorBar(); renderSubjectChips(); updateCallIdentity();
+  renderSavedChat();
+  if (!chatHistory.length) showTutorGreeting();
+}
+
+function switchSubject(id) {
+  if (id === currentSubject) return;
+  if (doubtBtn.disabled || imageGenBtn.disabled || callActive) { rnToast('Pehle jawab aane ka intezar karein.'); return; }
+  persistChat();
+  currentSubject = id;
+  try { localStorage.setItem('nishaan_subject', id); } catch (e) {}
+  initSubjectChat();
+}
 
 function renderTutorMarkdown(src) {
   const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -2252,7 +2356,7 @@ function appendMessage(role, text, opts) {
   } else {
     const who = document.createElement('div');
     who.className = 'chat-who';
-    who.textContent = 'Javeria';
+    who.textContent = tutorName();
     bubble.appendChild(who);
     textSpan.innerHTML = renderTutorMarkdown(text);
   }
@@ -2315,6 +2419,7 @@ function startEditMessage(bubble, textSpan, editBtn) {
     if (!newText) return;
     const idx = parseInt(bubble.dataset.historyIndex, 10) || 0;
     chatHistory = chatHistory.slice(0, idx);
+    persistChat();
     let node = bubble;
     while (node) {
       const next = node.nextSibling;
@@ -2326,14 +2431,24 @@ function startEditMessage(bubble, textSpan, editBtn) {
 }
 
 async function showTutorGreeting() {
-  if (greetingShown) return;
-  greetingShown = true;
+  if (chatHistory.length || chatMessages.children.length) return;
+  const subjAtStart = currentSubject;
+  const local = tutorIntroText(getCurrentLanguage());
+  if (local) {
+    appendMessage('assistant', local);
+    chatHistory.push({ role: 'assistant', content: local });
+    persistChat();
+    return;
+  }
   try {
     const res = await chatFetch('/api/tutor-greeting', { method: 'POST', body: { language: getCurrentLanguage() } });
     const data = await res.json();
+    if (subjAtStart !== currentSubject || chatHistory.length || chatMessages.children.length) return;
     appendMessage('assistant', data.greeting);
     chatHistory.push({ role: 'assistant', content: data.greeting });
+    persistChat();
   } catch (e) {
+    if (subjAtStart !== currentSubject || chatMessages.children.length) return;
     appendMessage('assistant', 'Assalam o Alaikum! Aaj kis topic mein madad chahiye?');
   }
 }
@@ -2344,6 +2459,7 @@ async function submitUserMessage(question) {
   const bubble = appendMessage('user', question);
   bubble.dataset.historyIndex = historyIndexAtSend;
   chatHistory.push({ role: 'user', content: question });
+  persistChat();
 
   doubtBtn.disabled = true; doubtBtn.textContent = '...';
 
@@ -2361,6 +2477,7 @@ async function submitUserMessage(question) {
         question,
         studentClass: localStorage.getItem('nishaan_student_class'),
         history: chatHistory.slice(0, -1),
+        subject: currentSubject,
         language: getCurrentLanguage(),
         voice: callActive
       }
@@ -2371,6 +2488,7 @@ async function submitUserMessage(question) {
     appendMessage('assistant', data.answer);
     recordActivity('doubt');
     chatHistory.push({ role: 'assistant', content: data.answer });
+    persistChat();
     if (callActive) speakText(data.answer);
   } catch (e) {
     document.getElementById('thinkingBubble')?.remove();
@@ -2447,6 +2565,7 @@ imageGenBtn.addEventListener('click', async () => {
   const bubble = appendMessage('user', prompt, { noEdit: true });
   bubble.dataset.historyIndex = historyIndexAtSend;
   chatHistory.push({ role: 'user', content: '[Image request] ' + prompt });
+  persistChat();
 
   const loadingBubble = document.createElement('div');
   loadingBubble.style.cssText = 'max-width:85%; margin-bottom:14px; padding:12px 16px; border-radius:14px; font-size:14px; background:var(--bg-soft); border:1.4px solid var(--border); color:var(--text-faint);';
@@ -2475,6 +2594,7 @@ imageGenBtn.addEventListener('click', async () => {
     chatMessages.appendChild(imgBubble);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     chatHistory.push({ role: 'assistant', content: '[Generated an image for: ' + prompt + ']' });
+    persistChat();
   } catch (err) {
     loadingBubble.remove();
     appendMessage('assistant', err.status === 429 ? err.message : dict.imageFailed, { noEdit: true });
@@ -2582,6 +2702,22 @@ const authEmailInput = document.getElementById('authEmail');
 const authPasswordInput = document.getElementById('authPassword');
 const authClassField = document.getElementById('authClassField');
 const authClassInput = document.getElementById('authClass');
+const authNameField = document.getElementById('authNameField');
+const authNameInput = document.getElementById('authName');
+function rnDisplayName() {
+  const n = localStorage.getItem('nishaan_user_name');
+  if (n) return n;
+  const e = localStorage.getItem('nishaan_user_email');
+  return e ? e.split('@')[0] : '';
+}
+// Password dikhane / chhupane ka button
+document.getElementById('authPwToggle').addEventListener('click', () => {
+  const show = authPasswordInput.type === 'password';
+  authPasswordInput.type = show ? 'text' : 'password';
+  document.getElementById('authPwEyeOn').style.display = show ? 'none' : '';
+  document.getElementById('authPwEyeOff').style.display = show ? '' : 'none';
+  document.getElementById('authPwToggle').setAttribute('aria-label', show ? 'Password chhupayein' : 'Password dikhayein');
+});
 const authError = document.getElementById('authError');
 const authLoggedOutView = document.getElementById('authLoggedOutView');
 const authLoggedInView = document.getElementById('authLoggedInView');
@@ -2615,6 +2751,9 @@ function setAuthMode(mode) {
     authSubmitBtn.textContent = dict.authSubmitLogin;
     authClassField.style.display = 'none';
     authClassInput.required = false;
+    authNameField.style.display = 'none';
+    authNameInput.required = false;
+    authPasswordInput.autocomplete = 'current-password';
   } else {
     authTabSignup.classList.add('active'); authTabSignup.style.background = 'var(--surface-2)'; authTabSignup.style.borderColor = 'var(--border-strong)'; authTabSignup.style.color = 'var(--text)';
     authTabLogin.classList.remove('active'); authTabLogin.style.background = 'transparent'; authTabLogin.style.borderColor = 'transparent'; authTabLogin.style.color = 'var(--text-dim)';
@@ -2622,6 +2761,9 @@ function setAuthMode(mode) {
     authSubmitBtn.textContent = dict.authSubmitSignup;
     authClassField.style.display = 'block';
     authClassInput.required = true;
+    authNameField.style.display = 'block';
+    authNameInput.required = true;
+    authPasswordInput.autocomplete = 'new-password';
   }
 }
 authTabLogin.addEventListener('click', () => setAuthMode('login'));
@@ -2630,8 +2772,13 @@ authTabSignup.addEventListener('click', () => setAuthMode('signup'));
 function showLoggedInView(email) {
   authLoggedOutView.style.display = 'none';
   authLoggedInView.style.display = 'block';
-  authLoggedInEmail.textContent = email;
-  authAvatarInitial.textContent = email.charAt(0).toUpperCase();
+  const nm = rnDisplayName() || email;
+  authLoggedInEmail.innerHTML = '';
+  const b1 = document.createElement('b'); b1.textContent = nm; b1.style.cssText = 'color:var(--text); font-size:16px;';
+  authLoggedInEmail.appendChild(b1);
+  authLoggedInEmail.appendChild(document.createElement('br'));
+  authLoggedInEmail.appendChild(document.createTextNode(email));
+  authAvatarInitial.textContent = nm.charAt(0).toUpperCase();
 }
 function showLoggedOutView() {
   authLoggedOutView.style.display = 'block';
@@ -2643,8 +2790,9 @@ function showLoggedOutView() {
 
 function refreshAuthButtonLabel() {
   if (typeof renderHome === 'function') setTimeout(renderHome, 0);
+  if (typeof initSubjectChat === 'function' && typeof chatMessages !== 'undefined') { try { initSubjectChat(); } catch (e) {} }
   const savedUser = localStorage.getItem('nishaan_user_email');
-  const label = savedUser ? savedUser.split('@')[0] : 'Login / Sign up';
+  const label = savedUser ? (rnDisplayName() || savedUser.split('@')[0]) : 'Login / Sign up';
   authOpenBtn.textContent = label;
   if (authOpenBtnMobile) authOpenBtnMobile.textContent = label;
 }
@@ -2720,8 +2868,15 @@ authForm.addEventListener('submit', async (e) => {
   const email = authEmailInput.value.trim();
   const password = authPasswordInput.value;
   const studentClass = authClassInput.value;
+  const nameVal = authNameInput.value.trim();
   const endpoint = authMode === 'login' ? '/api/login' : '/api/signup';
 
+  if (authMode === 'signup' && nameVal.length < 2) {
+    authError.textContent = 'Apna naam likhein (kam se kam 2 huroof).';
+    authError.style.color = 'var(--pink)';
+    authError.style.display = 'block';
+    return;
+  }
   if (authMode === 'signup' && !studentClass) {
     authError.textContent = (translations[getCurrentLanguage()] || translations.roman).authClassRequired;
     authError.style.color = 'var(--pink)';
@@ -2736,7 +2891,7 @@ authForm.addEventListener('submit', async (e) => {
   try {
     const body = authMode === 'login'
       ? { email, password }
-      : { email, password, studentClass };
+      : { email, password, studentClass, name: nameVal };
 
     const res = await fetch(BACKEND_URL + endpoint, {
       method: 'POST',
@@ -2761,6 +2916,10 @@ authForm.addEventListener('submit', async (e) => {
     }
 
     localStorage.setItem('nishaan_user_email', email);
+    const metaName = data.user && data.user.user_metadata && data.user.user_metadata.name;
+    if (authMode === 'signup' && nameVal) localStorage.setItem('nishaan_user_name', nameVal);
+    else if (metaName) localStorage.setItem('nishaan_user_name', metaName);
+    else localStorage.removeItem('nishaan_user_name');
     if (data.session && data.session.access_token) {
       localStorage.setItem('nishaan_access_token', data.session.access_token);
     }
@@ -2792,8 +2951,24 @@ authForm.addEventListener('submit', async (e) => {
   }
 });
 
+document.getElementById('authRenameBtn').addEventListener('click', async () => {
+  const cur = localStorage.getItem('nishaan_user_name') || '';
+  const v = (window.prompt('Aapka naam kya hai?', cur) || '').trim();
+  if (v.length < 2) return;
+  try {
+    const res = await chatFetch('/api/profile/name', { method: 'POST', body: { name: v } });
+    const d = await res.json();
+    if (!res.ok) throw new Error(d.error || 'Save nahi hua');
+    localStorage.setItem('nishaan_user_name', d.name);
+    refreshAuthButtonLabel();
+    showLoggedInView(localStorage.getItem('nishaan_user_email') || '');
+    rnToast('Naam save ho gaya.');
+  } catch (e) { rnToast(e.message || 'Naam save nahi hua.'); }
+});
+
 authLogoutBtn.addEventListener('click', () => {
   localStorage.removeItem('nishaan_user_email');
+  localStorage.removeItem('nishaan_user_name');
   localStorage.removeItem('nishaan_access_token');
   localStorage.removeItem('nishaan_refresh_token');
   localStorage.removeItem('nishaan_user_id');
@@ -3339,7 +3514,7 @@ chatReportBtn.addEventListener('click', async () => {
 renderChatSection();
 
 renderProgressSection();
-showTutorGreeting();
+initSubjectChat();
 
 const waitlistForm = document.getElementById('waitlistForm');
 const waitlistSuccess = document.getElementById('waitlistSuccess');
@@ -3504,7 +3679,7 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
 
 async function renderHome() {
   const email = localStorage.getItem('nishaan_user_email');
-  document.getElementById('homeGreeting').textContent = email ? 'Assalam o Alaikum, ' + email.split('@')[0] + '!' : 'Assalam o Alaikum!';
+  document.getElementById('homeGreeting').textContent = email ? 'Assalam o Alaikum, ' + (rnDisplayName() || email.split('@')[0]) + '!' : 'Assalam o Alaikum!';
   document.getElementById('homeLoginBtn').style.display = email ? 'none' : 'inline-flex';
   const solved = document.getElementById('statSolved'), acc = document.getElementById('statAcc'), weak = document.getElementById('statWeak');
   const focus = document.getElementById('homeFocus');
