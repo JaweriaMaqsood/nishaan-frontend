@@ -2266,7 +2266,70 @@ let chatHistory = []; // [{role:'user'|'assistant', content:'...'}]
 
 function chatStoreKey(subj) { return 'nishaan_chat_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + subj; }
 function loadSavedChat(subj) { try { const a = JSON.parse(localStorage.getItem(chatStoreKey(subj))); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
-function persistChat() { try { localStorage.setItem(chatStoreKey(currentSubject), JSON.stringify(chatHistory.slice(-60))); } catch (e) { /* storage full / blocked */ } }
+function chatTsKey(subj) { return 'nishaan_chat_ts_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + subj; }
+function persistChat() {
+  try {
+    localStorage.setItem(chatStoreKey(currentSubject), JSON.stringify(chatHistory.slice(-60)));
+    const t = Date.now(); localStorage.setItem(chatTsKey(currentSubject), String(t));
+    if (chatHistory.some((m) => m.role === 'user')) cloudPush('chat:' + currentSubject, { messages: chatHistory.slice(-60), t });
+  } catch (e) { /* storage full / blocked */ }
+}
+// ============ Cloud sync (chat + streak account mein save) ============
+const cloudTimers = {};
+let cloudOff = false; // server par table na ho to chup chap sirf local chalta rahe
+function cloudPush(key, value) {
+  if (cloudOff || !localStorage.getItem('nishaan_user_id')) return;
+  clearTimeout(cloudTimers[key]);
+  cloudTimers[key] = setTimeout(async () => {
+    try {
+      const res = await chatFetch('/api/sync/' + encodeURIComponent(key), { method: 'PUT', body: { value } });
+      if (res.status === 503) cloudOff = true;
+    } catch (e) { /* offline: agli dafa save hoga */ }
+  }, 1500);
+}
+const hasUserMsg = (msgs) => Array.isArray(msgs) && msgs.some((m) => m && m.role === 'user');
+async function cloudPull() {
+  if (cloudOff || !localStorage.getItem('nishaan_user_id')) return;
+  try {
+    const res = await chatFetch('/api/sync');
+    if (res.status === 503) { cloudOff = true; return; }
+    if (!res.ok) return;
+    const { items } = await res.json();
+    const cloud = {}; (items || []).forEach((it) => { cloud[it.key] = it.value; });
+    let reloadChat = false;
+    Object.keys(TUTORS).forEach((subj) => {
+      const c = cloud['chat:' + subj];
+      const local = loadSavedChat(subj);
+      const localT = Number(localStorage.getItem(chatTsKey(subj))) || 0;
+      if (c && Array.isArray(c.messages)) {
+        const cloudNewer = (Number(c.t) || 0) > localT;
+        const cloudBetter = hasUserMsg(c.messages) && !hasUserMsg(local);
+        const localBetter = hasUserMsg(local) && !hasUserMsg(c.messages);
+        if ((cloudNewer && !localBetter) || cloudBetter) {
+          localStorage.setItem(chatStoreKey(subj), JSON.stringify(c.messages));
+          localStorage.setItem(chatTsKey(subj), String(Number(c.t) || Date.now()));
+          if (subj === currentSubject) reloadChat = true;
+        } else if (hasUserMsg(local) && localT > (Number(c.t) || 0)) {
+          cloudPush('chat:' + subj, { messages: local.slice(-60), t: localT });
+        }
+      } else if (hasUserMsg(local)) {
+        cloudPush('chat:' + subj, { messages: local.slice(-60), t: localT || Date.now() });
+      }
+    });
+    // streak: har din ka zyada wala number rakho
+    const act = rnLoadAct(), ca = cloud.activity || {}; let changed = false;
+    Object.keys(ca).forEach((d) => {
+      const a = act[d] || { mcq: 0, doubt: 0 };
+      const m = { mcq: Math.max(a.mcq || 0, ca[d].mcq || 0), doubt: Math.max(a.doubt || 0, ca[d].doubt || 0) };
+      if (m.mcq !== (a.mcq || 0) || m.doubt !== (a.doubt || 0)) { act[d] = m; changed = true; }
+    });
+    if (changed) localStorage.setItem(rnActKey(), JSON.stringify(act));
+    if (Object.keys(act).some((d) => !ca[d] || (act[d].mcq || 0) > (ca[d].mcq || 0) || (act[d].doubt || 0) > (ca[d].doubt || 0))) cloudPush('activity', act);
+    renderStreak();
+    if (reloadChat && !doubtBtn.disabled && !callActive) { chatHistory = loadSavedChat(currentSubject); renderSavedChat(); }
+  } catch (e) { /* silent */ }
+}
+
 function tutorName() { return TUTORS[currentSubject].name; }
 
 function tutorIntroText(lang) {
@@ -2462,8 +2525,9 @@ async function showTutorGreeting() {
     const res = await chatFetch('/api/tutor-greeting', { method: 'POST', body: { language: getCurrentLanguage() } });
     const data = await res.json();
     if (subjAtStart !== currentSubject || chatHistory.length || chatMessages.children.length) return;
-    appendMessage('assistant', data.greeting);
-    chatHistory.push({ role: 'assistant', content: data.greeting });
+    const g = (data && data.greeting) || 'Assalam o Alaikum! Aaj kis topic mein madad chahiye?';
+    appendMessage('assistant', g);
+    chatHistory.push({ role: 'assistant', content: g });
     persistChat();
   } catch (e) {
     if (subjAtStart !== currentSubject || chatMessages.children.length) return;
@@ -2954,8 +3018,12 @@ authForm.addEventListener('submit', async (e) => {
       localStorage.setItem('nishaan_student_class', data.studentClass);
     }
 
+    cloudOff = false;
     refreshAuthButtonLabel();
     showLoggedInView(email);
+    initSubjectChat();
+    renderStreak();
+    cloudPull();
     renderProgressSection();
     renderLeaderboard();
     if (typeof renderChatSection === 'function') renderChatSection();
@@ -2993,6 +3061,8 @@ authLogoutBtn.addEventListener('click', () => {
   localStorage.removeItem('nishaan_student_class');
   refreshAuthButtonLabel();
   showLoggedOutView();
+  initSubjectChat();
+  renderStreak();
   renderProgressSection();
   renderLeaderboard();
   if (typeof renderChatSection === 'function') renderChatSection();
@@ -3640,6 +3710,7 @@ function recordActivity(type) {
     // purani entries (60 din se purani) saaf
     Object.keys(act).sort().slice(0, -60).forEach((d) => delete act[d]);
     localStorage.setItem(rnActKey(), JSON.stringify(act));
+    cloudPush('activity', act);
     if (type === 'mcq' && before < DAILY_GOAL && day.mcq >= DAILY_GOAL) rnToast('Aaj ka goal poora! Shabash, streak barh gayi.');
     renderStreak();
   } catch (e) { /* silent */ }
@@ -3723,6 +3794,8 @@ async function renderHome() {
     }
   } catch (e) { /* silent */ }
 }
+
+cloudPull();
 
 (function initView() {
   const h = location.hash.slice(1);
