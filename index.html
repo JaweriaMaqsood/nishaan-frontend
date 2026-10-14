@@ -492,6 +492,18 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .mcq-result .row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .btn-wa{ background:#25D366; color:#06210f; border:none; font-weight:700; }
 .btn-wa:hover{ filter:brightness(1.08); }
+.exam-card{ border:1.4px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:16px; background:var(--bg-soft); }
+.exam-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; }
+.exam-link{ font-size:12.5px; font-weight:700; color:var(--cyan); background:none; border:0; padding:4px 6px; }
+.exam-form{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px; }
+.exam-form input{ background:var(--bg); border:1.4px solid var(--border); border-radius:10px; padding:9px 12px; color:var(--text); font-size:14px; font-family:inherit; flex:1; min-width:150px; color-scheme:dark; }
+.exam-empty{ font-size:13.5px; color:var(--text-dim); margin:0; }
+.exam-days{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+.exam-days b{ font-size:34px; line-height:1; color:var(--cyan); } .exam-days span{ font-size:14px; color:var(--text-dim); }
+.exam-plan{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.exam-plan li{ display:flex; align-items:center; justify-content:space-between; gap:10px; border:1.2px solid var(--border); border-radius:12px; padding:10px 12px; font-size:13.5px; }
+.exam-plan li.ok{ opacity:.65; text-decoration:line-through; }
+.exam-plan button{ font-size:12px; font-weight:700; padding:6px 12px; border-radius:999px; border:1.2px solid var(--border-strong); color:var(--text-dim); background:var(--bg); flex-shrink:0; }
 .notes-ov{ position:fixed; inset:0; z-index:550; background:rgba(5,8,18,.72); display:flex; align-items:center; justify-content:center; padding:16px; }
 .notes-card{ width:100%; max-width:640px; max-height:90vh; overflow-y:auto; background:var(--surface-2,var(--bg-soft)); border:1px solid var(--border-strong); border-radius:18px; padding:24px 24px 20px; color:var(--text); }
 .notes-card h3{ font-size:20px; font-weight:800; margin:0 0 4px; }
@@ -707,6 +719,13 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <div class="goal-bar"><div id="goalFill"></div></div>
         <div class="week-dots" id="weekDots"></div>
       </div>
+    </div>
+    <div class="exam-card" id="examCard">
+      <div class="exam-head"><b>Exam countdown</b><button type="button" id="examEdit" class="exam-link">Date set karo</button></div>
+      <div id="examSet" style="display:none;">
+        <div class="exam-form"><input type="text" id="examName" maxlength="40" placeholder="Exam ka naam (jaise: Matric Boards)"><input type="date" id="examDate"><button type="button" class="btn btn-primary" id="examSave">Save</button><button type="button" class="exam-link" id="examClear">Hata do</button></div>
+      </div>
+      <div id="examView"><p class="exam-empty">Exam ki date daalo, hum tumhara roz ka study plan bana denge.</p></div>
     </div>
     <div class="statbar">
       <div><b id="statSolved">—</b><span>MCQs solve kiye</span></div>
@@ -3809,6 +3828,58 @@ function rnStreakCount(act) {
   while (has(d)) { n++; d.setDate(d.getDate() - 1); }
   return n;
 }
+// ---- Exam countdown + daily plan ----
+function examKey() { return 'nishaan_exam_' + (localStorage.getItem('nishaan_user_id') || 'guest'); }
+function examLoad() { try { const e = JSON.parse(localStorage.getItem(examKey())); return e && /^\d{4}-\d{2}-\d{2}$/.test(e.date) ? e : null; } catch (e) { return null; } }
+function renderExam() {
+  const view = document.getElementById('examView'); if (!view) return;
+  const ex = examLoad(), edit = document.getElementById('examEdit');
+  view.textContent = '';
+  edit.textContent = ex ? 'Badlo' : 'Date set karo';
+  if (!ex) { const p = document.createElement('p'); p.className = 'exam-empty'; p.textContent = 'Exam ki date daalo, hum tumhara roz ka study plan bana denge.'; view.appendChild(p); return; }
+  const [y, m, d] = ex.date.split('-').map(Number);
+  const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+  const days = Math.round((new Date(y, m - 1, d) - t0) / 86400000);
+  const head = document.createElement('div'); head.className = 'exam-days';
+  const num = document.createElement('b'), lbl = document.createElement('span');
+  if (days < 0) { num.textContent = '0'; lbl.textContent = (ex.name || 'Exam') + ' ho chuka. Nayi date set kar sakte ho.'; head.append(num, lbl); view.appendChild(head); return; }
+  num.textContent = days;
+  lbl.textContent = days === 0 ? (ex.name || 'Exam') + ' AAJ hai. Best of luck!' : 'din baqi: ' + (ex.name || 'Exam');
+  head.append(num, lbl); view.appendChild(head);
+  const act = rnLoadAct(), today = act[rnDayKey()] || { mcq: 0, doubt: 0 };
+  const target = days <= 7 ? 15 : days <= 30 ? 10 : 8;
+  const weakEl = document.getElementById('statWeak'), weak = weakEl && weakEl.textContent.trim();
+  const hasWeak = weak && weak !== '—' && weak !== '-';
+  const tasks = [
+    { t: hasWeak ? 'Weak topic "' + weak + '" ka concept samjho' : 'Aaj ka ek topic tutor se samjho', done: (today.doubt || 0) > 0, nav: 'study', b: 'Study' },
+    { t: target + ' MCQs solve karo', done: (today.mcq || 0) >= target, nav: 'practice', b: 'Practice' },
+    { t: days <= 7 ? 'Aakhri hafta: aaj ke notes ek dafa revise karo' : 'Tutor chat se "Notes banao" karke revise karo', done: false, nav: 'study', b: 'Notes' },
+  ];
+  const ul = document.createElement('ul'); ul.className = 'exam-plan';
+  tasks.forEach((k) => {
+    const li = document.createElement('li'); if (k.done) li.className = 'ok';
+    const sp = document.createElement('span'); sp.textContent = k.t;
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = k.b; b.addEventListener('click', () => showView(k.nav));
+    li.append(sp, b); ul.appendChild(li);
+  });
+  view.appendChild(ul);
+}
+(function initExam() {
+  const box = document.getElementById('examSet'); if (!box) return;
+  const dateIn = document.getElementById('examDate'), nameIn = document.getElementById('examName');
+  const tomorrow = new Date(); dateIn.min = rnDayKey(tomorrow);
+  document.getElementById('examEdit').addEventListener('click', () => {
+    const ex = examLoad(); nameIn.value = ex ? ex.name || '' : ''; dateIn.value = ex ? ex.date : '';
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  });
+  document.getElementById('examSave').addEventListener('click', () => {
+    if (!dateIn.value) { rnToast('Exam ki date chunein'); return; }
+    try { localStorage.setItem(examKey(), JSON.stringify({ name: nameIn.value.trim().slice(0, 40), date: dateIn.value })); } catch (e) {}
+    box.style.display = 'none'; renderExam(); rnToast('Plan ban gaya. Roz yahan dekho!');
+  });
+  document.getElementById('examClear').addEventListener('click', () => { try { localStorage.removeItem(examKey()); } catch (e) {} box.style.display = 'none'; renderExam(); });
+  renderExam();
+})();
 function renderStreak() {
   const card = document.getElementById('streakCard'); if (!card) return;
   const act = rnLoadAct(), today = act[rnDayKey()] || { mcq: 0, doubt: 0 };
@@ -3828,6 +3899,7 @@ function renderStreak() {
     dots += '<span class="' + (on ? 'on' : '') + '"><i></i>' + ['Ait', 'Pir', 'Mang', 'Budh', 'Jumr', 'Juma', 'Haft'][d.getDay()] + '</span>';
   }
   document.getElementById('weekDots').innerHTML = dots;
+  if (typeof renderExam === 'function') renderExam();
 }
 
 function shareToWhatsApp(topic, correct, total) {
