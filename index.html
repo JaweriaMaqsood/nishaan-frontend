@@ -1223,9 +1223,15 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
     <p data-i18n="classFixDesc" style="color:var(--text-dim); font-size:14px; margin-bottom:20px;">Tumhara account class ke bina bana tha — ek dafa select kar lo taake Progress aur Leaderboard theek se kaam karein.</p>
     <select id="classFixSelect" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:16px;">
       <option value="">Class select karein</option>
-      <option value="primary">Class 1-5 (Primary)</option>
-      <option value="middle">Class 6-8 (Middle)</option>
-      <option value="matric">Class 9-10 / Matric / O-Levels</option>
+      <optgroup label="Primary">
+        <option value="class_1">Class 1</option><option value="class_2">Class 2</option><option value="class_3">Class 3</option><option value="class_4">Class 4</option><option value="class_5">Class 5</option>
+      </optgroup>
+      <optgroup label="Middle">
+        <option value="class_6">Class 6</option><option value="class_7">Class 7</option><option value="class_8">Class 8</option>
+      </optgroup>
+      <optgroup label="Matric">
+        <option value="class_9">Class 9</option><option value="class_10">Class 10</option>
+      </optgroup>
       <optgroup label="Intermediate">
         <option value="inter_ics_1">ICS — 1st Year</option>
         <option value="inter_ics_2">ICS — 2nd Year</option>
@@ -1235,9 +1241,14 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <option value="inter_fsc_2">FSc — 2nd Year</option>
         <option value="inter_fa_1">FA — 1st Year</option>
         <option value="inter_fa_2">FA — 2nd Year</option>
-        <option value="inter_alevels">A-Levels</option>
       </optgroup>
-      <option value="entry_test">Entry Test (MDCAT, ECAT, etc.)</option>
+      <optgroup label="Other">
+        <option value="o_levels">O-Levels</option>
+        <option value="inter_alevels">A-Levels</option>
+        <option value="university">University / BS</option>
+        <option value="entry_test">Entry Test (MDCAT, ECAT, NET, SAT)</option>
+        <option value="other">Other</option>
+      </optgroup>
     </select>
     <p id="classFixError" style="display:none; font-size:13px; color:var(--pink); margin-bottom:12px;"></p>
     <button type="button" class="btn btn-primary btn-block" id="classFixSaveBtn" data-i18n="classFixSave">Save karein</button>
@@ -1268,21 +1279,32 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
           <label data-i18n="authClassLabel" style="display:block; font-size:13px; font-weight:700; color:var(--text-dim); margin-bottom:8px;">Aap kis class mein hain?</label>
           <select id="authClass" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 15px; color:var(--text); font-size:14.5px; font-family:var(--font-body); margin-bottom:8px;">
             <option value="" disabled selected data-i18n="authClassPlaceholder">Class ya level select karein</option>
-            <option value="primary">Class 1-5 (Primary)</option>
-            <option value="middle">Class 6-8 (Middle)</option>
-            <option value="matric">Class 9-10 / Matric / O-Levels</option>
-            <optgroup label="Intermediate">
-              <option value="inter_ics_1">ICS — 1st Year</option>
-              <option value="inter_ics_2">ICS — 2nd Year</option>
-              <option value="inter_icom_1">I.Com — 1st Year</option>
-              <option value="inter_icom_2">I.Com — 2nd Year</option>
-              <option value="inter_fsc_1">FSc — 1st Year</option>
-              <option value="inter_fsc_2">FSc — 2nd Year</option>
-              <option value="inter_fa_1">FA — 1st Year</option>
-              <option value="inter_fa_2">FA — 2nd Year</option>
-              <option value="inter_alevels">A-Levels</option>
-            </optgroup>
-            <option value="entry_test">Entry Test (MDCAT, ECAT, etc.)</option>
+            <optgroup label="Primary">
+        <option value="class_1">Class 1</option><option value="class_2">Class 2</option><option value="class_3">Class 3</option><option value="class_4">Class 4</option><option value="class_5">Class 5</option>
+      </optgroup>
+      <optgroup label="Middle">
+        <option value="class_6">Class 6</option><option value="class_7">Class 7</option><option value="class_8">Class 8</option>
+      </optgroup>
+      <optgroup label="Matric">
+        <option value="class_9">Class 9</option><option value="class_10">Class 10</option>
+      </optgroup>
+      <optgroup label="Intermediate">
+        <option value="inter_ics_1">ICS — 1st Year</option>
+        <option value="inter_ics_2">ICS — 2nd Year</option>
+        <option value="inter_icom_1">I.Com — 1st Year</option>
+        <option value="inter_icom_2">I.Com — 2nd Year</option>
+        <option value="inter_fsc_1">FSc — 1st Year</option>
+        <option value="inter_fsc_2">FSc — 2nd Year</option>
+        <option value="inter_fa_1">FA — 1st Year</option>
+        <option value="inter_fa_2">FA — 2nd Year</option>
+      </optgroup>
+      <optgroup label="Other">
+        <option value="o_levels">O-Levels</option>
+        <option value="inter_alevels">A-Levels</option>
+        <option value="university">University / BS</option>
+        <option value="entry_test">Entry Test (MDCAT, ECAT, NET, SAT)</option>
+        <option value="other">Other</option>
+      </optgroup>
           </select>
         </div>
 
