@@ -1235,6 +1235,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 14-Oct-B</div>
   </div>
 </footer>
 
@@ -2302,7 +2303,21 @@ let currentSubject = (function () { const s0 = localStorage.getItem('nishaan_sub
 let chatHistory = []; // [{role:'user'|'assistant', content:'...'}]
 
 function chatStoreKey(subj) { return 'nishaan_chat_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + subj; }
-function loadSavedChat(subj) { try { const a = JSON.parse(localStorage.getItem(chatStoreKey(subj))); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+// Purani saved chats mein tutor ka purana naam ho sakta hai: pehla intro maujooda naam se badal do
+const INTRO_RE = [/^Assalam o Alaikum! Main .{2,40}? hoon, aapka .{2,40}? ka tutor\. Aaj aap kya parhna chahte hain\?$/, /^Hello! I'm .{2,40}?, your .{2,40}? teacher on Rehnuma\. What would you like to learn today\?$/, /^السلام علیکم! میں .{2,40}? ہوں، آپ کا .{2,40}? کا ٹیوٹر۔ آج آپ کیا پڑھنا چاہتے ہیں؟$/];
+function freshenIntro(msgs, subj) {
+  if (subj === 'general' || !msgs.length) return msgs;
+  msgs.forEach((m, i) => {
+    if (!m || m.role !== 'assistant' || typeof m.content !== 'string') return;
+    const c = m.content.trim();
+    const lang = INTRO_RE[1].test(c) ? 'en' : INTRO_RE[2].test(c) ? 'ur' : INTRO_RE[0].test(c) ? 'roman' : null;
+    if (!lang) return;
+    const fresh = tutorIntroText(lang, subj);
+    if (fresh && fresh !== m.content) msgs[i] = { role: 'assistant', content: fresh };
+  });
+  return msgs;
+}
+function loadSavedChat(subj) { try { const a = JSON.parse(localStorage.getItem(chatStoreKey(subj))); return Array.isArray(a) ? freshenIntro(a, subj) : []; } catch (e) { return []; } }
 function chatTsKey(subj) { return 'nishaan_chat_ts_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + subj; }
 function persistChat() {
   try {
@@ -2369,9 +2384,10 @@ async function cloudPull() {
 
 function tutorName() { return TUTORS[currentSubject].name; }
 
-function tutorIntroText(lang) {
-  const t = TUTORS[currentSubject];
-  if (currentSubject === 'general') return null;
+function tutorIntroText(lang, subj) {
+  subj = subj || currentSubject;
+  const t = TUTORS[subj];
+  if (subj === 'general') return null;
   if (lang === 'en') return "Hello! I'm " + t.name + ", your " + t.en + " teacher on Rehnuma. What would you like to learn today?";
   if (lang === 'ur') return 'السلام علیکم! میں ' + t.name + ' ہوں، آپ کا ' + t.ur + ' کا ٹیوٹر۔ آج آپ کیا پڑھنا چاہتے ہیں؟';
   return 'Assalam o Alaikum! Main ' + t.name + ' hoon, aapka ' + t.en + ' ka tutor. Aaj aap kya parhna chahte hain?';
