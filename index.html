@@ -935,9 +935,6 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
             <button type="button" class="btn btn-outline" id="micBtn" style="flex-shrink:0; padding:14px 16px;" data-i18n-title="micTitle" title="Bol kar poocho" aria-label="Voice input">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
             </button>
-            <button type="button" class="btn btn-outline" id="imageGenBtn" style="flex-shrink:0; padding:14px 16px;" data-i18n-title="imageGenTitle" title="AI se pic banwayein" aria-label="Generate image">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="10" r="1.8" stroke="currentColor" stroke-width="1.6"/><path d="m4 17 5-5 3.5 3.5L16 11l4 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
             <button class="btn btn-primary" id="doubtBtn" data-i18n="askButton" style="flex-shrink:0;">Poocho</button>
           </div>
           <p id="micStatus" style="font-family:var(--font-mono); font-size:11.5px; color:var(--cyan); margin-top:10px; display:none;">🎙️ Sun rahe hain... bolein</p>
@@ -1392,7 +1389,7 @@ const translations = {
     authSubmitLogin: 'Login', authSubmitSignup: 'Sign up',
     tabDoubtSolver: 'Doubt Solver', tabMcqGenerator: 'MCQ Generator',
     notesBtnLabel: 'Make notes', callModeLabel: 'Call Mode', askButton: 'Ask', generateButton: 'Generate',
-    doubtInputPlaceholder: 'Type your question...', mcqLabel: 'Type a topic to generate MCQs',
+    doubtInputPlaceholder: 'Type your question... or "make an image of a plant cell"', mcqLabel: 'Type a topic to generate MCQs',
     mcqInputPlaceholder: 'e.g. Genetics',
     progressLoginPrompt: 'Login first to see your progress.', leaderboardLoginPrompt: 'Login first to see the leaderboard.',
     loginSignupBtn: 'Login / Sign up',
@@ -1528,7 +1525,7 @@ const translations = {
     authSubmitLogin: 'لاگ ان کریں', authSubmitSignup: 'سائن اپ کریں',
     tabDoubtSolver: 'سوال حل کریں', tabMcqGenerator: 'ایم سی کیوز بنائیں',
     notesBtnLabel: 'نوٹس بنائیں', callModeLabel: 'کال موڈ', askButton: 'پوچھیں', generateButton: 'بنائیں',
-    doubtInputPlaceholder: 'اپنا سوال لکھیں...', mcqLabel: 'موضوع لکھیں، ایم سی کیوز بنیں گے',
+    doubtInputPlaceholder: 'اپنا سوال لکھیں... یا "خلیے کی تصویر بناؤ"', mcqLabel: 'موضوع لکھیں، ایم سی کیوز بنیں گے',
     mcqInputPlaceholder: 'مثلاً: جینیات',
     progressLoginPrompt: 'اپنی پیش رفت دیکھنے کے لیے پہلے لاگ ان کریں۔', leaderboardLoginPrompt: 'لیڈربورڈ دیکھنے کے لیے پہلے لاگ ان کریں۔',
     loginSignupBtn: 'لاگ ان / سائن اپ',
@@ -1664,7 +1661,7 @@ const translations = {
     authSubmitLogin: 'Login karein', authSubmitSignup: 'Sign up karein',
     tabDoubtSolver: 'Doubt Solver', tabMcqGenerator: 'MCQ Generator',
     notesBtnLabel: 'Notes banao', callModeLabel: 'Call Mode', askButton: 'Poocho', generateButton: 'Generate',
-    doubtInputPlaceholder: 'Apna sawal likhein...', mcqLabel: 'Topic likhein, MCQs generate honge',
+    doubtInputPlaceholder: 'Apna sawal likhein... ya "cell ki image bana do"', mcqLabel: 'Topic likhein, MCQs generate honge',
     mcqInputPlaceholder: 'Jaise: Genetics',
     progressLoginPrompt: 'Apna progress dekhne ke liye pehle login karein.', leaderboardLoginPrompt: 'Leaderboard dekhne ke liye pehle login karein.',
     loginSignupBtn: 'Login / Sign up',
@@ -2416,6 +2413,11 @@ function renderSubjectChips() {
     c.addEventListener('click', () => { doubtInput.value = q; askDoubt(); });
     box.appendChild(c);
   });
+  const ic = document.createElement('button');
+  ic.className = 'demo-chip'; ic.type = 'button'; ic.textContent = 'Image banao';
+  ic.style.cssText = 'font-size:12.5px; padding:8px 14px; border-radius:999px; border:1.4px dashed var(--cyan); color:var(--cyan); background:var(--bg-soft);';
+  ic.addEventListener('click', () => { doubtInput.value = 'Ek image bana do: '; doubtInput.focus(); });
+  box.appendChild(ic);
 }
 
 function updateCallIdentity() {
@@ -2447,7 +2449,7 @@ function initSubjectChat() {
 
 function switchSubject(id) {
   if (id === currentSubject) return;
-  if (doubtBtn.disabled || imageGenBtn.disabled || callActive) { rnToast('Pehle jawab aane ka intezar karein.'); return; }
+  if (doubtBtn.disabled || imageBusy || callActive) { rnToast('Pehle jawab aane ka intezar karein.'); return; }
   persistChat();
   currentSubject = id;
   try { localStorage.setItem('nishaan_subject', id); } catch (e) {}
@@ -2590,6 +2592,7 @@ async function showTutorGreeting() {
 
 async function submitUserMessage(question) {
   const dict = translations[getCurrentLanguage()] || translations.roman;
+  if (!callActive && detectImageRequest(question)) return generateImageInChat(question);
   const historyIndexAtSend = chatHistory.length;
   const bubble = appendMessage('user', question);
   bubble.dataset.historyIndex = historyIndexAtSend;
@@ -2643,7 +2646,6 @@ async function askDoubt() {
 }
 
 // ============ AI Image Generation (Pollinations) ============
-const imageGenBtn = document.getElementById('imageGenBtn');
 
 // Tries each URL in order; moves to the next if one errors or takes too long
 function loadImageWithFallback(urls, timeoutMs) {
@@ -2678,23 +2680,34 @@ function loadImageWithFallback(urls, timeoutMs) {
   });
 }
 
-imageGenBtn.addEventListener('click', async () => {
+// Student seedha likhta hai: "cell ki image bana do" -> tutor khud image bana deta hai (alag button ki zaroorat nahi)
+let imageBusy = false;
+const IMG_WORD = /\b(image|images|img|pic|pics|picture|pictures|photo|photos|tasveer|tasvir|tasweer|tasaweer|tasveeer)\b|تصویر|تصاویر/i;
+const IMG_VERB = /\b(bana|banao|banado|banaado|banao|bnao|bna|bnado|bnaao|banaen|banain|bnaen|banaye|banaiye|banana|generate|create|make|draw|design)\b|بنا/i;
+const IMG_NOT = /\b(kaise|kese|kaisay|how to|how do|what is|kya hai|kya hota|kyun|why|explain|samjha|meaning|definition)\b|کیا ہے|کیسے/i;
+function detectImageRequest(text) {
+  const t = String(text || '').trim();
+  if (t.length < 6 || t.length > 400) return false;
+  return IMG_WORD.test(t) && IMG_VERB.test(t) && !IMG_NOT.test(t);
+}
+function imageActionBtn(label, fn) {
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+  b.style.cssText = 'font-size:12px; font-weight:700; padding:7px 13px; border-radius:999px; border:1.2px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft);';
+  b.addEventListener('click', fn); return b;
+}
+async function imageToBlob(src) {
+  const r = await fetch(src); if (!r.ok) throw new Error('fetch'); return await r.blob();
+}
+async function generateImageInChat(prompt) {
   const dict = translations[getCurrentLanguage()] || translations.roman;
-  const prompt = doubtInput.value.trim();
-
-  if (!prompt) {
-    appendMessage('assistant', dict.imageNeedsPrompt, { noEdit: true });
-    doubtInput.focus();
-    return;
-  }
+  if (imageBusy) { rnToast('Pehli image abhi ban rahi hai, zara ruko.'); return; }
   if (!localStorage.getItem('nishaan_user_id')) {
+    const ub = appendMessage('user', prompt, { noEdit: true });
     appendMessage('assistant', dict.imageNeedsLogin, { noEdit: true });
     return;
   }
-
-  doubtInput.value = '';
-  imageGenBtn.disabled = true;
-  imageGenBtn.style.opacity = '.5';
+  imageBusy = true;
+  doubtBtn.disabled = true;
 
   const historyIndexAtSend = chatHistory.length;
   const bubble = appendMessage('user', prompt, { noEdit: true });
@@ -2716,14 +2729,30 @@ imageGenBtn.addEventListener('click', async () => {
     const imgBubble = document.createElement('div');
     imgBubble.style.cssText = 'max-width:85%; margin-bottom:14px; margin-right:auto;';
     const imgEl = document.createElement('img');
-    imgEl.src = data.image;
-    imgEl.alt = prompt;
-    imgEl.style.cssText = 'width:100%; max-width:280px; border-radius:14px; border:1.4px solid var(--border); display:block;';
+    imgEl.src = data.image; imgEl.alt = prompt;
+    imgEl.style.cssText = 'width:100%; max-width:320px; border-radius:14px; border:1.4px solid var(--border); display:block;';
     imgBubble.appendChild(imgEl);
+    const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;';
+    row.appendChild(imageActionBtn('Download', async () => {
+      try {
+        const blob = await imageToBlob(data.image);
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'rehnuma-image.png';
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+      } catch (e) { window.open(data.image, '_blank', 'noopener'); }
+    }));
+    row.appendChild(imageActionBtn('Share', async () => {
+      try {
+        const blob = await imageToBlob(data.image);
+        const file = new File([blob], 'rehnuma-image.png', { type: blob.type || 'image/png' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text: 'Rehnuma se banayi: ' + location.origin + '/' }); return; }
+      } catch (e) { if (e && e.name === 'AbortError') return; }
+      window.open('https://wa.me/?text=' + encodeURIComponent('Maine Rehnuma par ye image banayi: ' + (/^https?:/.test(data.image) ? data.image : location.origin + '/')), '_blank', 'noopener');
+    }));
+    imgBubble.appendChild(row);
     if (data.prompt) {
       const cap = document.createElement('p');
       cap.textContent = data.prompt;
-      cap.style.cssText = 'font-size:11.5px; color:var(--text-faint); margin-top:6px; max-width:280px; line-height:1.5;';
+      cap.style.cssText = 'font-size:11.5px; color:var(--text-faint); margin-top:6px; max-width:320px; line-height:1.5;';
       imgBubble.appendChild(cap);
     }
     chatMessages.appendChild(imgBubble);
@@ -2734,10 +2763,10 @@ imageGenBtn.addEventListener('click', async () => {
     loadingBubble.remove();
     appendMessage('assistant', err.status === 429 ? err.message : dict.imageFailed, { noEdit: true });
   } finally {
-    imageGenBtn.disabled = false;
-    imageGenBtn.style.opacity = '';
+    imageBusy = false;
+    doubtBtn.disabled = false;
   }
-});
+}
 
 const mcqInput = document.getElementById('mcqInput');
 const mcqBtn = document.getElementById('mcqBtn');
