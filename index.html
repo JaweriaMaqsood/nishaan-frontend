@@ -492,6 +492,13 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .mcq-result .row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .btn-wa{ background:#25D366; color:#06210f; border:none; font-weight:700; }
 .btn-wa:hover{ filter:brightness(1.08); }
+@media (max-width:440px){
+  .header-inner{ gap:8px; }
+  .header-actions{ gap:8px; min-width:0; }
+  .header-actions .btn-outline{ padding:8px 12px; font-size:12.5px; max-width:120px; display:block; text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #langSwitchBtn{ padding:8px 10px !important; font-size:12px !important; }
+  .notes-card{ padding:20px 16px 16px; border-radius:16px; }
+}
 .exam-card{ border:1.4px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:16px; background:var(--bg-soft); }
 .exam-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; }
 .exam-link{ font-size:12.5px; font-weight:700; color:var(--cyan); background:none; border:0; padding:4px 6px; }
@@ -1057,6 +1064,11 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       <p data-i18n="chatSub">Apna number set karo, dost add karo, aur unse baat karo — bilkul WhatsApp jaisa, sirf Rehnuma students ke darmiyan.</p>
     </div>
 
+    <div id="friendsSoon" style="display:none; max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
+      <h3 style="font-size:20px; margin-bottom:10px;">Jald aa raha hai</h3>
+      <p style="color:var(--text-dim); font-size:15px; line-height:1.6;">Friends Chat ko hum pehle poori tarah mehfooz bana rahe hain (phone number ki tasdeeq ke sath), phir shuru karenge. Tab tak doubt solver, MCQs aur leaderboard se parhai jari rakho.</p>
+      <button type="button" class="btn btn-primary" data-nav="study" style="margin-top:20px;">Doubt Solver kholo</button>
+    </div>
     <div id="chatLoggedOut" style="max-width:520px; margin:0 auto; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
       <p data-i18n="chatLoginPrompt" style="color:var(--text-dim); font-size:15px; margin-bottom:20px;">Friends chat dekhne ke liye pehle login karein.</p>
       <button type="button" class="btn btn-primary" id="chatLoginBtn" data-i18n="loginSignupBtn">Login / Sign up</button>
@@ -3454,7 +3466,10 @@ function chatDebug(result) {
     ' refresh=' + has('nishaan_refresh_token') + ' class=' + (localStorage.getItem('nishaan_student_class') || 'no') + ' -> ' + result;
 }
 
+// Friends Chat launch par band: phone OTP lagne ke baad sirf yahan true kar dena
+const FRIENDS_LIVE = false;
 async function renderChatSection() {
+  if (!FRIENDS_LIVE) return;
   clearInterval(chatFriendsPollTimer);
   const d = chatDict();
   const retryBtn = document.getElementById('chatRetryBtn');
@@ -3786,6 +3801,15 @@ waitlistForm.addEventListener('submit', async (e) => {
 
 // ============ App navigation (sidebar views) ============
 const VIEW_ALIAS = { practice: 'study', chat: 'friends', demo: 'study', top: 'home' };
+(function lockFriends() {
+  if (FRIENDS_LIVE) return;
+  const sec = document.querySelector('[data-view="friends"]'); if (!sec) return;
+  sec.querySelectorAll('.wrap > *').forEach((el) => { if (el.id !== 'friendsSoon' && !el.classList.contains('section-head')) el.style.display = 'none'; });
+  const sub = sec.querySelector('[data-i18n="chatSub"]'); if (sub) sub.style.display = 'none';
+  document.getElementById('friendsSoon').style.display = 'block';
+  const nav = document.querySelector('.sb-item[data-nav="friends"]');
+  if (nav) { const b = document.createElement('span'); b.textContent = 'Jald'; b.style.cssText = 'margin-left:auto; font-size:10px; font-weight:800; letter-spacing:.04em; padding:2px 7px; border-radius:999px; background:var(--bg-soft); color:var(--cyan); border:1px solid var(--border-strong);'; nav.appendChild(b); }
+})();
 function showView(name) {
   const target = VIEW_ALIAS[name] || name;
   if (!document.querySelector('[data-view="' + target + '"]')) return;
@@ -3800,7 +3824,7 @@ function showView(name) {
   if (target === 'home') renderHome();
   if (target === 'progress') renderProgressSection();
   if (target === 'leaderboard') renderLeaderboard();
-  if (target === 'friends') renderChatSection();
+  if (target === 'friends' && FRIENDS_LIVE) renderChatSection();
   window.scrollTo(0, 0);
   history.replaceState(null, '', '#' + navName);
 }
