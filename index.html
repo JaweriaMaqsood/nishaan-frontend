@@ -509,6 +509,18 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
   .site-header .logo-mark{ width:30px; height:30px; }
   .notes-card{ padding:20px 16px 16px; border-radius:16px; }
 }
+.fb-kinds{ display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 10px; }
+.fb-kinds button{ font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border); color:var(--text-dim); background:var(--bg-soft); }
+.fb-kinds button.on{ border-color:var(--cyan); color:var(--cyan); }
+.notes-card textarea{ width:100%; min-height:110px; resize:vertical; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:12px 14px; color:var(--text); font-size:16px; font-family:inherit; }
+.rp-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0 4px; }
+.rp-grid div{ background:var(--bg-soft); border:1.2px solid var(--border); border-radius:12px; padding:12px 10px; text-align:center; }
+.rp-grid b{ display:block; font-size:24px; color:var(--cyan); } .rp-grid span{ font-size:11.5px; color:var(--text-dim); }
+.report-row{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; border:1.4px solid var(--border); border-radius:16px; padding:14px 18px; margin-bottom:16px; background:var(--bg-soft); }
+.report-row b{ display:block; font-size:14px; margin-bottom:2px; } .report-row span{ font-size:12.5px; color:var(--text-dim); }
+.wk-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:12px; }
+.wk-box{ border:1.2px solid var(--border); border-radius:12px; padding:12px; background:var(--bg-soft); } .wk-box b{ display:block; font-size:24px; color:var(--cyan); line-height:1.1; } .wk-box span{ font-size:12px; color:var(--text-dim); }
+.wk-days{ display:flex; gap:6px; margin-top:12px; } .wk-days i{ flex:1; text-align:center; font-style:normal; font-size:11px; padding:7px 0; border-radius:8px; border:1.2px solid var(--border); color:var(--text-faint); } .wk-days i.on{ background:var(--cyan); color:#04101a; border-color:var(--cyan); font-weight:800; }
 .exam-card{ border:1.4px solid var(--border); border-radius:16px; padding:16px 18px; margin-bottom:16px; background:var(--bg-soft); }
 .exam-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; }
 .exam-link{ font-size:12.5px; font-weight:700; color:var(--cyan); background:none; border:0; padding:4px 6px; }
@@ -715,6 +727,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
   <button type="button" class="sb-item" data-nav="friends"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M10 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20 20v-1a3 3 0 0 0-2-2.8M16 5.2a3 3 0 0 1 0 5.6"/></svg><span data-i18n="navFriends">Friends</span></button>
   <div class="sb-sep"></div>
   <button type="button" class="sb-item" data-nav="about"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8h.01M11 12h1v5h1M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/></svg><span data-i18n="navWhy">Kyun Rehnuma</span></button>
+  <button type="button" class="sb-item" id="feedbackOpen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.7 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg><span>Problem batao</span></button>
   <button type="button" class="sb-item" id="installBtn" style="display:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg><span>App install karo</span></button>
 </aside>
 
@@ -749,6 +762,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       <div><b id="statAcc">—</b><span>Sahi jawab %</span></div>
       <div><b id="statWeak">—</b><span>Sabse weak topic</span></div>
     </div>
+    <div class="report-row"><div><b>Hafte ki report</b><span>Is hafte ki mehnat ka saaf card, jo ammi abbu ko WhatsApp par bhej sako.</span></div><button type="button" class="btn btn-outline" id="weeklyBtn">Report banao</button></div>
     <div class="focus" id="homeFocus"><p id="homeFocusText" style="font-weight:600;"></p><button type="button" class="btn btn-primary" id="homeFocusBtn">Is topic ki practice karo</button></div>
     <ol class="journey">
       <li><span class="j-num">01</span><div class="j-body"><h3>Concept samjho</h3><p>Apna topic AI tutor Javeria se poocho. Tumhari class ke level par, aasan zaban mein, misalon ke sath samjhaya jata hai. Bol kar ya call par bhi poochh sakte ho.</p></div><button type="button" class="btn btn-primary" data-nav="study">Study shuru karo</button></li>
@@ -1020,6 +1034,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
     </div>
 
     <div id="progressLoggedIn" style="display:none; max-width:800px; margin:0 auto;">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:14px;"><button type="button" class="btn btn-primary" id="weeklyReportBtn" style="font-size:13.5px; padding:11px 18px;">Haftawar report banao</button></div>
       <div id="progressLoading" data-i18n="progressLoadingText" style="text-align:center; color:var(--text-dim); font-size:14.5px; padding:30px 0;">Progress load ho raha hai...</div>
       <div id="progressEmpty" style="display:none; text-align:center; background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg); padding:40px 30px;">
         <p data-i18n="progressEmptyText" style="color:var(--text-dim); font-size:15px;">Abhi tak koi MCQ attempt nahi mila. "Live Demo" mein jaake kuch MCQs solve karein, phir yahan report dikhega.</p>
@@ -1179,7 +1194,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <ul class="price-list">
           <li><span class="price-check">✓</span><span data-i18n="pricePro1">Unlimited doubts aur MCQs</span></li>
           <li><span class="price-check">✓</span><span data-i18n="pricePro2">Detailed weak-area tracking</span></li>
-          <li><span class="price-check">✓</span><span data-i18n="pricePro3">Weekly progress report (coming soon)</span></li>
+          <li><span class="price-check">✓</span><span data-i18n="pricePro3">Monthly progress report (coming soon)</span></li>
           <li><span class="price-check">✓</span><span data-i18n="pricePro4">Full past-paper MCQ bank</span></li>
         </ul>
         <a href="#waitlist" class="btn btn-primary btn-block" data-i18n="waitlistJoin">Waitlist join karo</a>
@@ -1483,7 +1498,7 @@ const translations = {
     priceFree1: 'Up to 60 AI questions / hour', priceFree2: 'MCQ practice included', priceFree3: 'Basic weak-area report',
     priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'For full access',
     pricePro1: 'Unlimited doubts and MCQs', pricePro2: 'Detailed weak-area tracking',
-    pricePro3: 'Weekly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
+    pricePro3: 'Monthly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
     faqEyebrow: 'Questions & Answers',
     faq1Q: 'When will Rehnuma launch?',
     faq1A: "We're currently building the beta. Waitlist members get access first — you'll hear by email/SMS as soon as the launch date is confirmed.",
@@ -1619,7 +1634,7 @@ const translations = {
     priceFree1: 'فی گھنٹہ 60 تک AI سوالات', priceFree2: 'MCQ پریکٹس شامل', priceFree3: 'بنیادی ویک ایریا رپورٹ',
     priceBadge: 'ویٹ لسٹ آفر', pricePro: 'پرو', priceProDesc: 'مکمل رسائی کے لیے',
     pricePro1: 'لامحدود سوالات اور MCQs', pricePro2: 'تفصیلی ویک ایریا ٹریکنگ',
-    pricePro3: 'ہفتہ وار پیش رفت رپورٹ (جلد آ رہی ہے)', pricePro4: 'مکمل past-paper MCQ بینک',
+    pricePro3: 'ماہانہ پیش رفت رپورٹ (جلد آ رہی ہے)', pricePro4: 'مکمل past-paper MCQ بینک',
     faqEyebrow: 'سوالات و جوابات',
     faq1Q: 'رہنما کب لانچ ہوگا؟',
     faq1A: 'ہم ابھی بیٹا بنا رہے ہیں۔ ویٹ لسٹ میں شامل ہونے والوں کو سب سے پہلے رسائی ملے گی، لانچ ڈیٹ کنفرم ہوتے ہی ای میل/ایس ایم ایس سے پتا چل جائے گا۔',
@@ -1755,7 +1770,7 @@ const translations = {
     priceFree1: 'Ghante mein 60 tak AI sawal', priceFree2: 'MCQ practice shamil', priceFree3: 'Basic weak-area report',
     priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'Full access ke liye',
     pricePro1: 'Unlimited doubts aur MCQs', pricePro2: 'Detailed weak-area tracking',
-    pricePro3: 'Weekly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
+    pricePro3: 'Monthly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
     faqEyebrow: 'Sawal jawab',
     faq1Q: 'Rehnuma kab launch hoga?',
     faq1A: 'Hum abhi beta build kar rahe hain. Waitlist join karne walon ko sabse pehle access milega, launch date confirm hote hi email/SMS se pata chal jayega.',
@@ -3929,6 +3944,178 @@ document.getElementById('notesBtn').addEventListener('click', async () => {
     showNotes(data.notes, data.tutor || tutorName());
   } catch (e) { rnToast(e.message || 'Notes nahi ban sake'); }
   finally { btn.disabled = false; label.textContent = orig; }
+});
+// ============ Haftawar report (parents ke liye) ============
+function weeklyStats() {
+  const act = rnLoadAct(); let mcq = 0, doubt = 0, days = 0; const per = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const v = act[rnDayKey(d)] || {}; const m = v.mcq || 0, q = v.doubt || 0;
+    mcq += m; doubt += q; if (m + q > 0) days++;
+    per.push({ label: ['Ait', 'Pir', 'Mang', 'Budh', 'Jumr', 'Juma', 'Haft'][d.getDay()], n: m + q });
+  }
+  return { mcq, doubt, days, per, streak: rnStreakCount(act) };
+}
+function reportCanvas(r) {
+  const W = 1080, H = 1350, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+  const g = x.createLinearGradient(0, 0, W, H); g.addColorStop(0, '#0E1020'); g.addColorStop(1, '#241a4a'); x.fillStyle = g; x.fillRect(0, 0, W, H);
+  const font = (w, px) => (x.font = w + ' ' + px + 'px Inter, Arial, sans-serif');
+  x.fillStyle = '#00E5FF'; font('700', 34); x.fillText('REHNUMA  •  HAFTAWAR REPORT', 70, 110);
+  x.fillStyle = '#fff'; font('800', 78); x.fillText(r.name, 70, 230);
+  x.fillStyle = '#B9B4D6'; font('500', 34); x.fillText(r.range + (r.cls ? '  •  ' + r.cls : ''), 70, 290);
+  const box = (i, big, small) => { const bx = 70 + i * 320; x.fillStyle = 'rgba(255,255,255,.07)'; x.beginPath(); x.roundRect(bx, 360, 290, 210, 28); x.fill(); x.fillStyle = '#00E5FF'; font('800', 84); x.textAlign = 'center'; x.fillText(String(big), bx + 145, 468); x.fillStyle = '#B9B4D6'; font('500', 28); x.fillText(small, bx + 145, 525); x.textAlign = 'left'; };
+  box(0, r.days + '/7', 'din active'); box(1, r.mcq, 'MCQs solve'); box(2, r.acc === null ? '—' : r.acc + '%', 'sahi jawab');
+  x.fillStyle = '#fff'; font('700', 38); x.fillText('Is hafte ki activity', 70, 650);
+  const max = Math.max(1, ...r.per.map((p) => p.n));
+  r.per.forEach((p, i) => { const bx = 90 + i * 140, h = Math.max(8, Math.round((p.n / max) * 200)); x.fillStyle = p.n ? '#00E5FF' : 'rgba(255,255,255,.14)'; x.beginPath(); x.roundRect(bx, 900 - h, 80, h, 14); x.fill(); x.fillStyle = '#B9B4D6'; font('500', 26); x.textAlign = 'center'; x.fillText(p.label, bx + 40, 945); x.textAlign = 'left'; });
+  x.fillStyle = '#fff'; font('700', 38); x.fillText('Zyada mehnat chahiye', 70, 1040);
+  x.fillStyle = '#FFB86B'; font('600', 34);
+  const weak = r.weak.length ? r.weak : ['Abhi koi weak topic nahi mila'];
+  weak.slice(0, 3).forEach((w, i) => x.fillText('•  ' + (w.length > 38 ? w.slice(0, 36) + '…' : w), 70, 1100 + i * 52));
+  x.fillStyle = '#B9B4D6'; font('500', 30); x.fillText('Streak: ' + r.streak + ' din   |   Rehnuma AI Tutor', 70, 1290);
+  return c;
+}
+async function openWeeklyReport() {
+  if (!localStorage.getItem('nishaan_user_id')) { rnToast('Report ke liye pehle login karein.'); return; }
+  const btn = document.getElementById('weeklyReportBtn'); btn.disabled = true;
+  let acc = null, weak = [];
+  try {
+    const res = await chatFetch('/api/weak-areas'); const d = await res.json();
+    if (res.ok && Array.isArray(d.accuracy) && d.accuracy.length) {
+      const tot = d.accuracy.reduce((a, t) => a + t.total, 0), ok = d.accuracy.reduce((a, t) => a + t.correct, 0);
+      acc = tot ? Math.round(ok / tot * 100) : null;
+      weak = d.accuracy.filter((t) => t.total >= 2).sort((a, b) => a.percent - b.percent).slice(0, 3).map((t) => t.topic + ' (' + t.percent + '%)');
+    }
+  } catch (e) { /* offline: sirf local activity */ }
+  btn.disabled = false;
+  const w = weeklyStats(), dd = new Date(), d0 = new Date(); d0.setDate(d0.getDate() - 6);
+  const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  const clsEl = document.querySelector('#studentClassSelect option:checked');
+  const r = { name: localStorage.getItem('nishaan_user_name') || 'Student', range: fmt(d0) + ' - ' + fmt(dd), cls: '', acc, weak, ...w };
+  closeNotes();
+  const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card';
+  const add = (tag, text) => { const e = document.createElement(tag); e.textContent = text; card.appendChild(e); return e; };
+  add('h3', r.name + ' ki haftawar report'); add('div', r.range + ' • Rehnuma').className = 'nt-by';
+  const grid = document.createElement('div'); grid.className = 'rp-grid';
+  [[r.days + '/7', 'din active'], [r.mcq, 'MCQs solve'], [acc === null ? '—' : acc + '%', 'sahi jawab']].forEach(([b, s]) => { const d = document.createElement('div'); const bb = document.createElement('b'); bb.textContent = b; const ss = document.createElement('span'); ss.textContent = s; d.append(bb, ss); grid.appendChild(d); });
+  card.appendChild(grid);
+  add('h4', 'Sawal pooche'); add('p', r.doubt + ' sawal tutor se poochay, streak ' + r.streak + ' din.');
+  add('h4', 'Zyada mehnat chahiye'); add('p', weak.length ? weak.join(', ') : 'Abhi itne MCQs nahi hue ke weak topic pata chale. Zyada practice karein.');
+  const text = r.name + ' ki Rehnuma haftawar report (' + r.range + '): ' + r.days + '/7 din active, ' + r.mcq + ' MCQs' + (acc === null ? '' : ', ' + acc + '% sahi') + ', ' + r.doubt + ' sawal.' + (weak.length ? ' Weak: ' + weak.join(', ') + '.' : '') + ' ' + location.origin + '/';
+  const act = document.createElement('div'); act.className = 'nt-actions';
+  const mk = (label, fn, cls) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
+  const getBlob = () => new Promise((res) => reportCanvas(r).toBlob(res, 'image/png'));
+  mk('WhatsApp par bhejo', async () => {
+    try {
+      const blob = await getBlob(), file = new File([blob], 'rehnuma-report.png', { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], text }); return; }
+    } catch (e) { if (e && e.name === 'AbortError') return; }
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  }, 'primary');
+  mk('Image download', async () => { const a = document.createElement('a'); a.href = URL.createObjectURL(await getBlob()); a.download = 'rehnuma-weekly-report.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 3000); });
+  mk('Close', closeNotes);
+  card.appendChild(act); ov.appendChild(card); ov.addEventListener('click', (e) => { if (e.target === ov) closeNotes(); });
+  document.body.appendChild(ov);
+}
+document.getElementById('weeklyReportBtn').addEventListener('click', openWeeklyReport);
+
+// ============ Problem batao (feedback) ============
+document.getElementById('feedbackOpen').addEventListener('click', () => {
+  closeNotes();
+  const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card';
+  const h = document.createElement('h3'); h.textContent = 'Problem ya idea batao'; card.appendChild(h);
+  const sub = document.createElement('div'); sub.className = 'nt-by'; sub.textContent = 'Hum har message parhte hain. Rehnuma isi se behtar banta hai.'; card.appendChild(sub);
+  let kind = 'bug';
+  const kinds = document.createElement('div'); kinds.className = 'fb-kinds';
+  [['bug', 'Kuch kharab hai'], ['wrong_answer', 'Galat jawab mila'], ['idea', 'Idea / feature'], ['other', 'Kuch aur']].forEach(([k, l]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.textContent = l; if (k === kind) b.className = 'on';
+    b.addEventListener('click', () => { kind = k; kinds.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b)); });
+    kinds.appendChild(b);
+  });
+  card.appendChild(kinds);
+  const ta = document.createElement('textarea'); ta.maxLength = 1500; ta.placeholder = 'Kya hua? Kis page par? Jitna detail, utna behtar.'; card.appendChild(ta);
+  const act = document.createElement('div'); act.className = 'nt-actions';
+  const send = document.createElement('button'); send.type = 'button'; send.className = 'primary'; send.textContent = 'Bhejo';
+  send.addEventListener('click', async () => {
+    const message = ta.value.trim(); if (message.length < 5) { rnToast('Thora detail mein likhein.'); return; }
+    send.disabled = true; send.textContent = '...';
+    try {
+      const res = await chatFetch('/api/feedback', { method: 'POST', body: { message, kind, page: document.body.dataset.view || '' } });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(d.error || 'Nahi gaya');
+      closeNotes(); rnToast('Shukriya! Aap ka message mil gaya.');
+    } catch (e) { rnToast(e.message || 'Nahi gaya, dobara try karein.'); send.disabled = false; send.textContent = 'Bhejo'; }
+  });
+  const cl = document.createElement('button'); cl.type = 'button'; cl.textContent = 'Close'; cl.addEventListener('click', closeNotes);
+  act.append(send, cl); card.appendChild(act); ov.appendChild(card); ov.addEventListener('click', (e) => { if (e.target === ov) closeNotes(); });
+  document.body.appendChild(ov); ta.focus();
+});
+// ---- Hafte ki report (parents ko share) ----
+async function buildWeeklyReport() {
+  const act = rnLoadAct(), days = [];
+  let mcq = 0, doubt = 0, active = 0;
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const v = act[rnDayKey(d)] || {}; const m = v.mcq || 0, q = v.doubt || 0;
+    mcq += m; doubt += q; if (m + q > 0) active++;
+    days.push({ label: ['Ait', 'Pir', 'Mang', 'Budh', 'Jumr', 'Juma', 'Haft'][d.getDay()], on: m + q > 0 });
+  }
+  let acc = null, weak = null, total = 0;
+  try {
+    const res = await chatFetch('/api/weak-areas');
+    if (res.ok) {
+      const dta = await res.json(), list = dta.accuracy || [];
+      total = list.reduce((n, x) => n + x.total, 0);
+      const correct = list.reduce((n, x) => n + x.correct, 0);
+      if (total) acc = Math.round((correct / total) * 100);
+      const w = list.filter((x) => x.total >= 2).sort((x, y) => x.percent - y.percent)[0];
+      if (w) weak = w.topic + ' (' + w.percent + '%)';
+    }
+  } catch (e) { /* offline: sirf local data */ }
+  return { name: rnDisplayName() || (localStorage.getItem('nishaan_user_email') || '').split('@')[0] || 'Student', mcq, doubt, active, streak: rnStreakCount(act), acc, weak, total, days };
+}
+function weeklyText(r) {
+  const L = ['Rehnuma - Hafte ki report: ' + r.name, '',
+    'Is hafte ' + r.active + '/7 din parha',
+    'MCQs solve kiye: ' + r.mcq,
+    'Tutor se sawal poochhe: ' + r.doubt,
+    'Streak: ' + r.streak + ' din'];
+  if (r.acc !== null) L.push('Ab tak sahi jawab: ' + r.acc + '% (' + r.total + ' MCQs mein se)');
+  if (r.weak) L.push('Sab se kamzor topic: ' + r.weak);
+  L.push('', location.origin + '/');
+  return L.join('\n');
+}
+function showWeekly(r) {
+  closeNotes();
+  const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card';
+  const add = (tag, text, cls) => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; card.appendChild(e); return e; };
+  add('h3', 'Hafte ki report');
+  add('div', r.name + ' • Rehnuma', 'nt-by');
+  const days = document.createElement('div'); days.className = 'wk-days';
+  r.days.forEach((d) => { const i = document.createElement('i'); i.textContent = d.label; if (d.on) i.className = 'on'; days.appendChild(i); });
+  card.appendChild(days);
+  const grid = document.createElement('div'); grid.className = 'wk-grid';
+  [[r.active + '/7', 'din parha'], [r.mcq, 'MCQs solve kiye'], [r.doubt, 'tutor se sawal'], [r.streak, 'din ki streak'], [r.acc === null ? '—' : r.acc + '%', 'sahi jawab (ab tak)'], [r.weak || '—', 'kamzor topic']].forEach(([n, l]) => {
+    const b = document.createElement('div'); b.className = 'wk-box';
+    const bb = document.createElement('b'); bb.textContent = n; if (String(n).length > 8) bb.style.fontSize = '15px';
+    const sp = document.createElement('span'); sp.textContent = l; b.append(bb, sp); grid.appendChild(b);
+  });
+  card.appendChild(grid);
+  const act = document.createElement('div'); act.className = 'nt-actions';
+  const mk = (label, fn, cls) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
+  mk('WhatsApp par bhejo', () => window.open('https://wa.me/?text=' + encodeURIComponent(weeklyText(r)), '_blank', 'noopener'), 'primary');
+  mk('Copy', async () => { try { await navigator.clipboard.writeText(weeklyText(r)); rnToast('Copy ho gaya'); } catch (e) { rnToast('Copy nahi ho saka'); } });
+  mk('Close', closeNotes);
+  card.appendChild(act); ov.appendChild(card);
+  ov.addEventListener('click', (e) => { if (e.target === ov) closeNotes(); });
+  document.body.appendChild(ov);
+}
+document.getElementById('weeklyBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('weeklyBtn'); btn.disabled = true; const o = btn.textContent; btn.textContent = '...';
+  try { showWeekly(await buildWeeklyReport()); } finally { btn.disabled = false; btn.textContent = o; }
 });
 function rnToast(msg) {
   let t = document.getElementById('rnToast');
