@@ -516,6 +516,9 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .rp-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0 4px; }
 .rp-grid div{ background:var(--bg-soft); border:1.2px solid var(--border); border-radius:12px; padding:12px 10px; text-align:center; }
 .rp-grid b{ display:block; font-size:24px; color:var(--cyan); } .rp-grid span{ font-size:11.5px; color:var(--text-dim); }
+.daily-card{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; border:1.4px solid var(--cyan); border-radius:16px; padding:16px 18px; margin-bottom:16px; background:linear-gradient(135deg, rgba(0,229,255,.10), rgba(255,46,154,.06)); }
+.daily-card.done{ border-color:var(--border); background:var(--bg-soft); }
+.daily-card b{ display:block; font-size:18px; margin:4px 0 2px; } .daily-card span{ font-size:12.5px; color:var(--text-dim); } .daily-card .daily-tag{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--cyan); }
 .report-row{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; border:1.4px solid var(--border); border-radius:16px; padding:14px 18px; margin-bottom:16px; background:var(--bg-soft); }
 .report-row b{ display:block; font-size:14px; margin-bottom:2px; } .report-row span{ font-size:12.5px; color:var(--text-dim); }
 .wk-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:12px; }
@@ -750,6 +753,10 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <div class="week-dots" id="weekDots"></div>
       </div>
     </div>
+    <div class="daily-card" id="dailyCard">
+      <div><span class="daily-tag">AAJ KA CHALLENGE</span><b id="dailyTopic">—</b><span id="dailySub">3 MCQs, 2 minute. Roz naya topic.</span></div>
+      <button type="button" class="btn btn-primary" id="dailyBtn">Shuru karo</button>
+    </div>
     <div class="exam-card" id="examCard">
       <div class="exam-head"><b>Exam countdown</b><button type="button" id="examEdit" class="exam-link">Date set karo</button></div>
       <div id="examSet" style="display:none;">
@@ -762,7 +769,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       <div><b id="statAcc">—</b><span>Sahi jawab %</span></div>
       <div><b id="statWeak">—</b><span>Sabse weak topic</span></div>
     </div>
-    <div class="report-row"><div><b>Hafte ki report</b><span>Is hafte ki mehnat ka saaf card, jo ammi abbu ko WhatsApp par bhej sako.</span></div><button type="button" class="btn btn-outline" id="weeklyBtn">Report banao</button></div>
+    <div class="report-row"><div><b>Is hafte ka progress</b><span>Apne hafte ka card dekho: kitne din parha, kitne MCQs kiye. Chaho to doston ya ghar walon ko share karo.</span></div><button type="button" class="btn btn-outline" id="weeklyBtn">Card dekho</button></div>
     <div class="focus" id="homeFocus"><p id="homeFocusText" style="font-weight:600;"></p><button type="button" class="btn btn-primary" id="homeFocusBtn">Is topic ki practice karo</button></div>
     <ol class="journey">
       <li><span class="j-num">01</span><div class="j-body"><h3>Concept samjho</h3><p>Apna topic AI tutor Javeria se poocho. Tumhari class ke level par, aasan zaban mein, misalon ke sath samjhaya jata hai. Bol kar ya call par bhi poochh sakte ho.</p></div><button type="button" class="btn btn-primary" data-nav="study">Study shuru karo</button></li>
@@ -2661,6 +2668,7 @@ async function submitUserMessage(question, photo) {
       body: {
         question,
         image: photo || undefined,
+        studentName: (localStorage.getItem('nishaan_user_name') || '').slice(0, 30) || undefined,
         studentClass: localStorage.getItem('nishaan_student_class'),
         history: chatHistory.slice(0, -1),
         subject: currentSubject,
@@ -3945,7 +3953,7 @@ document.getElementById('notesBtn').addEventListener('click', async () => {
   } catch (e) { rnToast(e.message || 'Notes nahi ban sake'); }
   finally { btn.disabled = false; label.textContent = orig; }
 });
-// ============ Haftawar report (parents ke liye) ============
+// ============ Haftawar progress ============
 function weeklyStats() {
   const act = rnLoadAct(); let mcq = 0, doubt = 0, days = 0; const per = [];
   for (let i = 6; i >= 0; i--) {
@@ -4052,7 +4060,7 @@ document.getElementById('feedbackOpen').addEventListener('click', () => {
   act.append(send, cl); card.appendChild(act); ov.appendChild(card); ov.addEventListener('click', (e) => { if (e.target === ov) closeNotes(); });
   document.body.appendChild(ov); ta.focus();
 });
-// ---- Hafte ki report (parents ko share) ----
+// ---- Hafte ka progress card (share) ----
 async function buildWeeklyReport() {
   const act = rnLoadAct(), days = [];
   let mcq = 0, doubt = 0, active = 0;
@@ -4077,7 +4085,7 @@ async function buildWeeklyReport() {
   return { name: rnDisplayName() || (localStorage.getItem('nishaan_user_email') || '').split('@')[0] || 'Student', mcq, doubt, active, streak: rnStreakCount(act), acc, weak, total, days };
 }
 function weeklyText(r) {
-  const L = ['Rehnuma - Hafte ki report: ' + r.name, '',
+  const L = ['Rehnuma - ' + r.name + ' ka is hafte ka progress', '',
     'Is hafte ' + r.active + '/7 din parha',
     'MCQs solve kiye: ' + r.mcq,
     'Tutor se sawal poochhe: ' + r.doubt,
@@ -4092,7 +4100,7 @@ function showWeekly(r) {
   const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
   const card = document.createElement('div'); card.className = 'notes-card';
   const add = (tag, text, cls) => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; card.appendChild(e); return e; };
-  add('h3', 'Hafte ki report');
+  add('h3', 'Is hafte ka progress');
   add('div', r.name + ' • Rehnuma', 'nt-by');
   const days = document.createElement('div'); days.className = 'wk-days';
   r.days.forEach((d) => { const i = document.createElement('i'); i.textContent = d.label; if (d.on) i.className = 'on'; days.appendChild(i); });
@@ -4106,7 +4114,7 @@ function showWeekly(r) {
   card.appendChild(grid);
   const act = document.createElement('div'); act.className = 'nt-actions';
   const mk = (label, fn, cls) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
-  mk('WhatsApp par bhejo', () => window.open('https://wa.me/?text=' + encodeURIComponent(weeklyText(r)), '_blank', 'noopener'), 'primary');
+  mk('WhatsApp par share karo', () => window.open('https://wa.me/?text=' + encodeURIComponent(weeklyText(r)), '_blank', 'noopener'), 'primary');
   mk('Copy', async () => { try { await navigator.clipboard.writeText(weeklyText(r)); rnToast('Copy ho gaya'); } catch (e) { rnToast('Copy nahi ho saka'); } });
   mk('Close', closeNotes);
   card.appendChild(act); ov.appendChild(card);
@@ -4117,6 +4125,28 @@ document.getElementById('weeklyBtn').addEventListener('click', async () => {
   const btn = document.getElementById('weeklyBtn'); btn.disabled = true; const o = btn.textContent; btn.textContent = '...';
   try { showWeekly(await buildWeeklyReport()); } finally { btn.disabled = false; btn.textContent = o; }
 });
+// ---- Aaj ka challenge (roz ek naya topic, sab ke liye wohi) ----
+const DAILY_TOPICS = ['Photosynthesis', "Newton's Laws of Motion", 'Quadratic Equations', 'Tenses in English', 'Pakistan Movement', 'Arkan-e-Islam', 'Periodic Table', 'Cell Structure', 'Percentage and Ratio', 'Muhavare (Urdu)', 'Binary Numbers', 'Ohm\'s Law', 'Human Digestive System', 'Pakistan Geography: Rivers', 'Chemical Bonding', 'Parts of Speech', 'Triangles and Pythagoras', 'Seerat-un-Nabi', 'Acids, Bases and Salts', 'Light and Reflection', 'Genetics Basics', 'Active and Passive Voice', 'Algebraic Identities', 'Computer Hardware', 'Mughal Empire', 'Electricity and Circuits', 'Mole Concept', 'Urdu Grammar: Ism aur Fail', 'Climate of Pakistan', 'Heat and Temperature'];
+function dailyTopic() {
+  const d = new Date(), start = new Date(d.getFullYear(), 0, 0);
+  const n = Math.floor((d - start) / 86400000);
+  return DAILY_TOPICS[n % DAILY_TOPICS.length];
+}
+function dailyKey() { return 'nishaan_daily_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + rnDayKey(); }
+function renderDaily() {
+  const card = document.getElementById('dailyCard'); if (!card) return;
+  document.getElementById('dailyTopic').textContent = dailyTopic();
+  let done = false; try { done = localStorage.getItem(dailyKey()) === '1'; } catch (e) {}
+  card.classList.toggle('done', done);
+  document.getElementById('dailySub').textContent = done ? 'Aaj ka challenge ho gaya. Kal naya topic aayega!' : '3 MCQs, 2 minute. Roz naya topic.';
+  document.getElementById('dailyBtn').textContent = done ? 'Dobara karo' : 'Shuru karo';
+  document.getElementById('dailyBtn').className = done ? 'btn btn-outline' : 'btn btn-primary';
+}
+document.getElementById('dailyBtn').addEventListener('click', () => {
+  try { localStorage.setItem(dailyKey(), '1'); } catch (e) {}
+  mcqInput.value = dailyTopic(); showView('practice'); generateMcq(); renderDaily();
+});
+renderDaily();
 function rnToast(msg) {
   let t = document.getElementById('rnToast');
   if (!t) { t = document.createElement('div'); t.id = 'rnToast'; t.className = 'rn-toast'; document.body.appendChild(t); }
@@ -4249,7 +4279,7 @@ async function renderHome() {
   const solved = document.getElementById('statSolved'), acc = document.getElementById('statAcc'), weak = document.getElementById('statWeak');
   const focus = document.getElementById('homeFocus');
   solved.textContent = acc.textContent = weak.textContent = '—';
-  renderStreak();
+  renderStreak(); renderDaily();
   focus.style.display = 'none';
   if (!localStorage.getItem('nishaan_user_id')) return;
   try {
