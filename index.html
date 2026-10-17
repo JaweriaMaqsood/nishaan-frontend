@@ -443,6 +443,53 @@ section{ padding:40px 0; }
 #callEndBtn{ display:inline-block !important; margin-top:34px !important; padding:11px 26px !important; border:1px solid rgba(255,90,110,.55) !important; border-radius:10px; color:#ff8a9a !important; font-weight:600; background:rgba(255,90,110,.08) !important; cursor:pointer; }
 #callEndBtn:hover{ background:rgba(255,90,110,.16) !important; }
 #callCloseX{ border-radius:10px !important; }
+/* ===== Online class room ===== */
+#callOverlay{ position:fixed; inset:0; z-index:250; flex-direction:column; align-items:stretch !important; justify-content:flex-start !important; padding:0 !important; overflow:hidden; }
+.cr-top{ display:flex; align-items:center; gap:12px; padding:12px 18px; border-bottom:1px solid var(--border); background:rgba(255,255,255,.02); }
+.cr-live{ display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:800; letter-spacing:.1em; color:#ff8a9a; padding:4px 9px; border:1px solid rgba(255,90,110,.45); border-radius:999px; } .cr-live i{ width:7px; height:7px; border-radius:50%; background:#ff5d73; animation:crBlink 1.4s infinite; }
+@keyframes crBlink{ 50%{ opacity:.25; } }
+.cr-title{ font-weight:700; font-size:15px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#callOverlay .call-timer{ margin:0; }
+.cr-x{ background:rgba(255,255,255,.06); border:1.4px solid var(--border-strong); color:var(--text-dim); font-size:15px; width:34px; height:34px; border-radius:10px; }
+.cr-main{ flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:14px; padding:14px 18px; }
+.cr-stage{ position:relative; min-height:0; }
+.cr-tile{ position:relative; height:100%; min-height:260px; border-radius:18px; border:1.4px solid var(--border-strong); background:radial-gradient(ellipse 80% 70% at 50% 30%, rgba(0,229,255,.12), transparent 70%), var(--surface-2,#171a30); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:16px; overflow:hidden; }
+#callOverlay[data-state="speaking"] .cr-tile{ border-color:var(--cyan); box-shadow:0 0 0 2px rgba(0,229,255,.25); }
+.cr-avatar{ position:relative; width:128px; height:128px; margin-bottom:14px; }
+.cr-avatar #callPulse{ position:absolute; inset:0; border-radius:50%; opacity:0; }
+.cr-avatar .cr-initial{ position:relative; width:100%; height:100%; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:46px; }
+.cr-wave{ display:flex; gap:4px; height:22px; align-items:center; margin-bottom:10px; opacity:0; transition:opacity .2s; } .cr-wave i{ width:4px; height:6px; border-radius:3px; background:var(--cyan); }
+#callOverlay[data-state="speaking"] .cr-wave{ opacity:1; } #callOverlay[data-state="speaking"] .cr-wave i{ animation:crWave .8s ease-in-out infinite; }
+.cr-wave i:nth-child(2){ animation-delay:.12s !important; } .cr-wave i:nth-child(3){ animation-delay:.24s !important; } .cr-wave i:nth-child(4){ animation-delay:.36s !important; } .cr-wave i:nth-child(5){ animation-delay:.48s !important; }
+@keyframes crWave{ 0%,100%{ height:6px; } 50%{ height:22px; } }
+.cr-nametag{ position:absolute; left:12px; bottom:12px; display:flex; align-items:center; gap:7px; background:rgba(0,0,0,.45); padding:6px 11px; border-radius:9px; color:var(--text); font-size:12px; } .cr-nametag h3{ margin:0; font-size:13px !important; font-weight:700; } .cr-nametag span{ font-family:var(--font-mono); font-size:10px; color:var(--text-faint); }
+#callStatusText{ margin:0 0 34px !important; font-size:13px !important; padding:6px 14px !important; }
+.cr-self{ position:absolute; right:12px; bottom:12px; width:112px; height:84px; border-radius:12px; border:1.4px solid var(--border-strong); background:#0b0e1c; overflow:hidden; display:grid; place-items:center; }
+.cr-self video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scaleX(-1); display:none; } .cr-self.cam video{ display:block; } .cr-self.cam .cr-self-initial{ display:none; }
+.cr-self-initial{ font-size:12px; color:var(--text-faint); } .cr-self-tag{ position:absolute; left:6px; bottom:5px; font-size:10px; background:rgba(0,0,0,.5); padding:2px 6px; border-radius:6px; color:#fff; }
+#callOverlay section{ padding:0 !important; margin:0 !important; }
+#callOverlay .cr-nametag h3{ font-size:14px !important; }
+.cr-board{ min-height:0; display:flex; flex-direction:column; border-radius:18px; border:1.4px solid var(--border); background:#10142a; overflow:hidden; }
+.cr-board-head{ display:flex; justify-content:space-between; align-items:center; padding:11px 16px; border-bottom:1px solid var(--border); font-size:13px; } .cr-board-head button{ font-size:12px; font-weight:700; color:var(--cyan); background:none; border:0; }
+#crBoard{ flex:1; overflow-y:auto; padding:14px 16px; }
+.cr-empty{ color:var(--text-faint); font-size:13.5px; line-height:1.6; }
+.cr-q{ font-size:12.5px; color:var(--text-dim); border-left:3px solid var(--pink,#ff2e9a); padding:2px 0 2px 10px; margin:14px 0 8px; } .cr-q:first-child{ margin-top:0; }
+.cr-lines{ list-style:none; margin:0 0 6px; padding:0; } .cr-lines li{ position:relative; padding:0 0 8px 18px; font-size:15px; line-height:1.55; opacity:0; animation:crIn .5s ease forwards; } .cr-lines li::before{ content:""; position:absolute; left:2px; top:.6em; width:7px; height:7px; border-radius:50%; background:var(--cyan); }
+@keyframes crIn{ from{ opacity:0; transform:translateY(5px); } to{ opacity:1; transform:none; } }
+.cr-controls{ padding:10px 18px 14px; border-top:1px solid var(--border); background:rgba(255,255,255,.02); }
+.cr-row{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+#callMicBtn{ width:56px !important; height:56px !important; border-radius:50% !important; margin:0 !important; display:grid; place-items:center; }
+.cr-btn{ display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:700; padding:10px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft); } .cr-btn.on{ border-color:var(--cyan); color:var(--cyan); }
+#callEndBtn{ margin:0 !important; padding:10px 18px !important; font-size:13px !important; }
+.cr-type{ display:flex; gap:8px; max-width:560px; margin:0 auto; } .cr-type input{ flex:1; min-width:0; background:var(--bg-soft); border:1.4px solid var(--border); border-radius:12px; padding:11px 13px; color:var(--text); font-size:16px; font-family:inherit; } .cr-type button{ font-size:13px; font-weight:700; padding:0 16px; border-radius:12px; border:0; background:var(--cyan); color:#04101a; }
+@media (max-width:820px){
+  .cr-main{ grid-template-columns:1fr; grid-template-rows:auto minmax(0,1fr); gap:10px; padding:10px 12px; }
+  .cr-tile{ min-height:0; height:200px; flex-direction:row; gap:14px; justify-content:flex-start; padding:14px; text-align:left; } .cr-avatar{ width:84px; height:84px; margin:0; flex-shrink:0; } .cr-avatar .cr-initial{ font-size:32px; }
+  .cr-wave{ position:absolute; right:14px; top:14px; margin:0; } #callStatusText{ position:absolute; left:110px; top:50%; margin:0 !important; transform:translateY(-50%); max-width:calc(100% - 200px); }
+  .cr-self{ width:84px; height:64px; bottom:8px; right:8px; } .cr-nametag{ left:8px; bottom:8px; }
+  .cr-btn span{ font-size:12px; } .cr-row{ gap:8px; }
+}
+
 
 /* ===== Unified font + colours (students ke liye saaf, calm) ===== */
 :root{ --font-display:'Inter',system-ui,sans-serif; --grad:linear-gradient(120deg,#00E5FF 0%,#3D8BFF 100%); --grad-soft:linear-gradient(120deg,rgba(0,229,255,.16),rgba(61,139,255,.16)); }
@@ -959,7 +1006,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
           </button>
           <button type="button" id="callModeBtn" style="display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft);">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-            <span id="callModeLabel" data-i18n="callModeLabel">Call Mode</span>
+            <span id="callModeLabel" data-i18n="callModeLabel">Online Class</span>
           </button>
         </div>
         <div id="chatMessages" style="max-height:380px; min-height:180px; overflow-y:auto; padding:22px 26px 8px;"></div>
@@ -1286,27 +1333,39 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 </footer>
 
 <!-- ============================= CALL MODE OVERLAY ============================= -->
-<div id="callOverlay" style="display:none; position:fixed; inset:0; z-index:250; background:radial-gradient(ellipse 80% 60% at 50% 20%, rgba(255,46,154,.12), transparent 60%), #170D30; align-items:center; justify-content:center; padding:20px;">
-  <button type="button" id="callCloseX" aria-label="Close" style="position:absolute; top:24px; right:24px; background:rgba(255,255,255,.06); border:1.4px solid var(--border-strong); color:var(--text-dim); font-size:18px; line-height:1; width:40px; height:40px; border-radius:50%;">✕</button>
-
-  <div style="text-align:center; max-width:420px;">
-    <div id="callAvatarWrap" style="position:relative; width:150px; height:150px; margin:0 auto 26px;">
-      <div id="callPulse" style="position:absolute; inset:0; border-radius:50%; background:var(--grad); opacity:0; transform:scale(1);"></div>
-      <div style="position:relative; width:150px; height:150px; border-radius:50%; background:var(--grad); display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:52px; color:#170D30; box-shadow:0 20px 60px -18px rgba(255,46,154,.55);">J</div>
+<div id="callOverlay" role="dialog" aria-label="Online class" style="display:none;">
+  <div class="cr-top">
+    <span class="cr-live"><i></i>LIVE</span>
+    <span class="cr-title" id="callTitle">Online class</span>
+    <span class="call-timer" id="callTimer">00:00</span>
+    <button type="button" id="callCloseX" aria-label="Close" class="cr-x">✕</button>
+  </div>
+  <div class="cr-main">
+    <section class="cr-stage">
+      <div class="cr-tile">
+        <div id="callAvatarWrap" class="cr-avatar">
+          <div id="callPulse"></div>
+          <div class="cr-initial">J</div>
+        </div>
+        <div class="cr-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="cr-nametag"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/></svg><h3>Javeria</h3><span data-i18n="callSubtitle" id="callSubtitle">AI TUTOR · REHNUMA</span></div>
+        <p id="callStatusText">Tap the mic to start talking</p>
+      </div>
+      <div class="cr-self" id="crSelf"><video id="crVideo" autoplay muted playsinline></video><span class="cr-self-initial" id="crSelfInitial">Aap</span><span class="cr-self-tag" id="crSelfTag">Aap</span></div>
+    </section>
+    <section class="cr-board">
+      <div class="cr-board-head"><b id="crBoardTitle">Board</b><button type="button" id="crClear">Saaf karo</button></div>
+      <div id="crBoard" aria-live="polite"></div>
+    </section>
+  </div>
+  <div class="cr-controls">
+    <div class="cr-row">
+      <button type="button" id="callMicBtn" aria-label="Mic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.9"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></button>
+      <button type="button" class="cr-btn" id="crHandBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11M11 10V4.5a1.5 1.5 0 0 1 3 0V11M14 10V6a1.5 1.5 0 0 1 3 0v8a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3.5 14a1.5 1.5 0 0 1 2.4-1.7L8 14"/></svg><span id="crHandLbl">Haath uthao</span></button>
+      <button type="button" class="cr-btn" id="crCamBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></svg><span id="crCamLbl">Camera</span></button>
+      <button type="button" id="callEndBtn" data-i18n="callEndBtn">Class khatam karein</button>
     </div>
-
-    <h3 style="font-size:22px; margin-bottom:6px;">Javeria</h3>
-    <p data-i18n="callSubtitle" style="font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); margin-bottom:34px; letter-spacing:0.04em;">AI TUTOR · REHNUMA</p>
-
-    <div id="callTimer" class="call-timer">00:00</div>
-
-    <p id="callStatusText" style="color:var(--text-dim); font-size:15px; margin-bottom:38px; min-height:22px;">Tap the mic to start talking</p>
-
-    <button type="button" id="callMicBtn" style="width:72px; height:72px; border-radius:50%; background:var(--grad); border:none; display:grid; place-items:center; margin:0 auto; box-shadow:0 16px 44px -14px rgba(255,46,154,.6); color:#170D30;">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.9"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-    </button>
-
-    <button type="button" id="callEndBtn" data-i18n="callEndBtn" style="display:block; margin:30px auto 0; font-size:13px; color:var(--text-faint); background:none; border:none; padding:8px;">Call khatam karein</button>
+    <form class="cr-type" id="crTypeForm" autocomplete="off"><input type="text" id="crInput" maxlength="300" placeholder="Ya yahan likh kar poochho..."><button type="submit" id="crSend">Bhejo</button></form>
   </div>
 </div>
 
@@ -1437,12 +1496,12 @@ const translations = {
     authFormTitleLogin: 'Login to your account', authFormTitleSignup: 'Create a new account',
     authSubmitLogin: 'Login', authSubmitSignup: 'Sign up',
     tabDoubtSolver: 'Doubt Solver', tabMcqGenerator: 'MCQ Generator',
-    notesBtnLabel: 'Make notes', callModeLabel: 'Call Mode', askButton: 'Ask', generateButton: 'Generate',
+    notesBtnLabel: 'Make notes', callModeLabel: 'Online Class', askButton: 'Ask', generateButton: 'Generate',
     doubtInputPlaceholder: 'Type your question... or "make an image of a plant cell"', mcqLabel: 'Type a topic to generate MCQs',
     mcqInputPlaceholder: 'e.g. Genetics',
     progressLoginPrompt: 'Login first to see your progress.', leaderboardLoginPrompt: 'Login first to see the leaderboard.',
     loginSignupBtn: 'Login / Sign up',
-    waitlistJoin: 'Join Waitlist', callEndBtn: 'End call',
+    waitlistJoin: 'Join Waitlist', callEndBtn: 'End class',
     callIdle: 'Tap the mic to start talking', callListening: 'Listening...', callThinking: 'Javeria is thinking...', callSpeaking: 'Javeria is speaking...',
     thinkingText: 'Thinking...', editSave: 'Save', editCancel: 'Cancel', errorGeneric: 'Something went wrong. Check the backend or try again.',
     imageGenerating: 'Generating image...', imageFailed: 'Could not generate the image. Try again.',
@@ -1573,12 +1632,12 @@ const translations = {
     authFormTitleLogin: 'اپنے اکاؤنٹ میں لاگ ان کریں', authFormTitleSignup: 'نیا اکاؤنٹ بنائیں',
     authSubmitLogin: 'لاگ ان کریں', authSubmitSignup: 'سائن اپ کریں',
     tabDoubtSolver: 'سوال حل کریں', tabMcqGenerator: 'ایم سی کیوز بنائیں',
-    notesBtnLabel: 'نوٹس بنائیں', callModeLabel: 'کال موڈ', askButton: 'پوچھیں', generateButton: 'بنائیں',
+    notesBtnLabel: 'نوٹس بنائیں', callModeLabel: 'آن لائن کلاس', askButton: 'پوچھیں', generateButton: 'بنائیں',
     doubtInputPlaceholder: 'اپنا سوال لکھیں... یا "خلیے کی تصویر بناؤ"', mcqLabel: 'موضوع لکھیں، ایم سی کیوز بنیں گے',
     mcqInputPlaceholder: 'مثلاً: جینیات',
     progressLoginPrompt: 'اپنی پیش رفت دیکھنے کے لیے پہلے لاگ ان کریں۔', leaderboardLoginPrompt: 'لیڈربورڈ دیکھنے کے لیے پہلے لاگ ان کریں۔',
     loginSignupBtn: 'لاگ ان / سائن اپ',
-    waitlistJoin: 'ویٹ لسٹ میں شامل ہوں', callEndBtn: 'کال ختم کریں',
+    waitlistJoin: 'ویٹ لسٹ میں شامل ہوں', callEndBtn: 'کلاس ختم کریں',
     callIdle: 'بات کرنے کے لیے مائیک دبائیں', callListening: 'سن رہی ہوں...', callThinking: 'جاویریا سوچ رہی ہے...', callSpeaking: 'جاویریا بول رہی ہے...',
     thinkingText: 'سوچ رہی ہوں...', editSave: 'محفوظ کریں', editCancel: 'منسوخ کریں', errorGeneric: 'کچھ مسئلہ ہو گیا۔ بیک اینڈ چیک کریں یا دوبارہ کوشش کریں۔',
     imageGenerating: 'تصویر بن رہی ہے...', imageFailed: 'تصویر نہیں بن سکی۔ دوبارہ کوشش کریں۔',
@@ -1709,12 +1768,12 @@ const translations = {
     authFormTitleLogin: 'Apne account mein login karein', authFormTitleSignup: 'Naya account banayein',
     authSubmitLogin: 'Login karein', authSubmitSignup: 'Sign up karein',
     tabDoubtSolver: 'Doubt Solver', tabMcqGenerator: 'MCQ Generator',
-    notesBtnLabel: 'Notes banao', callModeLabel: 'Call Mode', askButton: 'Poocho', generateButton: 'Generate',
+    notesBtnLabel: 'Notes banao', callModeLabel: 'Online Class', askButton: 'Poocho', generateButton: 'Generate',
     doubtInputPlaceholder: 'Apna sawal likhein... ya "cell ki image bana do"', mcqLabel: 'Topic likhein, MCQs generate honge',
     mcqInputPlaceholder: 'Jaise: Genetics',
     progressLoginPrompt: 'Apna progress dekhne ke liye pehle login karein.', leaderboardLoginPrompt: 'Leaderboard dekhne ke liye pehle login karein.',
     loginSignupBtn: 'Login / Sign up',
-    waitlistJoin: 'Waitlist join karo', callEndBtn: 'Call khatam karein',
+    waitlistJoin: 'Waitlist join karo', callEndBtn: 'Class khatam karein',
     callIdle: 'Tap the mic to start talking', callListening: 'Sun rahi hoon...', callThinking: 'Javeria soch rahi hai...', callSpeaking: 'Javeria bol rahi hai...',
     thinkingText: 'Soch rahe hain...', editSave: 'Save', editCancel: 'Cancel', errorGeneric: 'Kuch masla ho gaya. Backend check karein ya dobara try karein.',
     imageGenerating: 'Tasveer ban rahi hai...', imageFailed: 'Tasveer nahi ban saki. Dobara try karein.',
@@ -2211,6 +2270,7 @@ function gx(t) {
 
 function setCallState(state) {
   const dict = voiceDict();
+  callOverlay.dataset.state = state;
   if (state === 'listening') {
     callStatusText.textContent = gx(dict.callListening);
     callPulse.style.background = 'var(--cyan)';
@@ -2280,6 +2340,8 @@ async function openCall() {
   callActive = true;
   callSilentRetries = 0;
   callOverlay.style.display = 'flex';
+  crReset();
+  updateCallIdentity();
 
   // 1) Pehle ring ho
   const T = CALL_TEXT[getCurrentLanguage()] || CALL_TEXT.roman;
@@ -2293,7 +2355,79 @@ async function openCall() {
 
   // 2) Call uth gayi — Javeria salam kare, intro de, phir student ki baat suney
   document.dispatchEvent(new Event('call:connected'));
-  speakText(currentSubject === 'general' ? T.intro : tutorIntroText(getCurrentLanguage()) + ' ' + ({ en: 'Just ask me out loud.', ur: 'بس بول کر اپنا سوال پوچھ لیں۔', roman: 'Bas bol kar apna sawal poochh lein.' }[getCurrentLanguage()] || ''));
+  const introText = currentSubject === 'general' ? T.intro : tutorIntroText(getCurrentLanguage()) + ' ' + ({ en: 'Just ask me out loud.', ur: 'بس بول کر اپنا سوال پوچھ لیں۔', roman: 'Bas bol kar apna sawal poochh lein.' }[getCurrentLanguage()] || '');
+  crBoardAdd(null, introText);
+  speakText(introText);
+}
+
+// ---------- Online class room (board, camera, haath uthao) ----------
+const CR_T = {
+  en: { board: 'Board', clear: 'Clear', hand: 'Raise hand', cam: 'Camera', camOff: 'Camera off', ph: 'Or type your question here...', send: 'Send', you: 'You', empty: 'The class is starting. Whatever the teacher explains will be written here. Ask out loud or type below.', hand_say: 'Yes, go ahead. What is your question?', cam_fail: 'Could not open the camera.', cam_note: 'Your video stays on your device only.' },
+  roman: { board: 'Board', clear: 'Saaf karo', hand: 'Haath uthao', cam: 'Camera', camOff: 'Camera band', ph: 'Ya yahan likh kar poochho...', send: 'Bhejo', you: 'Aap', empty: 'Class shuru ho rahi hai. Teacher jo samjhayen ge, wo yahan likha jayega. Bol kar poochho ya neeche likho.', hand_say: 'Ji, boliye. Aap ka sawal kya hai?', cam_fail: 'Camera nahi khul saka.', cam_note: 'Aap ki video sirf aap ke device par rehti hai.' },
+  ur: { board: 'بورڈ', clear: 'صاف کریں', hand: 'ہاتھ اٹھائیں', cam: 'کیمرا', camOff: 'کیمرا بند', ph: 'یا یہاں لکھ کر پوچھیں...', send: 'بھیجیں', you: 'آپ', empty: 'کلاس شروع ہو رہی ہے۔ استاد جو سمجھائیں گے وہ یہاں لکھا جائے گا۔ بول کر پوچھیں یا نیچے لکھیں۔', hand_say: 'جی، بولیے۔ آپ کا سوال کیا ہے؟', cam_fail: 'کیمرا نہیں کھل سکا۔', cam_note: 'آپ کی ویڈیو صرف آپ کے ڈیوائس پر رہتی ہے۔' },
+};
+const crT = () => CR_T[getCurrentLanguage()] || CR_T.roman;
+let crQCount = 0, crStream = null;
+function crReset() {
+  const t = crT(); crQCount = 0;
+  const board = document.getElementById('crBoard'); board.textContent = '';
+  const p = document.createElement('p'); p.className = 'cr-empty'; p.textContent = t.empty; board.appendChild(p);
+  document.getElementById('crBoardTitle').textContent = t.board;
+  document.getElementById('crClear').textContent = t.clear;
+  document.getElementById('crHandLbl').textContent = t.hand;
+  document.getElementById('crCamLbl').textContent = crStream ? t.camOff : t.cam;
+  document.getElementById('crInput').placeholder = t.ph;
+  document.getElementById('crSend').textContent = t.send;
+  const nm = (localStorage.getItem('nishaan_user_name') || '').split(' ')[0] || t.you;
+  document.getElementById('crSelfTag').textContent = nm; document.getElementById('crSelfInitial').textContent = nm.charAt(0).toUpperCase();
+}
+function crBoardAdd(question, answer) {
+  const board = document.getElementById('crBoard');
+  const empty = board.querySelector('.cr-empty'); if (empty) empty.remove();
+  if (question) { const q = document.createElement('div'); q.className = 'cr-q'; q.textContent = (crT().you) + ': ' + question; board.appendChild(q); crQCount++; }
+  const ul = document.createElement('ul'); ul.className = 'cr-lines';
+  const lines = String(answer || '').replace(/[*_#`>~|]/g, ' ').replace(/\s+/g, ' ').trim().split(/(?<=[.!?۔؟])\s+/).filter(Boolean);
+  lines.forEach((ln, i) => { const li = document.createElement('li'); li.textContent = ln; li.style.animationDelay = (i * 0.9) + 's'; ul.appendChild(li); });
+  board.appendChild(ul); board.scrollTop = board.scrollHeight;
+}
+async function crToggleCam() {
+  const btn = document.getElementById('crCamBtn'), self = document.getElementById('crSelf'), vid = document.getElementById('crVideo');
+  if (crStream) { crStopCam(); return; }
+  try {
+    crStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 480 }, audio: false });
+    vid.srcObject = crStream; self.classList.add('cam'); btn.classList.add('on');
+    document.getElementById('crCamLbl').textContent = crT().camOff; rnToast(crT().cam_note);
+  } catch (e) { crStream = null; rnToast(crT().cam_fail); }
+}
+function crStopCam() {
+  if (crStream) { crStream.getTracks().forEach((t) => t.stop()); crStream = null; }
+  const vid = document.getElementById('crVideo'); if (vid) vid.srcObject = null;
+  document.getElementById('crSelf').classList.remove('cam'); document.getElementById('crCamBtn').classList.remove('on');
+  const l = document.getElementById('crCamLbl'); if (l) l.textContent = crT().cam;
+}
+document.getElementById('crCamBtn').addEventListener('click', crToggleCam);
+document.getElementById('crClear').addEventListener('click', crReset);
+document.getElementById('crHandBtn').addEventListener('click', () => {
+  if (!callActive || callRinging) return;
+  if (isListening) { rnToast(crT().hand_say); return; }
+  if (recognition) { try { recognition.abort(); } catch (e) {} }
+  speakText(crT().hand_say);
+});
+document.getElementById('crTypeForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const inp = document.getElementById('crInput'), text = inp.value.trim();
+  if (!text || !callActive || callRinging) return;
+  if (doubtBtn.disabled) { rnToast('Pehle jawab aane ka intezar karein.'); return; }
+  inp.value = '';
+  SpeechSynthesisAPI.cancel();
+  if (recognition) { try { recognition.abort(); } catch (e2) {} }
+  isListening = false;
+  submitUserMessage(text);
+});
+function endClass() {
+  const had = crQCount > 0;
+  closeCall();
+  if (had) setTimeout(() => { const nb = document.getElementById('notesBtn'); if (nb) nb.click(); }, 400);
 }
 
 function closeCall() {
@@ -2305,12 +2439,13 @@ function closeCall() {
   if (recognition) { try { recognition.abort(); } catch (e) {} }
   isListening = false;
   callOverlay.style.display = 'none';
+  crStopCam();
   setCallState('idle');
 }
 
 callModeBtn.addEventListener('click', openCall);
 callCloseX.addEventListener('click', closeCall);
-callEndBtn.addEventListener('click', closeCall);
+callEndBtn.addEventListener('click', endClass);
 callMicBtn.addEventListener('click', () => {
   if (!callActive || isListening || callRinging) return;
   SpeechSynthesisAPI.cancel();
@@ -2471,6 +2606,7 @@ function renderSubjectChips() {
 
 function updateCallIdentity() {
   const h = document.querySelector('#callOverlay h3'); if (h) h.textContent = tutorName();
+  const ct = document.getElementById('callTitle'); if (ct) ct.textContent = (currentSubject === 'general' ? 'Open' : TUTORS[currentSubject].label) + ' class';
   const av = document.querySelector('#callAvatarWrap > div:nth-child(2)'); if (av) av.textContent = tutorName().split(' ').pop().charAt(0).toUpperCase();
 }
 
@@ -2683,7 +2819,7 @@ async function submitUserMessage(question, photo) {
     recordActivity('doubt');
     chatHistory.push({ role: 'assistant', content: data.answer });
     persistChat();
-    if (callActive) speakText(data.answer);
+    if (callActive) { crBoardAdd(question, data.answer); speakText(data.answer); }
   } catch (e) {
     document.getElementById('thinkingBubble')?.remove();
     appendMessage('assistant', e.status === 429 ? e.message : dict.errorGeneric, { noEdit: true });
