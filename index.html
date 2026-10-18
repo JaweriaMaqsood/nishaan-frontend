@@ -623,6 +623,23 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .grp-bar button{ font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft); }
 .grp-bar button.primary{ background:var(--cyan); color:#04101a; border-color:var(--cyan); }
 .grp-join{ display:flex; gap:8px; margin-top:8px; } .grp-join input{ flex:1; min-width:0; background:var(--bg); border:1.4px solid var(--border); border-radius:12px; padding:11px 12px; color:var(--text); font-size:15px; letter-spacing:.14em; text-transform:uppercase; font-family:inherit; }
+.ob-card{ max-width:480px; }
+.ob-top{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+.ob-av{ width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--cyan),#7c5cff); color:#04101a; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ob-dots{ display:flex; gap:5px; margin-left:auto; } .ob-dots i{ width:18px; height:4px; border-radius:2px; background:var(--border-strong); } .ob-dots i.on{ background:var(--cyan); }
+.ob-q{ font-size:19px; font-weight:800; margin:0 0 6px; line-height:1.35; } .ob-sub{ font-size:13px; color:var(--text-dim); margin:0 0 14px; line-height:1.5; }
+.ob-opts{ display:flex; flex-wrap:wrap; gap:8px; }
+.ob-opt{ font-size:14px; font-weight:600; padding:10px 15px; border-radius:12px; border:1.4px solid var(--border-strong); color:var(--text); background:var(--bg); }
+.ob-opt.sel{ background:var(--cyan); border-color:var(--cyan); color:#04101a; }
+.ob-foot{ display:flex; align-items:center; gap:10px; margin-top:20px; }
+.ob-foot .ob-skip{ margin-left:auto; font-size:12.5px; color:var(--text-faint); background:none; border:0; text-decoration:underline; }
+.ob-time{ background:var(--bg); border:1.4px solid var(--border); border-radius:12px; padding:12px 14px; color:var(--text); font-size:22px; font-family:inherit; color-scheme:dark; }
+.ob-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+.remind-banner{ position:fixed; top:12px; left:50%; transform:translateX(-50%); z-index:700; width:min(440px,calc(100% - 24px)); background:var(--surface-2,var(--bg-soft)); border:1.5px solid var(--cyan); border-radius:16px; padding:14px 16px; box-shadow:0 12px 40px rgba(0,0,0,.5); color:var(--text); }
+.remind-banner b{ display:block; font-size:15px; margin-bottom:2px; } .remind-banner span{ font-size:13px; color:var(--text-dim); }
+.remind-banner .rb-row{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+.remind-banner button{ font-size:13px; font-weight:700; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text); background:var(--bg); }
+.remind-banner button.primary{ background:var(--cyan); border-color:var(--cyan); color:#04101a; }
 .notes-ov{ position:fixed; inset:0; z-index:550; background:rgba(5,8,18,.72); display:flex; align-items:center; justify-content:center; padding:16px; }
 .notes-card{ width:100%; max-width:640px; max-height:90vh; overflow-y:auto; background:var(--surface-2,var(--bg-soft)); border:1px solid var(--border-strong); border-radius:18px; padding:24px 24px 20px; color:var(--text); }
 .notes-card h3{ font-size:20px; font-weight:800; margin:0 0 4px; }
@@ -851,6 +868,17 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
       <div id="examView"><p class="exam-empty">Exam ki date daalo, hum tumhara roz ka study plan bana denge.</p></div>
       <div id="roadBox"></div>
+    </div>
+    <div class="exam-card" id="remindCard">
+      <div class="exam-head"><b>Meri padhai ka waqt</b><button type="button" id="remindEdit" class="exam-link">Badlo</button></div>
+      <p class="exam-empty" id="remindText"></p>
+      <div class="diary-form" id="remindForm" style="display:none; margin-top:10px; align-items:center;">
+        <input type="time" id="rfTime" aria-label="Padhai ka waqt" style="min-width:120px;">
+        <select id="rfDays" aria-label="Din"><option value="all">Roz</option><option value="monsat">Pir se Sanichar</option><option value="weekdays">Pir se Juma</option></select>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim);"><input type="checkbox" id="rfOn" style="min-width:0;flex:none;"> Reminder bajao</label>
+        <button type="button" class="btn btn-primary" id="rfSave">Save</button>
+      </div>
+      <p class="exam-empty" id="remindNote" style="font-size:12px;margin-top:8px;display:none;"></p>
     </div>
     <div class="exam-card" id="diaryCard">
       <div class="exam-head"><b>School diary</b><button type="button" id="diaryToggle" class="exam-link">+ Likho</button></div>
@@ -1386,7 +1414,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-A</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-B</div>
   </div>
 </footer>
 
@@ -2623,6 +2651,12 @@ async function cloudPull() {
       } else if ((lp.items.length || lp.road) && (lp.t || 0) > ((cp && Number(cp.t)) || 0)) { cloudPush('planner', lp); }
       renderDiary(); renderRoad(); renderMentor();
     } catch (e) { /* silent */ }
+    try {
+      const cf = cloud.profile, lf = pfLoad();
+      if (cf && typeof cf === 'object' && (Number(cf.t) || 0) > (lf.t || 0)) { localStorage.setItem(pfKey(), JSON.stringify(cf)); }
+      else if ((lf.done || lf.skipped) && (lf.t || 0) > ((cf && Number(cf.t)) || 0)) { cloudPush('profile', lf); }
+      renderRemind(); remindTick(true);
+    } catch (e) { /* silent */ }
     renderStreak();
     if (reloadChat && !doubtBtn.disabled && !callActive) { chatHistory = loadSavedChat(currentSubject); renderSavedChat(); }
   } catch (e) { /* silent */ }
@@ -2877,6 +2911,7 @@ async function submitUserMessage(question, photo) {
         language: getCurrentLanguage(),
         voice: callActive,
         planner: mentorPayload(),
+        profile: (function () { const f = pfLoad(); return f.done ? { board: f.board, hard: f.hard, goal: f.goal, daily: f.daily } : undefined; })(),
         today: rnDayKey()
       }
     });
@@ -3406,7 +3441,7 @@ authForm.addEventListener('submit', async (e) => {
     showLoggedInView(email);
     initSubjectChat();
     renderStreak();
-    cloudPull();
+    cloudPull().finally(() => setTimeout(maybeOnboard, 900));
     renderProgressSection();
     renderLeaderboard();
     if (typeof renderChatSection === 'function') renderChatSection();
@@ -4830,7 +4865,229 @@ document.getElementById('groupBtn').addEventListener('click', () => grpMenu());
   setTimeout(() => { showView('study'); grpMenu(code); }, 500);
 })();
 
-cloudPull();
+// ============ Onboarding interview + study reminder ============
+const uidNow = () => localStorage.getItem('nishaan_user_id') || 'guest';
+const pfKey = () => 'nishaan_profile_' + uidNow();
+function pfLoad() {
+  try { const p = JSON.parse(localStorage.getItem(pfKey())); if (p && typeof p === 'object') return Object.assign({ board: '', hard: [], goal: '', daily: 0, time: '', days: 'all', remind: false, done: false, skipped: '', t: 0 }, p); } catch (e) {}
+  return { board: '', hard: [], goal: '', daily: 0, time: '', days: 'all', remind: false, done: false, skipped: '', t: 0 };
+}
+function pfSave(p) {
+  p.t = Date.now();
+  try { localStorage.setItem(pfKey(), JSON.stringify(p)); } catch (e) {}
+  cloudPush('profile', p); renderRemind();
+}
+const DAYS_LABEL = { all: 'Roz', monsat: 'Pir se Sanichar', weekdays: 'Pir se Juma' };
+function fmtTime(t) { if (!t) return ''; const [h, m] = t.split(':').map(Number); return ((h % 12) || 12) + ':' + String(m).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM'); }
+function b64ToU8(b) { const p = '='.repeat((4 - b.length % 4) % 4), r = atob((b + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(r, (c) => c.charCodeAt(0)); }
+const swReady = () => Promise.race([navigator.serviceWorker.ready, new Promise((_, rej) => setTimeout(() => rej(new Error('sw')), 4000))]);
+// natija: 'push' (band hone par bhi), 'inapp' (sirf site khuli ho), 'denied', 'unsupported'
+async function reminderEnable(p) {
+  if (!('Notification' in window)) return 'inapp';
+  let perm = Notification.permission;
+  if (perm === 'default') { try { perm = await Notification.requestPermission(); } catch (e) {} }
+  if (perm !== 'granted') return 'denied';
+  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !localStorage.getItem('nishaan_user_id')) return 'inapp';
+  try {
+    const reg = await swReady();
+    const kr = await chatFetch('/api/push/key'); if (!kr.ok) return 'inapp';
+    const { key } = await kr.json();
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(key) });
+    const tz = (Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || 'Asia/Karachi';
+    const r = await chatFetch('/api/push/subscribe', { method: 'POST', body: { subscription: sub.toJSON(), time: p.time, days: p.days, tz, name: (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0] } });
+    return r.ok ? 'push' : 'inapp';
+  } catch (e) { return 'inapp'; }
+}
+async function reminderDisable() {
+  try {
+    if (!('serviceWorker' in navigator)) return;
+    const reg = await swReady(), sub = await reg.pushManager.getSubscription();
+    if (sub) { const ep = sub.endpoint; await sub.unsubscribe(); await chatFetch('/api/push/unsubscribe', { method: 'POST', body: { endpoint: ep } }); }
+  } catch (e) {}
+}
+function reminderToast(r) {
+  if (r === 'push') rnToast('Reminder set! App band hone par bhi notification aayega.');
+  else if (r === 'denied') rnToast('Notification block hai. Browser settings se allow karo. Site khuli hogi tab alarm phir bhi bajega.');
+  else rnToast('Reminder set. Site ya app khuli hogi tab alarm bajega.');
+}
+// ---- Alarm + banner ----
+function rnAlarm() {
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
+    const ac = new AC(); const t0 = ac.currentTime;
+    [0, 0.45, 0.9, 1.6, 2.05, 2.5].forEach((d, i) => {
+      const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = i % 2 ? 880 : 660;
+      g.gain.setValueAtTime(0.0001, t0 + d); g.gain.exponentialRampToValueAtTime(0.25, t0 + d + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + 0.35);
+      o.connect(g); g.connect(ac.destination); o.start(t0 + d); o.stop(t0 + d + 0.4);
+    });
+    setTimeout(() => { try { ac.close(); } catch (e) {} }, 3500);
+  } catch (e) {}
+}
+function remindBannerShow(sound) {
+  document.getElementById('remindBanner')?.remove();
+  const nm = (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0];
+  const el = document.createElement('div'); el.id = 'remindBanner'; el.className = 'remind-banner'; el.setAttribute('role', 'alert');
+  const b = document.createElement('b'); b.textContent = (nm ? nm + ', ' : '') + 'padhai ka waqt ho gaya!';
+  const sp = document.createElement('span'); sp.textContent = 'Tumhara tutor intezar kar raha hai. Aaj ka homework aur test dekh lein?';
+  const row = document.createElement('div'); row.className = 'rb-row';
+  const go = document.createElement('button'); go.type = 'button'; go.className = 'primary'; go.textContent = 'Class shuru karo';
+  go.addEventListener('click', () => { el.remove(); showView('study'); });
+  const sn = document.createElement('button'); sn.type = 'button'; sn.textContent = '10 minute baad';
+  sn.addEventListener('click', () => { el.remove(); try { localStorage.removeItem('nishaan_remind_fired_' + uidNow()); sessionStorage.setItem('rn_snooze', String(Date.now() + 10 * 60000)); } catch (e) {} });
+  const cl = document.createElement('button'); cl.type = 'button'; cl.textContent = 'Band karo'; cl.addEventListener('click', () => el.remove());
+  row.append(go, sn, cl); el.append(b, sp, row); document.body.appendChild(el);
+  if (sound) rnAlarm();
+}
+function remindDiff(p) {
+  if (!p.remind || !p.time) return -1;
+  const n = new Date(), dow = n.getDay();
+  if (p.days === 'weekdays' && (dow === 0 || dow === 6)) return -1;
+  if (p.days === 'monsat' && dow === 0) return -1;
+  const [h, m] = p.time.split(':').map(Number);
+  const diff = n.getHours() * 60 + n.getMinutes() - (h * 60 + m);
+  return diff >= 0 && diff <= 45 ? diff : -1;
+}
+function remindTick(onLoad) {
+  if (!localStorage.getItem('nishaan_user_id')) return;
+  const p = pfLoad(); let snoozed = false;
+  try { const sz = Number(sessionStorage.getItem('rn_snooze')) || 0; if (sz && Date.now() >= sz) { sessionStorage.removeItem('rn_snooze'); remindBannerShow(true); return; } if (sz) snoozed = true; } catch (e) {}
+  if (snoozed) return;
+  const diff = remindDiff(p); if (diff < 0) return;
+  const key = 'nishaan_remind_fired_' + uidNow();
+  try { if (localStorage.getItem(key) === rnDayKey()) return; localStorage.setItem(key, rnDayKey()); } catch (e) {}
+  const loud = diff <= 2 && !onLoad || (onLoad && diff <= 2);
+  remindBannerShow(loud);
+  if (loud && 'Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistration().then((reg) => { if (reg) reg.showNotification('Padhai ka waqt ho gaya', { body: 'Tumhara tutor intezar kar raha hai.', icon: '/icon-192.png', tag: 'rehnuma-study', data: { url: '/#study' } }); }).catch(() => {});
+  }
+}
+setInterval(() => remindTick(false), 20000);
+
+// ---- Home card: padhai ka waqt ----
+function renderRemind() {
+  const txt = document.getElementById('remindText'); if (!txt) return;
+  const p = pfLoad();
+  txt.textContent = p.time ? 'Roz tuition ka waqt: ' + fmtTime(p.time) + ' (' + DAYS_LABEL[p.days] + '). ' + (p.remind ? 'Reminder on hai.' : 'Reminder band hai.') : 'Apna padhai ka waqt set karo, hum us waqt tumhe yaad dilayenge.';
+  document.getElementById('remindEdit').textContent = p.time ? 'Badlo' : 'Waqt set karo';
+}
+(function initRemindCard() {
+  const form = document.getElementById('remindForm'); if (!form) return;
+  document.getElementById('remindEdit').addEventListener('click', () => {
+    if (!localStorage.getItem('nishaan_user_id')) { rnToast('Reminder ke liye pehle login karein.'); openAuthModal(); return; }
+    const p = pfLoad(); document.getElementById('rfTime').value = p.time || '17:00'; document.getElementById('rfDays').value = p.days; document.getElementById('rfOn').checked = p.time ? p.remind : true;
+    form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+  });
+  document.getElementById('rfSave').addEventListener('click', async () => {
+    const t = document.getElementById('rfTime').value; if (!t) { rnToast('Waqt chunein.'); return; }
+    const p = pfLoad(); p.time = t; p.days = document.getElementById('rfDays').value; p.remind = document.getElementById('rfOn').checked;
+    try { localStorage.removeItem('nishaan_remind_fired_' + uidNow()); } catch (e) {}
+    pfSave(p); form.style.display = 'none';
+    if (p.remind) reminderToast(await reminderEnable(p)); else { await reminderDisable(); rnToast('Reminder band kar diya.'); }
+  });
+  renderRemind();
+})();
+
+// ---- Interview ----
+const OB_BOARDS = ['Punjab Board', 'Sindh Board', 'KPK Board', 'Balochistan Board', 'Federal Board', 'Cambridge (O/A Level)', 'Aur'];
+const OB_GOALS = ['Achay marks lene hain', 'Concepts clear karne hain', 'Exam / Entry test ki tayyari', 'Basics majboot karne hain'];
+const OB_DAILY = [[30, '30 minute'], [60, '1 ghanta'], [120, '2 ghantay'], [180, '3 ghantay ya zyada']];
+const OB_TIMES = [['07:00', 'Subah 7'], ['15:00', 'Dopahar 3'], ['17:00', 'Shaam 5'], ['20:00', 'Raat 8']];
+function maybeOnboard(tries) {
+  tries = tries || 0;
+  if (!localStorage.getItem('nishaan_user_id') || !localStorage.getItem('nishaan_student_class')) return;
+  if (document.getElementById('obOv')) return;
+  const p = pfLoad(); if (p.done || p.skipped === rnDayKey()) return;
+  const busy = (el) => el && el.style.display && el.style.display !== 'none';
+  if (busy(document.getElementById('classFixOverlay'))) { if (tries < 6) setTimeout(() => maybeOnboard(tries + 1), 1500); return; }
+  startOnboarding();
+}
+function startOnboarding() {
+  closeNotes();
+  const data = pfLoad(); data.hard = Array.isArray(data.hard) ? data.hard : [];
+  if (!data.time) data.time = '17:00';
+  const nm = (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0];
+  const ov = document.createElement('div'); ov.id = 'obOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card ob-card'; ov.appendChild(card); document.body.appendChild(ov);
+  const TOTAL = 6; let step = 0, busy = false;
+  const close = () => ov.remove();
+  const skip = () => { const q = pfLoad(); q.skipped = rnDayKey(); pfSave(q); close(); };
+  function opts(list, get, set, multi) {
+    const wrap = document.createElement('div'); wrap.className = 'ob-opts';
+    list.forEach((o) => {
+      const val = Array.isArray(o) ? o[0] : o, lab = Array.isArray(o) ? o[1] : o;
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'ob-opt'; b.textContent = lab;
+      const on = () => (multi ? get().includes(val) : get() === val);
+      if (on()) b.classList.add('sel');
+      b.addEventListener('click', () => { set(val); if (multi) b.classList.toggle('sel', on()); else { wrap.querySelectorAll('.ob-opt').forEach((x) => x.classList.remove('sel')); b.classList.add('sel'); } });
+      wrap.appendChild(b);
+    });
+    return wrap;
+  }
+  function render() {
+    card.textContent = '';
+    const top = document.createElement('div'); top.className = 'ob-top';
+    const av = document.createElement('div'); av.className = 'ob-av'; av.textContent = 'J';
+    const who = document.createElement('div'); who.innerHTML = '<b style="font-size:14px;"></b><div style="font-size:12px;color:var(--text-faint);">Rehnuma tutor</div>'; who.firstChild.textContent = 'Javeria';
+    const dots = document.createElement('div'); dots.className = 'ob-dots'; if (step > 0 && step <= TOTAL) for (let i = 1; i <= TOTAL; i++) { const d = document.createElement('i'); if (i <= step) d.className = 'on'; dots.appendChild(d); }
+    top.append(av, who, dots); card.appendChild(top);
+    const q = document.createElement('h3'); q.className = 'ob-q'; const sub = document.createElement('p'); sub.className = 'ob-sub';
+    const body = document.createElement('div'); const foot = document.createElement('div'); foot.className = 'ob-foot';
+    let canNext = true, nextLabel = 'Aage';
+    if (step === 0) {
+      q.textContent = 'Assalam o Alaikum' + (nm ? ' ' + nm : '') + '!';
+      sub.textContent = 'Main Javeria hoon. Padhai shuru karne se pehle chhota sa interview lungi (sirf 1 minute), taake main tumhe tumhare hisab se sikha sakun aur sahi waqt par yaad dila sakun.';
+      nextLabel = 'Chalo shuru karein';
+    } else if (step === 1) {
+      q.textContent = 'Tumhara board ya system kaunsa hai?'; sub.textContent = 'Syllabus usi ke hisab se samjhaya jayega.';
+      body.appendChild(opts(OB_BOARDS, () => data.board, (v) => { data.board = v; nextBtn.disabled = false; })); canNext = !!data.board;
+    } else if (step === 2) {
+      q.textContent = 'Kaun se subjects mushkil lagte hain?'; sub.textContent = 'Jitne chaho chuno. In mein tutor zyada aasan karke samjhayega.';
+      body.appendChild(opts(Object.keys(TUTORS).filter((k) => k !== 'general').map((k) => [k, TUTORS[k].label]), () => data.hard, (v) => { const i = data.hard.indexOf(v); if (i >= 0) data.hard.splice(i, 1); else data.hard.push(v); }, true));
+    } else if (step === 3) {
+      q.textContent = 'Tumhara maqsad kya hai?'; sub.textContent = 'Sab se zyada kya chahiye?';
+      body.appendChild(opts(OB_GOALS, () => data.goal, (v) => { data.goal = v; nextBtn.disabled = false; })); canNext = !!data.goal;
+    } else if (step === 4) {
+      q.textContent = 'Roz kitna waqt padhai ko de sakte ho?'; sub.textContent = 'Jitna realistic ho utna chuno. Plan usi ke hisab se banega.';
+      body.appendChild(opts(OB_DAILY, () => data.daily, (v) => { data.daily = v; nextBtn.disabled = false; })); canNext = !!data.daily;
+    } else if (step === 5) {
+      q.textContent = 'Tuition ka waqt kya rakhein?'; sub.textContent = 'Is waqt par main tumhe yaad dilaungi, bilkul real class ki tarah.';
+      const row = document.createElement('div'); row.className = 'ob-row';
+      const ti = document.createElement('input'); ti.type = 'time'; ti.className = 'ob-time'; ti.value = data.time; ti.addEventListener('input', () => { data.time = ti.value; nextBtn.disabled = !ti.value; });
+      row.appendChild(ti); body.appendChild(row);
+      body.appendChild(opts(OB_TIMES, () => data.time, (v) => { data.time = v; ti.value = v; nextBtn.disabled = false; }));
+      const dl = document.createElement('p'); dl.className = 'ob-sub'; dl.style.margin = '14px 0 8px'; dl.textContent = 'Kin dino?'; body.appendChild(dl);
+      body.appendChild(opts(Object.entries(DAYS_LABEL), () => data.days, (v) => { data.days = v; }));
+    } else if (step === 6) {
+      q.textContent = fmtTime(data.time) + ' par reminder bheju?'; sub.textContent = 'Alarm aur notification aayega: "Padhai ka waqt ho gaya". Baad mein Home se kabhi bhi badal sakte ho.';
+      nextLabel = 'Haan, yaad dilao';
+      const no = document.createElement('button'); no.type = 'button'; no.className = 'btn btn-outline'; no.textContent = 'Nahi, shukriya';
+      no.addEventListener('click', () => finish(false)); foot.appendChild(no);
+    } else {
+      q.textContent = 'Tayyar! Shukriya' + (nm ? ' ' + nm : '') + '.'; nextLabel = 'Study shuru karo';
+      sub.textContent = 'Tumhara plan: ' + (data.time ? 'roz ' + fmtTime(data.time) + ' (' + DAYS_LABEL[data.days].toLowerCase() + ')' : '') + (data.daily ? ', ' + (data.daily >= 180 ? '3+ ghantay' : data.daily >= 120 ? '2 ghantay' : data.daily >= 60 ? '1 ghanta' : '30 minute') : '') + '. Pehla kadam: School diary mein aaj ka homework likho, ya tutor se seedha pooch lo.';
+    }
+    card.append(q, sub, body, foot);
+    nextBtn = document.createElement('button'); nextBtn.type = 'button'; nextBtn.className = 'btn btn-primary'; nextBtn.textContent = nextLabel; nextBtn.disabled = !canNext;
+    nextBtn.addEventListener('click', () => { if (step === 6) finish(true); else if (step === 7) { close(); showView('study'); } else { step++; render(); } });
+    foot.insertBefore(nextBtn, foot.firstChild);
+    if (step > 1 && step <= 6) { const bk = document.createElement('button'); bk.type = 'button'; bk.className = 'btn btn-outline'; bk.textContent = 'Wapas'; bk.addEventListener('click', () => { step--; render(); }); foot.insertBefore(bk, foot.firstChild); }
+    if (step < 7) { const sk = document.createElement('button'); sk.type = 'button'; sk.className = 'ob-skip'; sk.textContent = 'Baad mein'; sk.addEventListener('click', skip); foot.appendChild(sk); }
+  }
+  let nextBtn;
+  async function finish(remind) {
+    if (busy) return; busy = true;
+    card.querySelectorAll('button').forEach((x) => { x.disabled = true; }); if (nextBtn) nextBtn.textContent = 'Reminder set ho raha hai...';
+    const p = Object.assign(pfLoad(), { board: data.board, hard: data.hard, goal: data.goal, daily: data.daily, time: data.time, days: data.days, remind: !!remind, done: true, skipped: '' });
+    pfSave(p);
+    if (remind) reminderToast(await reminderEnable(p));
+    busy = false; step = 7; render();
+  }
+  render();
+}
+
+if (typeof cloudPull === 'function') cloudPull().finally(() => setTimeout(maybeOnboard, 900));
+setTimeout(() => remindTick(true), 1500);
 
 (function initView() {
   const h = location.hash.slice(1);
