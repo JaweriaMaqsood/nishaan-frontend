@@ -869,17 +869,6 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       <div id="examView"><p class="exam-empty">Exam ki date daalo, hum tumhara roz ka study plan bana denge.</p></div>
       <div id="roadBox"></div>
     </div>
-    <div class="exam-card" id="remindCard">
-      <div class="exam-head"><b>Meri padhai ka waqt</b><button type="button" id="remindEdit" class="exam-link">Badlo</button></div>
-      <p class="exam-empty" id="remindText"></p>
-      <div class="diary-form" id="remindForm" style="display:none; margin-top:10px; align-items:center;">
-        <input type="time" id="rfTime" aria-label="Padhai ka waqt" style="min-width:120px;">
-        <select id="rfDays" aria-label="Din"><option value="all">Roz</option><option value="monsat">Pir se Sanichar</option><option value="weekdays">Pir se Juma</option></select>
-        <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim);"><input type="checkbox" id="rfOn" style="min-width:0;flex:none;"> Reminder bajao</label>
-        <button type="button" class="btn btn-primary" id="rfSave">Save</button>
-      </div>
-      <p class="exam-empty" id="remindNote" style="font-size:12px;margin-top:8px;display:none;"><button type="button" class="exam-link" id="remindTest" style="padding:0;">Test notification bhejo</button></p>
-    </div>
     <div class="exam-card" id="diaryCard">
       <div class="exam-head"><b>School diary</b><button type="button" id="diaryToggle" class="exam-link">+ Likho</button></div>
       <div class="diary-form" id="diaryForm" style="display:none;">
@@ -1414,7 +1403,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-C</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-D</div>
   </div>
 </footer>
 
@@ -2655,7 +2644,6 @@ async function cloudPull() {
       const cf = cloud.profile, lf = pfLoad();
       if (cf && typeof cf === 'object' && (Number(cf.t) || 0) > (lf.t || 0)) { localStorage.setItem(pfKey(), JSON.stringify(cf)); }
       else if ((lf.done || lf.skipped) && (lf.t || 0) > ((cf && Number(cf.t)) || 0)) { cloudPush('profile', lf); }
-      renderRemind(); remindTick(true);
     } catch (e) { /* silent */ }
     renderStreak();
     if (reloadChat && !doubtBtn.disabled && !callActive) { chatHistory = loadSavedChat(currentSubject); renderSavedChat(); }
@@ -4875,146 +4863,14 @@ function pfLoad() {
 function pfSave(p) {
   p.t = Date.now();
   try { localStorage.setItem(pfKey(), JSON.stringify(p)); } catch (e) {}
-  cloudPush('profile', p); renderRemind();
+  cloudPush('profile', p);
 }
 const DAYS_LABEL = { all: 'Roz', monsat: 'Pir se Sanichar', weekdays: 'Pir se Juma' };
-function fmtTime(t) { if (!t) return ''; const [h, m] = t.split(':').map(Number); return ((h % 12) || 12) + ':' + String(m).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM'); }
-function b64ToU8(b) { const p = '='.repeat((4 - b.length % 4) % 4), r = atob((b + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(r, (c) => c.charCodeAt(0)); }
-const swReady = () => Promise.race([navigator.serviceWorker.ready, new Promise((_, rej) => setTimeout(() => rej(new Error('sw')), 4000))]);
-// natija: 'push' (band hone par bhi), 'inapp' (sirf site khuli ho), 'denied', 'unsupported'
-let pushWhy = '';
-async function reminderEnable(p) {
-  pushWhy = '';
-  if (!('Notification' in window)) { pushWhy = 'Is browser mein notification support nahi.'; return 'inapp'; }
-  let perm = Notification.permission;
-  if (perm === 'default') { try { perm = await Notification.requestPermission(); } catch (e) {} }
-  if (perm !== 'granted') { pushWhy = 'Notification permission block hai.'; return 'denied'; }
-  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !localStorage.getItem('nishaan_user_id')) { pushWhy = 'Is browser mein push support nahi ya login nahi.'; return 'inapp'; }
-  try {
-    const reg = await swReady();
-    const kr = await chatFetch('/api/push/key'); if (!kr.ok) { pushWhy = 'Server par push on nahi (key ' + kr.status + ').'; return 'inapp'; }
-    const { key } = await kr.json();
-    let sub = await reg.pushManager.getSubscription();
-    if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(key) });
-    const tz = (Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || 'Asia/Karachi';
-    const r = await chatFetch('/api/push/subscribe', { method: 'POST', body: { subscription: sub.toJSON(), time: p.time, days: p.days, tz, name: (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0] } });
-    if (!r.ok) { let m = ''; try { m = (await r.json()).error || ''; } catch (e2) {} pushWhy = 'Server ne subscription nahi li (' + r.status + '): ' + m; try { localStorage.setItem('nishaan_push_mode', 'inapp'); } catch (e3) {} return 'inapp'; }
-    try { localStorage.setItem('nishaan_push_mode', 'push'); } catch (e4) {}
-    return 'push';
-  } catch (e) { pushWhy = 'Subscribe nahi ho saka: ' + (e && e.message ? e.message : e); return 'inapp'; }
-}
-async function reminderDisable() {
-  try {
-    if (!('serviceWorker' in navigator)) return;
-    try { localStorage.removeItem('nishaan_push_mode'); } catch (e0) {}
-    const reg = await swReady(), sub = await reg.pushManager.getSubscription();
-    if (sub) { const ep = sub.endpoint; await sub.unsubscribe(); await chatFetch('/api/push/unsubscribe', { method: 'POST', body: { endpoint: ep } }); }
-  } catch (e) {}
-}
-function reminderToast(r) {
-  if (r === 'push') rnToast('Reminder set! App band hone par bhi notification aayega.');
-  else if (r === 'denied') rnToast('Notification block hai. Browser settings se allow karo. Site khuli hogi tab alarm phir bhi bajega.');
-  else rnToast('Reminder set. Site ya app khuli hogi tab alarm bajega.');
-}
-// ---- Alarm + banner ----
-function rnAlarm() {
-  try {
-    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return;
-    const ac = new AC(); const t0 = ac.currentTime;
-    [0, 0.45, 0.9, 1.6, 2.05, 2.5].forEach((d, i) => {
-      const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = i % 2 ? 880 : 660;
-      g.gain.setValueAtTime(0.0001, t0 + d); g.gain.exponentialRampToValueAtTime(0.25, t0 + d + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d + 0.35);
-      o.connect(g); g.connect(ac.destination); o.start(t0 + d); o.stop(t0 + d + 0.4);
-    });
-    setTimeout(() => { try { ac.close(); } catch (e) {} }, 3500);
-  } catch (e) {}
-}
-function remindBannerShow(sound) {
-  document.getElementById('remindBanner')?.remove();
-  const nm = (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0];
-  const el = document.createElement('div'); el.id = 'remindBanner'; el.className = 'remind-banner'; el.setAttribute('role', 'alert');
-  const b = document.createElement('b'); b.textContent = (nm ? nm + ', ' : '') + 'padhai ka waqt ho gaya!';
-  const sp = document.createElement('span'); sp.textContent = 'Tumhara tutor intezar kar raha hai. Aaj ka homework aur test dekh lein?';
-  const row = document.createElement('div'); row.className = 'rb-row';
-  const go = document.createElement('button'); go.type = 'button'; go.className = 'primary'; go.textContent = 'Class shuru karo';
-  go.addEventListener('click', () => { el.remove(); showView('study'); });
-  const sn = document.createElement('button'); sn.type = 'button'; sn.textContent = '10 minute baad';
-  sn.addEventListener('click', () => { el.remove(); try { localStorage.removeItem('nishaan_remind_fired_' + uidNow()); sessionStorage.setItem('rn_snooze', String(Date.now() + 10 * 60000)); } catch (e) {} });
-  const cl = document.createElement('button'); cl.type = 'button'; cl.textContent = 'Band karo'; cl.addEventListener('click', () => el.remove());
-  row.append(go, sn, cl); el.append(b, sp, row); document.body.appendChild(el);
-  if (sound) rnAlarm();
-}
-function remindDiff(p) {
-  if (!p.remind || !p.time) return -1;
-  const n = new Date(), dow = n.getDay();
-  if (p.days === 'weekdays' && (dow === 0 || dow === 6)) return -1;
-  if (p.days === 'monsat' && dow === 0) return -1;
-  const [h, m] = p.time.split(':').map(Number);
-  const diff = n.getHours() * 60 + n.getMinutes() - (h * 60 + m);
-  return diff >= 0 && diff <= 45 ? diff : -1;
-}
-function remindTick(onLoad) {
-  if (!localStorage.getItem('nishaan_user_id')) return;
-  const p = pfLoad(); let snoozed = false;
-  try { const sz = Number(sessionStorage.getItem('rn_snooze')) || 0; if (sz && Date.now() >= sz) { sessionStorage.removeItem('rn_snooze'); remindBannerShow(true); return; } if (sz) snoozed = true; } catch (e) {}
-  if (snoozed) return;
-  const diff = remindDiff(p); if (diff < 0) return;
-  const key = 'nishaan_remind_fired_' + uidNow();
-  try { if (localStorage.getItem(key) === rnDayKey()) return; localStorage.setItem(key, rnDayKey()); } catch (e) {}
-  const loud = diff <= 2 && !onLoad || (onLoad && diff <= 2);
-  remindBannerShow(loud);
-  if (loud && 'Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistration().then((reg) => { if (reg) reg.showNotification('Padhai ka waqt ho gaya', { body: 'Tumhara tutor intezar kar raha hai.', icon: '/icon-192.png', tag: 'rehnuma-study', data: { url: '/#study' } }); }).catch(() => {});
-  }
-}
-setInterval(() => remindTick(false), 20000);
-
-// ---- Home card: padhai ka waqt ----
-function renderRemind() {
-  const txt = document.getElementById('remindText'); if (!txt) return;
-  const p = pfLoad();
-  txt.textContent = p.time ? 'Roz tuition ka waqt: ' + fmtTime(p.time) + ' (' + DAYS_LABEL[p.days] + '). ' + (p.remind ? 'Reminder on hai' + (localStorage.getItem('nishaan_push_mode') === 'push' ? ' (app band hone par bhi notification aayegi).' : ' (site khuli hogi tab alarm bajega).') : 'Reminder band hai.') : 'Apna padhai ka waqt set karo, hum us waqt tumhe yaad dilayenge.';
-  document.getElementById('remindEdit').textContent = p.time ? 'Badlo' : 'Waqt set karo';
-}
-(function initRemindCard() {
-  const form = document.getElementById('remindForm'); if (!form) return;
-  document.getElementById('remindEdit').addEventListener('click', () => {
-    if (!localStorage.getItem('nishaan_user_id')) { rnToast('Reminder ke liye pehle login karein.'); openAuthModal(); return; }
-    const p = pfLoad(); document.getElementById('rfTime').value = p.time || '17:00'; document.getElementById('rfDays').value = p.days; document.getElementById('rfOn').checked = p.time ? p.remind : true;
-    form.style.display = form.style.display === 'none' ? 'flex' : 'none';
-  });
-  document.getElementById('rfSave').addEventListener('click', async () => {
-    const t = document.getElementById('rfTime').value; if (!t) { rnToast('Waqt chunein.'); return; }
-    const p = pfLoad(); p.time = t; p.days = document.getElementById('rfDays').value; p.remind = document.getElementById('rfOn').checked;
-    try { localStorage.removeItem('nishaan_remind_fired_' + uidNow()); } catch (e) {}
-    pfSave(p); form.style.display = 'none';
-    if (p.remind) reminderToast(await reminderEnable(p)); else { await reminderDisable(); rnToast('Reminder band kar diya.'); }
-  });
-  document.getElementById('remindTest').addEventListener('click', async () => {
-    if (!localStorage.getItem('nishaan_user_id')) { rnToast('Pehle login karein.'); return; }
-    const btn = document.getElementById('remindTest'); btn.disabled = true;
-    try {
-      const p = pfLoad(); if (!p.time) p.time = '17:00';
-      const r = await reminderEnable(p);
-      if (r !== 'push') { rnToast('Push on nahi hua: ' + (pushWhy || r)); return; }
-      const res = await chatFetch('/api/push/test', { method: 'POST', body: {} });
-      const d = await res.json().catch(() => ({}));
-      if (!res.ok) { rnToast('Test fail: ' + (d.error || res.status)); return; }
-      if (d.sent > 0) rnToast('Test bhej diya. 5-10 second mein notification aani chahiye.');
-      else rnToast('Notification nahi bheji ja saki: ' + (d.reason || (d.fails || []).join(', ') || 'pata nahi'));
-    } catch (e) { rnToast('Test fail: ' + (e && e.message)); }
-    finally { btn.disabled = false; }
-  });
-  const showTest = () => { document.getElementById('remindNote').style.display = location.hash === '#pushtest' ? '' : 'none'; };
-  showTest(); window.addEventListener('hashchange', showTest);
-  renderRemind();
-})();
 
 // ---- Interview ----
 const OB_BOARDS = ['Punjab Board', 'Sindh Board', 'KPK Board', 'Balochistan Board', 'Federal Board', 'Cambridge (O/A Level)', 'Aur'];
 const OB_GOALS = ['Achay marks lene hain', 'Concepts clear karne hain', 'Exam / Entry test ki tayyari', 'Basics majboot karne hain'];
 const OB_DAILY = [[30, '30 minute'], [60, '1 ghanta'], [120, '2 ghantay'], [180, '3 ghantay ya zyada']];
-const OB_TIMES = [['07:00', 'Subah 7'], ['15:00', 'Dopahar 3'], ['17:00', 'Shaam 5'], ['20:00', 'Raat 8']];
 function maybeOnboard(tries) {
   tries = tries || 0;
   if (!localStorage.getItem('nishaan_user_id') || !localStorage.getItem('nishaan_student_class')) return;
@@ -5027,11 +4883,10 @@ function maybeOnboard(tries) {
 function startOnboarding() {
   closeNotes();
   const data = pfLoad(); data.hard = Array.isArray(data.hard) ? data.hard : [];
-  if (!data.time) data.time = '17:00';
   const nm = (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0];
   const ov = document.createElement('div'); ov.id = 'obOv'; ov.className = 'notes-ov';
   const card = document.createElement('div'); card.className = 'notes-card ob-card'; ov.appendChild(card); document.body.appendChild(ov);
-  const TOTAL = 6; let step = 0, busy = false;
+  const TOTAL = 4; let step = 0, busy = false;
   const close = () => ov.remove();
   const skip = () => { const q = pfLoad(); q.skipped = rnDayKey(); pfSave(q); close(); };
   function opts(list, get, set, multi) {
@@ -5058,7 +4913,7 @@ function startOnboarding() {
     let canNext = true, nextLabel = 'Aage';
     if (step === 0) {
       q.textContent = 'Assalam o Alaikum' + (nm ? ' ' + nm : '') + '!';
-      sub.textContent = 'Main Javeria hoon. Padhai shuru karne se pehle chhota sa interview lungi (sirf 1 minute), taake main tumhe tumhare hisab se sikha sakun aur sahi waqt par yaad dila sakun.';
+      sub.textContent = 'Main Javeria hoon. Padhai shuru karne se pehle chhota sa interview lungi (sirf 1 minute), taake main tumhe tumhare hisab se sikha sakun.';
       nextLabel = 'Chalo shuru karein';
     } else if (step === 1) {
       q.textContent = 'Tumhara board ya system kaunsa hai?'; sub.textContent = 'Syllabus usi ke hisab se samjhaya jayega.';
@@ -5072,44 +4927,29 @@ function startOnboarding() {
     } else if (step === 4) {
       q.textContent = 'Roz kitna waqt padhai ko de sakte ho?'; sub.textContent = 'Jitna realistic ho utna chuno. Plan usi ke hisab se banega.';
       body.appendChild(opts(OB_DAILY, () => data.daily, (v) => { data.daily = v; nextBtn.disabled = false; })); canNext = !!data.daily;
-    } else if (step === 5) {
-      q.textContent = 'Tuition ka waqt kya rakhein?'; sub.textContent = 'Is waqt par main tumhe yaad dilaungi, bilkul real class ki tarah.';
-      const row = document.createElement('div'); row.className = 'ob-row';
-      const ti = document.createElement('input'); ti.type = 'time'; ti.className = 'ob-time'; ti.value = data.time; ti.addEventListener('input', () => { data.time = ti.value; nextBtn.disabled = !ti.value; });
-      row.appendChild(ti); body.appendChild(row);
-      body.appendChild(opts(OB_TIMES, () => data.time, (v) => { data.time = v; ti.value = v; nextBtn.disabled = false; }));
-      const dl = document.createElement('p'); dl.className = 'ob-sub'; dl.style.margin = '14px 0 8px'; dl.textContent = 'Kin dino?'; body.appendChild(dl);
-      body.appendChild(opts(Object.entries(DAYS_LABEL), () => data.days, (v) => { data.days = v; }));
-    } else if (step === 6) {
-      q.textContent = fmtTime(data.time) + ' par reminder bheju?'; sub.textContent = 'Alarm aur notification aayega: "Padhai ka waqt ho gaya". Baad mein Home se kabhi bhi badal sakte ho.';
-      nextLabel = 'Haan, yaad dilao';
-      const no = document.createElement('button'); no.type = 'button'; no.className = 'btn btn-outline'; no.textContent = 'Nahi, shukriya';
-      no.addEventListener('click', () => finish(false)); foot.appendChild(no);
     } else {
       q.textContent = 'Tayyar! Shukriya' + (nm ? ' ' + nm : '') + '.'; nextLabel = 'Study shuru karo';
-      sub.textContent = 'Tumhara plan: ' + (data.time ? 'roz ' + fmtTime(data.time) + ' (' + DAYS_LABEL[data.days].toLowerCase() + ')' : '') + (data.daily ? ', ' + (data.daily >= 180 ? '3+ ghantay' : data.daily >= 120 ? '2 ghantay' : data.daily >= 60 ? '1 ghanta' : '30 minute') : '') + '. Pehla kadam: School diary mein aaj ka homework likho, ya tutor se seedha pooch lo.';
+      sub.textContent = (data.daily ? 'Roz ' + (data.daily >= 180 ? '3+ ghantay' : data.daily >= 120 ? '2 ghantay' : data.daily >= 60 ? '1 ghanta' : '30 minute') + ' ka plan note kar liya. ' : '') + 'Pehla kadam: School diary mein aaj ka homework likho, ya tutor se seedha pooch lo.';
     }
     card.append(q, sub, body, foot);
     nextBtn = document.createElement('button'); nextBtn.type = 'button'; nextBtn.className = 'btn btn-primary'; nextBtn.textContent = nextLabel; nextBtn.disabled = !canNext;
-    nextBtn.addEventListener('click', () => { if (step === 6) finish(true); else if (step === 7) { close(); showView('study'); } else { step++; render(); } });
+    nextBtn.addEventListener('click', () => { if (step === 4) finish(); else if (step === 5) { close(); showView('study'); } else { step++; render(); } });
     foot.insertBefore(nextBtn, foot.firstChild);
-    if (step > 1 && step <= 6) { const bk = document.createElement('button'); bk.type = 'button'; bk.className = 'btn btn-outline'; bk.textContent = 'Wapas'; bk.addEventListener('click', () => { step--; render(); }); foot.insertBefore(bk, foot.firstChild); }
-    if (step < 7) { const sk = document.createElement('button'); sk.type = 'button'; sk.className = 'ob-skip'; sk.textContent = 'Baad mein'; sk.addEventListener('click', skip); foot.appendChild(sk); }
+    if (step > 1 && step <= 4) { const bk = document.createElement('button'); bk.type = 'button'; bk.className = 'btn btn-outline'; bk.textContent = 'Wapas'; bk.addEventListener('click', () => { step--; render(); }); foot.insertBefore(bk, foot.firstChild); }
+    if (step < 5) { const sk = document.createElement('button'); sk.type = 'button'; sk.className = 'ob-skip'; sk.textContent = 'Baad mein'; sk.addEventListener('click', skip); foot.appendChild(sk); }
   }
   let nextBtn;
-  async function finish(remind) {
+  async function finish() {
     if (busy) return; busy = true;
-    card.querySelectorAll('button').forEach((x) => { x.disabled = true; }); if (nextBtn) nextBtn.textContent = 'Reminder set ho raha hai...';
-    const p = Object.assign(pfLoad(), { board: data.board, hard: data.hard, goal: data.goal, daily: data.daily, time: data.time, days: data.days, remind: !!remind, done: true, skipped: '' });
+    card.querySelectorAll('button').forEach((x) => { x.disabled = true; }); if (nextBtn) nextBtn.textContent = '...';
+    const p = Object.assign(pfLoad(), { board: data.board, hard: data.hard, goal: data.goal, daily: data.daily, done: true, skipped: '' });
     pfSave(p);
-    if (remind) reminderToast(await reminderEnable(p));
-    busy = false; step = 7; render();
+    busy = false; step = 5; render();
   }
   render();
 }
 
 if (typeof cloudPull === 'function') cloudPull().finally(() => setTimeout(maybeOnboard, 900));
-setTimeout(() => remindTick(true), 1500);
 
 (function initView() {
   const h = location.hash.slice(1);
