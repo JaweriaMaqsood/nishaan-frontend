@@ -878,7 +878,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim);"><input type="checkbox" id="rfOn" style="min-width:0;flex:none;"> Reminder bajao</label>
         <button type="button" class="btn btn-primary" id="rfSave">Save</button>
       </div>
-      <p class="exam-empty" id="remindNote" style="font-size:12px;margin-top:8px;"><button type="button" class="exam-link" id="remindTest" style="padding:0;">Test notification bhejo</button></p>
+      <p class="exam-empty" id="remindNote" style="font-size:12px;margin-top:8px;display:none;"><button type="button" class="exam-link" id="remindTest" style="padding:0;">Test notification bhejo</button></p>
     </div>
     <div class="exam-card" id="diaryCard">
       <div class="exam-head"><b>School diary</b><button type="button" id="diaryToggle" class="exam-link">+ Likho</button></div>
@@ -5005,6 +5005,8 @@ function renderRemind() {
     } catch (e) { rnToast('Test fail: ' + (e && e.message)); }
     finally { btn.disabled = false; }
   });
+  const showTest = () => { document.getElementById('remindNote').style.display = location.hash === '#pushtest' ? '' : 'none'; };
+  showTest(); window.addEventListener('hashchange', showTest);
   renderRemind();
 })();
 
