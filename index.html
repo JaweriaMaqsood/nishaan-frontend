@@ -878,7 +878,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-dim);"><input type="checkbox" id="rfOn" style="min-width:0;flex:none;"> Reminder bajao</label>
         <button type="button" class="btn btn-primary" id="rfSave">Save</button>
       </div>
-      <p class="exam-empty" id="remindNote" style="font-size:12px;margin-top:8px;display:none;"></p>
+      <p class="exam-empty" id="remindNote" style="font-size:12px;margin-top:8px;"><button type="button" class="exam-link" id="remindTest" style="padding:0;">Test notification bhejo</button></p>
     </div>
     <div class="exam-card" id="diaryCard">
       <div class="exam-head"><b>School diary</b><button type="button" id="diaryToggle" class="exam-link">+ Likho</button></div>
@@ -1414,7 +1414,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-B</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-C</div>
   </div>
 </footer>
 
@@ -4882,26 +4882,31 @@ function fmtTime(t) { if (!t) return ''; const [h, m] = t.split(':').map(Number)
 function b64ToU8(b) { const p = '='.repeat((4 - b.length % 4) % 4), r = atob((b + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(r, (c) => c.charCodeAt(0)); }
 const swReady = () => Promise.race([navigator.serviceWorker.ready, new Promise((_, rej) => setTimeout(() => rej(new Error('sw')), 4000))]);
 // natija: 'push' (band hone par bhi), 'inapp' (sirf site khuli ho), 'denied', 'unsupported'
+let pushWhy = '';
 async function reminderEnable(p) {
-  if (!('Notification' in window)) return 'inapp';
+  pushWhy = '';
+  if (!('Notification' in window)) { pushWhy = 'Is browser mein notification support nahi.'; return 'inapp'; }
   let perm = Notification.permission;
   if (perm === 'default') { try { perm = await Notification.requestPermission(); } catch (e) {} }
-  if (perm !== 'granted') return 'denied';
-  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !localStorage.getItem('nishaan_user_id')) return 'inapp';
+  if (perm !== 'granted') { pushWhy = 'Notification permission block hai.'; return 'denied'; }
+  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !localStorage.getItem('nishaan_user_id')) { pushWhy = 'Is browser mein push support nahi ya login nahi.'; return 'inapp'; }
   try {
     const reg = await swReady();
-    const kr = await chatFetch('/api/push/key'); if (!kr.ok) return 'inapp';
+    const kr = await chatFetch('/api/push/key'); if (!kr.ok) { pushWhy = 'Server par push on nahi (key ' + kr.status + ').'; return 'inapp'; }
     const { key } = await kr.json();
     let sub = await reg.pushManager.getSubscription();
     if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToU8(key) });
     const tz = (Intl.DateTimeFormat().resolvedOptions() || {}).timeZone || 'Asia/Karachi';
     const r = await chatFetch('/api/push/subscribe', { method: 'POST', body: { subscription: sub.toJSON(), time: p.time, days: p.days, tz, name: (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0] } });
-    return r.ok ? 'push' : 'inapp';
-  } catch (e) { return 'inapp'; }
+    if (!r.ok) { let m = ''; try { m = (await r.json()).error || ''; } catch (e2) {} pushWhy = 'Server ne subscription nahi li (' + r.status + '): ' + m; try { localStorage.setItem('nishaan_push_mode', 'inapp'); } catch (e3) {} return 'inapp'; }
+    try { localStorage.setItem('nishaan_push_mode', 'push'); } catch (e4) {}
+    return 'push';
+  } catch (e) { pushWhy = 'Subscribe nahi ho saka: ' + (e && e.message ? e.message : e); return 'inapp'; }
 }
 async function reminderDisable() {
   try {
     if (!('serviceWorker' in navigator)) return;
+    try { localStorage.removeItem('nishaan_push_mode'); } catch (e0) {}
     const reg = await swReady(), sub = await reg.pushManager.getSubscription();
     if (sub) { const ep = sub.endpoint; await sub.unsubscribe(); await chatFetch('/api/push/unsubscribe', { method: 'POST', body: { endpoint: ep } }); }
   } catch (e) {}
@@ -4968,7 +4973,7 @@ setInterval(() => remindTick(false), 20000);
 function renderRemind() {
   const txt = document.getElementById('remindText'); if (!txt) return;
   const p = pfLoad();
-  txt.textContent = p.time ? 'Roz tuition ka waqt: ' + fmtTime(p.time) + ' (' + DAYS_LABEL[p.days] + '). ' + (p.remind ? 'Reminder on hai.' : 'Reminder band hai.') : 'Apna padhai ka waqt set karo, hum us waqt tumhe yaad dilayenge.';
+  txt.textContent = p.time ? 'Roz tuition ka waqt: ' + fmtTime(p.time) + ' (' + DAYS_LABEL[p.days] + '). ' + (p.remind ? 'Reminder on hai' + (localStorage.getItem('nishaan_push_mode') === 'push' ? ' (app band hone par bhi notification aayegi).' : ' (site khuli hogi tab alarm bajega).') : 'Reminder band hai.') : 'Apna padhai ka waqt set karo, hum us waqt tumhe yaad dilayenge.';
   document.getElementById('remindEdit').textContent = p.time ? 'Badlo' : 'Waqt set karo';
 }
 (function initRemindCard() {
@@ -4984,6 +4989,21 @@ function renderRemind() {
     try { localStorage.removeItem('nishaan_remind_fired_' + uidNow()); } catch (e) {}
     pfSave(p); form.style.display = 'none';
     if (p.remind) reminderToast(await reminderEnable(p)); else { await reminderDisable(); rnToast('Reminder band kar diya.'); }
+  });
+  document.getElementById('remindTest').addEventListener('click', async () => {
+    if (!localStorage.getItem('nishaan_user_id')) { rnToast('Pehle login karein.'); return; }
+    const btn = document.getElementById('remindTest'); btn.disabled = true;
+    try {
+      const p = pfLoad(); if (!p.time) p.time = '17:00';
+      const r = await reminderEnable(p);
+      if (r !== 'push') { rnToast('Push on nahi hua: ' + (pushWhy || r)); return; }
+      const res = await chatFetch('/api/push/test', { method: 'POST', body: {} });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) { rnToast('Test fail: ' + (d.error || res.status)); return; }
+      if (d.sent > 0) rnToast('Test bhej diya. 5-10 second mein notification aani chahiye.');
+      else rnToast('Notification nahi bheji ja saki: ' + (d.reason || (d.fails || []).join(', ') || 'pata nahi'));
+    } catch (e) { rnToast('Test fail: ' + (e && e.message)); }
+    finally { btn.disabled = false; }
   });
   renderRemind();
 })();
