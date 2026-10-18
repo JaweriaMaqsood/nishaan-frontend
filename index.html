@@ -583,6 +583,46 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .exam-plan li{ display:flex; align-items:center; justify-content:space-between; gap:10px; border:1.2px solid var(--border); border-radius:12px; padding:10px 12px; font-size:13.5px; }
 .exam-plan li.ok{ opacity:.65; text-decoration:line-through; }
 .exam-plan button{ font-size:12px; font-weight:700; padding:6px 12px; border-radius:999px; border:1.2px solid var(--border-strong); color:var(--text-dim); background:var(--bg); flex-shrink:0; }
+.diary-form{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.diary-form select,.diary-form input{ background:var(--bg); border:1.4px solid var(--border); border-radius:10px; padding:9px 10px; color:var(--text); font-size:13.5px; font-family:inherit; color-scheme:dark; }
+.diary-form input[type=text]{ flex:1; min-width:160px; }
+.diary-list{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+.diary-list li{ display:flex; align-items:center; gap:10px; border:1.2px solid var(--border); border-radius:12px; padding:9px 12px; font-size:13.5px; }
+.diary-list .dl-main{ flex:1; min-width:0; } .diary-list .dl-main b{ display:block; font-weight:600; overflow-wrap:anywhere; }
+.diary-list .dl-main span{ font-size:12px; color:var(--text-faint); }
+.diary-list .dl-main span.late{ color:#ff8a7a; } .diary-list .dl-main span.soon{ color:var(--cyan); }
+.dl-tag{ font-size:10.5px; font-weight:800; letter-spacing:.06em; padding:3px 8px; border-radius:999px; border:1.2px solid var(--border-strong); color:var(--text-dim); flex-shrink:0; }
+.dl-tag.test{ color:#ffc857; border-color:#ffc85766; }
+.diary-list button{ font-size:12px; font-weight:700; padding:6px 11px; border-radius:999px; border:1.2px solid var(--border-strong); color:var(--text-dim); background:var(--bg); flex-shrink:0; }
+.diary-list button.x{ border:0; background:none; color:var(--text-faint); padding:6px 6px; }
+.road-week{ border:1.2px solid var(--border); border-radius:12px; padding:10px 12px; margin-top:8px; font-size:13.5px; }
+.road-week.now{ border-color:var(--cyan); }
+.road-week b{ display:block; margin-bottom:2px; } .road-week b em{ font-style:normal; font-size:11px; color:var(--cyan); margin-left:6px; letter-spacing:.06em; }
+.road-week ul{ margin:6px 0 0; padding-left:18px; color:var(--text-dim); } .road-week li{ margin:2px 0; }
+.mentor-bar{ display:none; margin:14px 26px 0; padding:12px 14px; border:1.4px solid var(--border-strong); border-radius:14px; background:var(--bg-soft); position:relative; }
+.mentor-bar .mb-who{ font-size:11.5px; font-weight:800; letter-spacing:.06em; color:var(--cyan); margin-bottom:4px; }
+.mentor-bar .mb-q{ font-size:14px; margin:0 22px 10px 0; line-height:1.5; }
+.mentor-bar .mb-chips{ display:flex; gap:8px; flex-wrap:wrap; }
+.mentor-bar .mb-chips button{ font-size:12.5px; font-weight:600; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text); background:var(--bg); }
+.mentor-bar .mb-x{ position:absolute; top:8px; right:10px; border:0; background:none; color:var(--text-faint); font-size:18px; line-height:1; padding:2px 6px; }
+@media (max-width:560px){ .mentor-bar{ margin:12px 14px 0; } }
+.grp-card{ max-width:560px; display:flex; flex-direction:column; height:min(86vh,680px); padding:0; overflow:hidden; }
+.grp-head{ padding:16px 18px 12px; border-bottom:1px solid var(--border); }
+.grp-head h3{ margin:0; font-size:17px; } .grp-sub{ font-size:12.5px; color:var(--text-dim); margin-top:4px; }
+.grp-code{ display:inline-block; font-family:var(--font-mono,monospace); letter-spacing:.18em; font-weight:800; color:var(--cyan); }
+.grp-feed{ flex:1; overflow-y:auto; padding:14px 18px; display:flex; flex-direction:column; gap:10px; }
+.grp-sys{ align-self:center; font-size:12px; color:var(--text-faint); }
+.grp-q{ align-self:flex-end; max-width:85%; background:var(--bg); border:1.2px solid var(--border-strong); border-radius:12px; padding:8px 12px; font-size:14px; }
+.grp-q i{ display:block; font-style:normal; font-size:11px; font-weight:800; color:var(--cyan); margin-bottom:2px; }
+.grp-a{ align-self:flex-start; max-width:92%; border-left:3px solid var(--cyan); padding:4px 0 4px 12px; font-size:14.5px; line-height:1.6; }
+.grp-a i{ display:block; font-style:normal; font-size:11px; font-weight:800; letter-spacing:.06em; color:var(--cyan); margin-bottom:2px; }
+.grp-a p{ margin:0 0 6px; } .grp-a ul,.grp-a ol{ margin:4px 0 6px; padding-left:20px; }
+.grp-form{ display:flex; gap:8px; padding:12px 14px; border-top:1px solid var(--border); }
+.grp-form input{ flex:1; min-width:0; background:var(--bg); border:1.4px solid var(--border); border-radius:12px; padding:11px 12px; color:var(--text); font-size:14.5px; font-family:inherit; }
+.grp-bar{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.grp-bar button{ font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft); }
+.grp-bar button.primary{ background:var(--cyan); color:#04101a; border-color:var(--cyan); }
+.grp-join{ display:flex; gap:8px; margin-top:8px; } .grp-join input{ flex:1; min-width:0; background:var(--bg); border:1.4px solid var(--border); border-radius:12px; padding:11px 12px; color:var(--text); font-size:15px; letter-spacing:.14em; text-transform:uppercase; font-family:inherit; }
 .notes-ov{ position:fixed; inset:0; z-index:550; background:rgba(5,8,18,.72); display:flex; align-items:center; justify-content:center; padding:16px; }
 .notes-card{ width:100%; max-width:640px; max-height:90vh; overflow-y:auto; background:var(--surface-2,var(--bg-soft)); border:1px solid var(--border-strong); border-radius:18px; padding:24px 24px 20px; color:var(--text); }
 .notes-card h3{ font-size:20px; font-weight:800; margin:0 0 4px; }
@@ -810,6 +850,19 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <div class="exam-form"><input type="text" id="examName" maxlength="40" placeholder="Exam ka naam (jaise: Matric Boards)"><input type="date" id="examDate"><button type="button" class="btn btn-primary" id="examSave">Save</button><button type="button" class="exam-link" id="examClear">Hata do</button></div>
       </div>
       <div id="examView"><p class="exam-empty">Exam ki date daalo, hum tumhara roz ka study plan bana denge.</p></div>
+      <div id="roadBox"></div>
+    </div>
+    <div class="exam-card" id="diaryCard">
+      <div class="exam-head"><b>School diary</b><button type="button" id="diaryToggle" class="exam-link">+ Likho</button></div>
+      <div class="diary-form" id="diaryForm" style="display:none;">
+        <select id="dfType" aria-label="Type"><option value="hw">Homework</option><option value="test">Test</option></select>
+        <select id="dfSubj" aria-label="Subject"></select>
+        <input type="text" id="dfText" maxlength="140" placeholder="Kya hai? (jaise: Ex 5.2 sawal 1 se 10)">
+        <input type="date" id="dfDate" aria-label="Kab tak / test ki date">
+        <button type="button" class="btn btn-primary" id="dfSave">Save</button>
+      </div>
+      <ul class="diary-list" id="diaryList"></ul>
+      <p class="exam-empty" id="diaryEmpty">Homework aur tests yahan likho. Tutor roz tumse poochhega: homework hua? test kaisa hua? Ya tutor se kaho "mujhe kal Math ka test hai" to wo khud likh lega.</p>
     </div>
     <div class="statbar">
       <div><b id="statSolved">—</b><span>MCQs solve kiye</span></div>
@@ -1008,7 +1061,12 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
             <span id="callModeLabel" data-i18n="callModeLabel">Online Class</span>
           </button>
+          <button type="button" id="groupBtn" style="display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.2 2.7-5.5 6-5.5s6 2.3 6 5.5"/><circle cx="17" cy="9" r="2.4"/><path d="M17 14.5c2.4 0 4 1.7 4 4"/></svg>
+            <span>Doston ke sath</span>
+          </button>
         </div>
+        <div class="mentor-bar" id="mentorBar" aria-live="polite"></div>
         <div id="chatMessages" style="max-height:380px; min-height:180px; overflow-y:auto; padding:22px 26px 8px;"></div>
         <div style="padding:14px 26px 22px; border-top:1px solid var(--border);">
           <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;" id="doubtChips">
@@ -1328,7 +1386,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 14-Oct-B</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-A</div>
   </div>
 </footer>
 
@@ -2558,6 +2616,13 @@ async function cloudPull() {
     });
     if (changed) localStorage.setItem(rnActKey(), JSON.stringify(act));
     if (Object.keys(act).some((d) => !ca[d] || (act[d].mcq || 0) > (ca[d].mcq || 0) || (act[d].doubt || 0) > (ca[d].doubt || 0))) cloudPush('activity', act);
+    try {
+      const cp = cloud.planner, lp = plLoad();
+      if (cp && Array.isArray(cp.items) && (Number(cp.t) || 0) > (lp.t || 0)) {
+        localStorage.setItem(plKey(), JSON.stringify({ items: cp.items, road: cp.road || null, t: Number(cp.t) }));
+      } else if ((lp.items.length || lp.road) && (lp.t || 0) > ((cp && Number(cp.t)) || 0)) { cloudPush('planner', lp); }
+      renderDiary(); renderRoad(); renderMentor();
+    } catch (e) { /* silent */ }
     renderStreak();
     if (reloadChat && !doubtBtn.disabled && !callActive) { chatHistory = loadSavedChat(currentSubject); renderSavedChat(); }
   } catch (e) { /* silent */ }
@@ -2630,6 +2695,7 @@ function initSubjectChat() {
   buildTutorBar(); renderSubjectChips(); updateCallIdentity();
   renderSavedChat();
   if (!chatHistory.length) showTutorGreeting();
+  if (typeof renderMentor === 'function') renderMentor();
 }
 
 function switchSubject(id) {
@@ -2809,12 +2875,15 @@ async function submitUserMessage(question, photo) {
         history: chatHistory.slice(0, -1),
         subject: currentSubject,
         language: getCurrentLanguage(),
-        voice: callActive
+        voice: callActive,
+        planner: mentorPayload(),
+        today: rnDayKey()
       }
     });
     const data = await res.json();
     if (!res.ok) { const err = new Error(data.error || 'Request failed'); err.status = res.status; throw err; }
     document.getElementById('thinkingBubble')?.remove();
+    data.answer = mentorExtract(data.answer);
     appendMessage('assistant', data.answer);
     recordActivity('doubt');
     chatHistory.push({ role: 'assistant', content: data.answer });
@@ -4436,6 +4505,330 @@ async function renderHome() {
     }
   } catch (e) { /* silent */ }
 }
+
+// ============ Mentor: School diary + roadmap + tutor check-ins ============
+function plKey() { return 'nishaan_planner_' + (localStorage.getItem('nishaan_user_id') || 'guest'); }
+function plLoad() {
+  try { const p = JSON.parse(localStorage.getItem(plKey())); if (p && Array.isArray(p.items)) return { items: p.items, road: p.road || null, t: Number(p.t) || 0 }; } catch (e) {}
+  return { items: [], road: null, t: 0 };
+}
+function plSave(p) {
+  p.t = Date.now(); p.items = p.items.slice(-40);
+  try { localStorage.setItem(plKey(), JSON.stringify(p)); } catch (e) {}
+  cloudPush('planner', p);
+  renderDiary(); renderRoad(); renderMentor();
+}
+const plNewId = () => Math.random().toString(36).slice(2, 10);
+function plDate(s) { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); }
+function plDays(due) { if (!due) return null; const t0 = plDate(rnDayKey()); return Math.round((plDate(due) - t0) / 86400000); }
+function plDueText(n) {
+  if (n === null) return '';
+  if (n < -1) return Math.abs(n) + ' din pehle tha';
+  if (n === -1) return 'kal tha';
+  if (n === 0) return 'aaj';
+  if (n === 1) return 'kal';
+  return n + ' din baad';
+}
+function plAddItem(type, subject, text, due) {
+  text = String(text || '').trim().slice(0, 140); if (!text) return false;
+  const p = plLoad();
+  if (p.items.some((i) => !i.done && i.type === type && i.subject === subject && i.text.toLowerCase() === text.toLowerCase())) return false;
+  p.items.push({ id: plNewId(), type, subject: TUTORS[subject] ? subject : 'general', text, due: due || '', done: false });
+  plSave(p); return true;
+}
+function mentorPayload() {
+  const p = plLoad(), ex = examLoad();
+  const items = p.items.filter((i) => !i.done).slice(-12).map((i) => ({ id: i.id, type: i.type, subject: i.subject, text: i.text, due: i.due, done: false }));
+  const wk = roadCurrent(p.road);
+  return { items, exam: ex || undefined, weekFocus: wk ? (wk.w.label ? wk.w.label + ': ' : '') + wk.w.focus : undefined };
+}
+function mentorExtract(text) {
+  let out = String(text || ''), added = 0;
+  out = out.replace(/\[\[DIARY:([^\]]*)\]\]/g, (m, body) => {
+    const [type, subj, txt, due] = body.split('|').map((x) => (x || '').trim());
+    if ((type === 'hw' || type === 'test') && txt && plAddItem(type, TUTORS[subj] ? subj : currentSubject, txt, /^\d{4}-\d{2}-\d{2}$/.test(due || '') ? due : '')) added++;
+    return '';
+  }).replace(/\[\[DIARY[^\]]*$/, '').trim();
+  if (added) rnToast('Diary mein likh liya.');
+  return out;
+}
+
+// ---- Diary UI ----
+function renderDiary() {
+  const ul = document.getElementById('diaryList'); if (!ul) return;
+  const p = plLoad();
+  const pending = p.items.filter((i) => !i.done).sort((a, b) => (a.due || '9999') < (b.due || '9999') ? -1 : 1);
+  ul.textContent = '';
+  document.getElementById('diaryEmpty').style.display = pending.length ? 'none' : '';
+  pending.forEach((i) => {
+    const li = document.createElement('li');
+    const tag = document.createElement('span'); tag.className = 'dl-tag' + (i.type === 'test' ? ' test' : ''); tag.textContent = i.type === 'test' ? 'TEST' : 'HW';
+    const main = document.createElement('div'); main.className = 'dl-main';
+    const b = document.createElement('b'); b.textContent = i.text;
+    const sp = document.createElement('span'); const n = plDays(i.due);
+    sp.textContent = (TUTORS[i.subject] ? TUTORS[i.subject].label : '') + (i.due ? ' · ' + plDueText(n) : '');
+    if (n !== null && n < 0) sp.className = 'late'; else if (n !== null && n <= 1) sp.className = 'soon';
+    main.append(b, sp);
+    li.append(tag, main);
+    if (i.type === 'test') {
+      const pr = document.createElement('button'); pr.type = 'button'; pr.textContent = 'Practice';
+      pr.addEventListener('click', () => { mcqInput.value = i.text; showView('practice'); });
+      li.appendChild(pr);
+    }
+    const ok = document.createElement('button'); ok.type = 'button'; ok.textContent = 'Ho gaya';
+    ok.addEventListener('click', () => { const q = plLoad(); const it = q.items.find((x) => x.id === i.id); if (it) { it.done = true; plSave(q); } });
+    const x = document.createElement('button'); x.type = 'button'; x.className = 'x'; x.setAttribute('aria-label', 'Hata do'); x.textContent = '×';
+    x.addEventListener('click', () => { const q = plLoad(); q.items = q.items.filter((y) => y.id !== i.id); plSave(q); });
+    li.append(ok, x); ul.appendChild(li);
+  });
+}
+(function initDiary() {
+  const form = document.getElementById('diaryForm'); if (!form) return;
+  const subj = document.getElementById('dfSubj');
+  Object.keys(TUTORS).forEach((id) => { const o = document.createElement('option'); o.value = id; o.textContent = id === 'general' ? 'Koi aur' : TUTORS[id].label; subj.appendChild(o); });
+  document.getElementById('diaryToggle').addEventListener('click', () => { form.style.display = form.style.display === 'none' ? 'flex' : 'none'; });
+  document.getElementById('dfSave').addEventListener('click', () => {
+    const t = document.getElementById('dfText'), d = document.getElementById('dfDate');
+    if (!t.value.trim()) { rnToast('Likho kya hai (homework ya test).'); return; }
+    plAddItem(document.getElementById('dfType').value, subj.value, t.value, d.value);
+    t.value = ''; d.value = ''; form.style.display = 'none'; rnToast('Diary mein likh liya.');
+  });
+  renderDiary();
+})();
+
+// ---- Tutor ke daily check-in ----
+function mentorSend(text, itemId, result) {
+  if (doubtBtn.disabled || imageBusy || callActive) { rnToast('Pehle jawab aane ka intezar karein.'); return; }
+  if (itemId) { const p = plLoad(); const it = p.items.find((x) => x.id === itemId); if (it) { it.done = result || true; plSave(p); } }
+  mentorDismiss();
+  submitUserMessage(text);
+}
+function mentorDismiss() {
+  try { localStorage.setItem('nishaan_checkin_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + currentSubject + '_' + rnDayKey(), 'x'); } catch (e) {}
+  const bar = document.getElementById('mentorBar'); if (bar) { bar.style.display = 'none'; bar.textContent = ''; }
+}
+function renderMentor() {
+  const bar = document.getElementById('mentorBar'); if (!bar) return;
+  bar.textContent = ''; bar.style.display = 'none';
+  if (callActive) return;
+  try { if (localStorage.getItem('nishaan_checkin_' + (localStorage.getItem('nishaan_user_id') || 'guest') + '_' + currentSubject + '_' + rnDayKey()) === 'x') return; } catch (e) {}
+  const s = currentSubject, p = plLoad();
+  const mine = p.items.filter((i) => !i.done && (s === 'general' || i.subject === s || i.subject === 'general'));
+  const dd = (i) => plDays(i.due);
+  const lbl = (i) => (s === 'general' && TUTORS[i.subject] && i.subject !== 'general' ? TUTORS[i.subject].label + ' ' : '') + i.text;
+  let q = '', chips = [];
+  const pastTest = mine.find((i) => i.type === 'test' && dd(i) !== null && dd(i) < 0);
+  const todayTest = mine.find((i) => i.type === 'test' && dd(i) === 0);
+  const hw = mine.filter((i) => i.type === 'hw' && (dd(i) === null || dd(i) <= 1)).sort((a, b) => (dd(a) === null ? 9 : dd(a)) - (dd(b) === null ? 9 : dd(b)))[0];
+  const nextTest = mine.filter((i) => i.type === 'test' && dd(i) !== null && dd(i) > 0 && dd(i) <= 7).sort((a, b) => dd(a) - dd(b))[0];
+  if (pastTest) {
+    q = '"' + lbl(pastTest) + '" ka test ' + plDueText(dd(pastTest)) + '. Kaisa hua?';
+    chips = [['Bohot acha hua', () => mentorSend('Mera ' + lbl(pastTest) + ' ka test ho gaya, bohot acha hua.', pastTest.id, 'good')],
+      ['Theek hua', () => mentorSend('Mera ' + lbl(pastTest) + ' ka test ho gaya, theek hua.', pastTest.id, 'ok')],
+      ['Acha nahi hua', () => mentorSend('Mera ' + lbl(pastTest) + ' ka test ho gaya, acha nahi hua. Mujhe samjhao kahan ghalti hui aur ab kya karun.', pastTest.id, 'bad')]];
+  } else if (todayTest) {
+    q = 'Aaj "' + lbl(todayTest) + '" ka test hai. Tayyari kaisi hai? Chaho to jaldi se 5 sawal ka mini test le leti/leta hoon.'.replace('le leti/leta hoon', 'lein');
+    chips = [['Mini test lo', () => mentorSend('Mera ' + lbl(todayTest) + ' ka test aaj hai. Mujhse 5 sawal ka mini test lo, ek ek karke.')],
+      ['Aakhri revision', () => mentorSend('Mera ' + lbl(todayTest) + ' ka test aaj hai. Aakhri minute ka revision karwao, sirf sab se ahem points.')]];
+  } else if (hw) {
+    const n = dd(hw);
+    q = (n !== null && n < 0 ? 'Ye homework baqi hai (' + plDueText(n) + '): ' : n === 0 ? 'Aaj ka homework: ' : n === 1 ? 'Kal ka homework: ' : 'Homework: ') + '"' + lbl(hw) + '". Ho gaya ya saath karein?';
+    chips = [['Saath karte hain', () => mentorSend('Mera homework hai: ' + lbl(hw) + '. Mujhe step by step guide karo, pehle hint do, seedha jawab nahi.')],
+      ['Kar liya', () => { const q2 = plLoad(); const it = q2.items.find((x) => x.id === hw.id); if (it) { it.done = true; plSave(q2); } mentorDismiss(); rnToast('Shabash! Homework tick ho gaya.'); }],
+      ['Baad mein', mentorDismiss]];
+  } else if (nextTest) {
+    q = '"' + lbl(nextTest) + '" ka test ' + plDueText(dd(nextTest)) + ' hai. Tayyari kahan tak pahunchi?';
+    chips = [['Mini test lo', () => mentorSend('Mera ' + lbl(nextTest) + ' ka test ' + plDueText(dd(nextTest)) + ' hai. Mujhse 5 sawal ka mini test lo, ek ek karke.')],
+      ['Kya parhun?', () => mentorSend('Mera ' + lbl(nextTest) + ' ka test ' + plDueText(dd(nextTest)) + ' hai. Batao kya kya revise karun aur kis tarteeb se.')],
+      ['Baad mein', mentorDismiss]];
+  } else {
+    q = s === 'general' ? 'Aaj school mein kya parhaya? Koi homework ya test mila?' : 'Aaj ' + TUTORS[s].label + ' mein kya parhaya? Koi homework ya test mila?';
+    chips = [['Homework mila hai', () => { mentorDismiss(); doubtInput.value = 'Mujhe homework mila hai: '; doubtInput.focus(); }],
+      ['Test aane wala hai', () => { mentorDismiss(); doubtInput.value = 'Mera test aane wala hai: '; doubtInput.focus(); }],
+      ['Aaj kuch nahi', mentorDismiss]];
+  }
+  const who = document.createElement('div'); who.className = 'mb-who'; who.textContent = tutorName().toUpperCase() + ' POOCHH RAHI HAIN'.replace('RAHI HAIN', TUTORS[s].gender === 'm' ? 'RAHE HAIN' : 'RAHI HAIN');
+  const qq = document.createElement('p'); qq.className = 'mb-q'; qq.textContent = q;
+  const row = document.createElement('div'); row.className = 'mb-chips';
+  chips.forEach(([l, fn]) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = l; b.addEventListener('click', fn); row.appendChild(b); });
+  const x = document.createElement('button'); x.type = 'button'; x.className = 'mb-x'; x.setAttribute('aria-label', 'Band karo'); x.textContent = '×'; x.addEventListener('click', mentorDismiss);
+  bar.append(who, qq, row, x); bar.style.display = 'block';
+}
+
+// ---- Exam roadmap ----
+function roadCurrent(road) {
+  if (!road || !road.weeks || !road.weeks.length || !road.start) return null;
+  const n = Math.floor((plDate(rnDayKey()) - plDate(road.start)) / 86400000 / 7);
+  const i = Math.min(Math.max(n, 0), road.weeks.length - 1);
+  return { w: road.weeks[i], i };
+}
+let roadBusy = false, roadOpenAll = false;
+function renderRoad() {
+  const box = document.getElementById('roadBox'); if (!box) return;
+  box.textContent = '';
+  const ex = examLoad(); if (!ex) return;
+  const days = plDays(ex.date); if (days === null || days < 1) return;
+  const p = plLoad(), road = p.road;
+  const mk = (txt, fn, cls) => { const b = document.createElement('button'); b.type = 'button'; b.className = cls || 'btn btn-outline'; b.textContent = txt; b.addEventListener('click', fn); return b; };
+  if (!road || road.examDate !== ex.date) {
+    const pp = document.createElement('p'); pp.className = 'exam-empty'; pp.style.margin = '12px 0 10px';
+    pp.textContent = road ? 'Exam ki date badal gayi hai, naya roadmap bana lo.' : 'Hafte ba hafte ka poora roadmap chahiye? Tutor tumhari class, exam date aur weak topics dekh kar bana dega.';
+    box.append(pp, mk(roadBusy ? 'Ban raha hai...' : 'Roadmap banao', makeRoad, 'btn btn-primary'));
+    return;
+  }
+  const cur = roadCurrent(road);
+  const h = document.createElement('div'); h.style.cssText = 'font-size:12px;font-weight:800;letter-spacing:.06em;color:var(--cyan);margin:14px 0 2px;'; h.textContent = 'ROADMAP';
+  box.appendChild(h);
+  road.weeks.forEach((w, i) => {
+    if (!roadOpenAll && cur && i !== cur.i) return;
+    const d = document.createElement('div'); d.className = 'road-week' + (cur && i === cur.i ? ' now' : '');
+    const b = document.createElement('b'); b.textContent = (w.label || 'Hafta ' + (i + 1)) + (w.focus ? ': ' + w.focus : '');
+    if (cur && i === cur.i) { const e = document.createElement('em'); e.textContent = 'IS HAFTE'; b.appendChild(e); }
+    d.appendChild(b);
+    if (w.tasks && w.tasks.length) { const ul = document.createElement('ul'); w.tasks.forEach((t) => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); }); d.appendChild(ul); }
+    box.appendChild(d);
+  });
+  const row = document.createElement('div'); row.style.cssText = 'display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;';
+  row.appendChild(mk(roadOpenAll ? 'Sirf is hafte ka dekho' : 'Poora roadmap dekho', () => { roadOpenAll = !roadOpenAll; renderRoad(); }, 'exam-link'));
+  row.appendChild(mk('Naya banao', makeRoad, 'exam-link'));
+  if (road.tip) { const t = document.createElement('span'); t.style.cssText = 'font-size:12.5px;color:var(--text-dim);'; t.textContent = 'Tip: ' + road.tip; row.appendChild(t); }
+  box.appendChild(row);
+}
+async function makeRoad() {
+  if (roadBusy) return;
+  if (!localStorage.getItem('nishaan_user_id')) { rnToast('Roadmap banane ke liye pehle login karein.'); return; }
+  const ex = examLoad(); if (!ex) return;
+  roadBusy = true; renderRoad();
+  try {
+    const res = await chatFetch('/api/roadmap', { method: 'POST', body: { examName: ex.name, examDate: ex.date, studentClass: localStorage.getItem('nishaan_student_class'), language: getCurrentLanguage(), today: rnDayKey() } });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Roadmap nahi ban saka.');
+    const p = plLoad(); p.road = data.road; roadOpenAll = false; plSave(p);
+    rnToast('Roadmap tayyar! Tutor bhi isi ke hisab se guide karega.');
+  } catch (e) { rnToast(e.message || 'Roadmap nahi ban saka.'); }
+  finally { roadBusy = false; renderRoad(); }
+}
+// exam card dobara bane to roadmap bhi dobara
+if (typeof renderExam === 'function') { const _re = renderExam; renderExam = function () { _re(); renderRoad(); }; }
+renderRoad(); renderMentor();
+
+// ============ Group class (doston ke sath ek class) ============
+const GRP_JUNIOR = ['primary', 'class_1', 'class_2', 'class_3', 'class_4', 'class_5'];
+let grp = null; // { code, since, timer, busy, isHost }
+function grpEligible() {
+  if (!localStorage.getItem('nishaan_user_id')) { rnToast('Group class ke liye pehle login karein.'); openAuthModal(); return false; }
+  const c = localStorage.getItem('nishaan_student_class');
+  if (!c || GRP_JUNIOR.includes(c)) { rnToast('Group class Class 6 aur us se upar ke liye hai.'); return false; }
+  return true;
+}
+function grpBody(extra) { return Object.assign({ studentClass: localStorage.getItem('nishaan_student_class'), name: (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0] || 'Student' }, extra || {}); }
+function grpClose() { if (grp) { clearInterval(grp.timer); grp = null; } closeNotes(); }
+function grpMenu(prefill) {
+  if (!grpEligible()) return;
+  closeNotes();
+  const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card';
+  const add = (tag, text, cls) => { const e = document.createElement(tag); e.textContent = text; if (cls) e.className = cls; card.appendChild(e); return e; };
+  add('h3', 'Doston ke sath class');
+  add('div', 'Sab ek hi tutor se ek saath parhein. Sirf tutor se sawal poochh sakte hain, free chat nahi. Max 6 dost.', 'nt-by');
+  add('h4', 'Nayi class');
+  add('div', TUTORS[currentSubject].name + ' (' + TUTORS[currentSubject].label + ') class lenge.', 'grp-sub');
+  const bar = document.createElement('div'); bar.className = 'grp-bar';
+  const go = document.createElement('button'); go.type = 'button'; go.className = 'primary'; go.textContent = 'Class shuru karo';
+  go.addEventListener('click', async () => {
+    go.disabled = true; go.textContent = '...';
+    try {
+      const res = await chatFetch('/api/room', { method: 'POST', body: grpBody({ subject: currentSubject }) });
+      const d = await res.json(); if (!res.ok) throw new Error(d.error || 'Class nahi ban saki.');
+      grpOpen(d);
+    } catch (e) { rnToast(e.message); go.disabled = false; go.textContent = 'Class shuru karo'; }
+  });
+  bar.appendChild(go); card.appendChild(bar);
+  add('h4', 'Code se join karo');
+  const row = document.createElement('div'); row.className = 'grp-join';
+  const inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 6; inp.placeholder = 'CODE'; inp.setAttribute('aria-label', 'Class code'); inp.value = (prefill || '').toUpperCase();
+  const jb = document.createElement('button'); jb.type = 'button'; jb.className = 'btn btn-primary'; jb.textContent = 'Join';
+  const doJoin = async () => {
+    const code = inp.value.trim().toUpperCase(); if (code.length < 6) { rnToast('6 huroof ka code likhein.'); return; }
+    jb.disabled = true;
+    try {
+      const res = await chatFetch('/api/room/' + encodeURIComponent(code) + '/join', { method: 'POST', body: grpBody() });
+      const d = await res.json(); if (!res.ok) throw new Error(d.error || 'Join nahi ho saka.');
+      grpOpen(d);
+    } catch (e) { rnToast(e.message); jb.disabled = false; }
+  };
+  jb.addEventListener('click', doJoin); inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') doJoin(); });
+  row.append(inp, jb); card.appendChild(row);
+  const cb = document.createElement('div'); cb.className = 'nt-actions';
+  const c = document.createElement('button'); c.type = 'button'; c.textContent = 'Close'; c.addEventListener('click', closeNotes); cb.appendChild(c); card.appendChild(cb);
+  ov.appendChild(card); ov.addEventListener('click', (e) => { if (e.target === ov) closeNotes(); });
+  document.body.appendChild(ov);
+}
+function grpOpen(first) {
+  closeNotes();
+  grp = { code: first.code, since: 0, timer: null, busy: false, isHost: !!first.isHost };
+  const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card grp-card';
+  card.innerHTML = '<div class="grp-head"><h3 id="grpTitle"></h3><div class="grp-sub" id="grpSub"></div><div class="grp-bar"><button type="button" id="grpShare" class="primary">WhatsApp par bulao</button><button type="button" id="grpCopy">Code copy</button><button type="button" id="grpLeave"></button></div></div><div class="grp-feed" id="grpFeed" aria-live="polite"></div><form class="grp-form" id="grpForm"><input type="text" id="grpInput" maxlength="300" placeholder="Tutor se sawal poochho..." autocomplete="off"><button type="submit" class="btn btn-primary" id="grpSend">Bhejo</button></form>';
+  ov.appendChild(card); document.body.appendChild(ov);
+  const $ = (id) => document.getElementById(id);
+  const link = location.origin + '/?room=' + grp.code;
+  $('grpLeave').textContent = grp.isHost ? 'Class khatam' : 'Chhod do';
+  $('grpShare').addEventListener('click', () => window.open('https://wa.me/?text=' + encodeURIComponent('Aao Rehnuma par saath parhte hain! Class code: ' + grp.code + '\n' + link), '_blank', 'noopener'));
+  $('grpCopy').addEventListener('click', async () => { try { await navigator.clipboard.writeText(link); rnToast('Link copy ho gaya'); } catch (e) { rnToast('Code: ' + grp.code); } });
+  $('grpLeave').addEventListener('click', async () => {
+    const code = grp && grp.code; grpClose();
+    try { if (code) await chatFetch('/api/room/' + code + '/leave', { method: 'POST', body: {} }); } catch (e) {}
+  });
+  $('grpForm').addEventListener('submit', async (e) => {
+    e.preventDefault(); const inp = $('grpInput'), q = inp.value.trim(); if (!q || !grp) return;
+    inp.value = ''; $('grpSend').disabled = true;
+    try {
+      const res = await chatFetch('/api/room/' + grp.code + '/ask', { method: 'POST', body: { question: q } });
+      if (!res.ok) { const d = await res.json().catch(() => ({})); rnToast(d.error || 'Sawal nahi ja saka.'); if (d.code === 'ROOM_BUSY') inp.value = q; }
+      grpPoll();
+    } catch (err) { rnToast('Internet check karein.'); inp.value = q; }
+    finally { const b = $('grpSend'); if (b) b.disabled = false; }
+  });
+  grpRender(first);
+  grp.timer = setInterval(grpPoll, 2500);
+}
+function grpRender(d) {
+  const feed = document.getElementById('grpFeed'); if (!feed || !grp) return;
+  document.getElementById('grpTitle').textContent = d.tutor + ' ki class';
+  document.getElementById('grpSub').innerHTML = '';
+  const sub = document.getElementById('grpSub');
+  sub.append('Code: '); const cd = document.createElement('span'); cd.className = 'grp-code'; cd.textContent = grp.code; sub.appendChild(cd);
+  sub.append(' · ' + d.members.length + ' dost: ' + d.members.join(', ') + (d.busy ? ' · tutor soch rahe hain...' : ''));
+  const stick = feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 40;
+  (d.events || []).forEach((ev) => {
+    if (ev.seq <= grp.since) return; grp.since = Math.max(grp.since, ev.seq);
+    const el = document.createElement('div');
+    if (ev.kind === 'sys') { el.className = 'grp-sys'; el.textContent = ev.text; }
+    else if (ev.kind === 'q') { el.className = 'grp-q'; const i = document.createElement('i'); i.textContent = ev.who; el.append(i, document.createTextNode(ev.text)); }
+    else { el.className = 'grp-a'; const i = document.createElement('i'); i.textContent = ev.who.toUpperCase(); el.appendChild(i); const b = document.createElement('div'); b.innerHTML = renderTutorMarkdown(ev.text); el.appendChild(b); }
+    feed.appendChild(el);
+  });
+  if (stick || grp.since <= 1) feed.scrollTop = feed.scrollHeight;
+  if (d.ended) { clearInterval(grp.timer); const f = document.getElementById('grpForm'); if (f) f.style.display = 'none'; }
+}
+async function grpPoll() {
+  if (!grp || grp.busy) return; grp.busy = true; const g = grp;
+  try {
+    const res = await chatFetch('/api/room/' + g.code + '?since=' + g.since);
+    if (!grp || grp !== g) return;
+    if (res.status === 404 || res.status === 403 || res.status === 410) { rnToast('Class khatam ho gayi.'); grpClose(); return; }
+    if (res.ok) grpRender(await res.json());
+  } catch (e) { /* internet gaya, agli dafa */ }
+  finally { if (grp === g) g.busy = false; }
+}
+document.getElementById('groupBtn').addEventListener('click', () => grpMenu());
+(function roomFromLink() {
+  let code = ''; try { code = (new URLSearchParams(location.search).get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); } catch (e) {}
+  if (code.length !== 6) return;
+  try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+  setTimeout(() => { showView('study'); grpMenu(code); }, 500);
+})();
 
 cloudPull();
 
