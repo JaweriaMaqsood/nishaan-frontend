@@ -234,12 +234,13 @@ section{ position:relative; z-index:1; padding:100px 0; scroll-margin-top:88px; 
 .how-step h3{ font-size:18px; margin-bottom:8px; }
 .how-step p{ font-size:14.5px; color:var(--text-dim); }
 
-.pay-box{ max-width:420px; margin:26px auto 0; padding:18px; border:1.6px solid var(--border); border-radius:16px; background:var(--bg-soft); text-align:center; }
-.pay-title{ font-weight:700; margin-bottom:12px; }
-.pay-row{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--border); font-size:14px; }
+.pay-card{ max-width:400px; text-align:center; }
+.pay-card h3{ margin-bottom:12px; }
+.pay-row{ display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--border); font-size:14px; }
 .pay-row span{ opacity:.75; }
-.pay-box .btn{ margin-top:14px; }
+.pay-steps{ text-align:left; margin:14px 0 0; padding-left:20px; font-size:13.5px; line-height:1.7; }
 .pay-note{ font-size:12.5px; opacity:.75; margin-top:10px; }
+.pay-card .btn{ margin-top:12px; width:100%; }
 .pricing-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; max-width:760px; margin:0 auto; }
 .price-card{
   background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg);
@@ -1335,15 +1336,8 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
           <li><span class="price-check">✓</span><span data-i18n="pricePro3">Monthly progress report (coming soon)</span></li>
           <li><span class="price-check">✓</span><span data-i18n="pricePro4">Full past-paper MCQ bank</span></li>
         </ul>
-        <a href="#waitlist" class="btn btn-primary btn-block" data-i18n="waitlistJoin">Waitlist join karo</a>
+        <button type="button" class="btn btn-primary btn-block" id="buyProBtn" data-i18n="buyPro">Pro kharido</button>
       </div>
-    </div>
-    <div class="pay-box reveal">
-      <div class="pay-title" data-i18n="payTitle">Payment sirf JazzCash se</div>
-      <div class="pay-row"><span data-i18n="payAcc">Account</span><b>Javeria Maqsood</b></div>
-      <div class="pay-row"><span data-i18n="payNum">JazzCash number</span><b id="payNumTxt">0326 3417092</b></div>
-      <button type="button" class="btn btn-outline" id="payCopy" data-i18n="payCopy">Number copy karo</button>
-      <p class="pay-note" data-i18n="payNote">Pro launch ke baad shuru hoga. Abhi payment bhejne ki zaroorat nahi.</p>
     </div>
   </div>
 </section>
@@ -1419,7 +1413,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 19-Oct-A</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 19-Oct-B</div>
   </div>
 </footer>
 
@@ -1656,7 +1650,7 @@ const translations = {
     priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'For full access',
     pricePro1: 'Unlimited doubts and MCQs', pricePro2: 'Detailed weak-area tracking',
     pricePro3: 'Monthly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
-    payTitle: 'Payment via JazzCash only', payAcc: 'Account', payNum: 'JazzCash number', payCopy: 'Copy number', payNote: 'Pro starts after launch. No need to send any payment right now.',
+    buyPro: 'Buy Pro', payTitle: 'Pay with JazzCash', payAmt: 'Amount', payAcc: 'Account name', payNum: 'JazzCash number', payCopy: 'Copy number', payS1: 'Open your JazzCash app', payS2: 'Choose Send Money and paste this number', payS3: 'Send the amount shown above', payS4: 'After sending, tell us — we will turn on Pro for you', payNote: 'Pro will start after launch. Please wait for our announcement before paying.', payClose: 'Close',
     faqEyebrow: 'Questions & Answers',
     faq1Q: 'When will Rehnuma launch?',
     faq1A: "We're currently building the beta. Waitlist members get access first — you'll hear by email/SMS as soon as the launch date is confirmed.",
@@ -1793,7 +1787,7 @@ const translations = {
     priceBadge: 'ویٹ لسٹ آفر', pricePro: 'پرو', priceProDesc: 'مکمل رسائی کے لیے',
     pricePro1: 'لامحدود سوالات اور MCQs', pricePro2: 'تفصیلی ویک ایریا ٹریکنگ',
     pricePro3: 'ماہانہ پیش رفت رپورٹ (جلد آ رہی ہے)', pricePro4: 'مکمل past-paper MCQ بینک',
-    payTitle: 'ادائیگی صرف جاز کیش سے', payAcc: 'اکاؤنٹ', payNum: 'جاز کیش نمبر', payCopy: 'نمبر کاپی کریں', payNote: 'Pro لانچ کے بعد شروع ہوگا۔ ابھی کوئی ادائیگی بھیجنے کی ضرورت نہیں۔',
+    buyPro: 'Pro خریدیں', payTitle: 'جاز کیش سے ادائیگی', payAmt: 'رقم', payAcc: 'اکاؤنٹ کا نام', payNum: 'جاز کیش نمبر', payCopy: 'نمبر کاپی کریں', payS1: 'اپنی جاز کیش ایپ کھولیں', payS2: 'Send Money چنیں اور یہ نمبر ڈالیں', payS3: 'اوپر دی گئی رقم بھیجیں', payS4: 'بھیجنے کے بعد ہمیں بتائیں، ہم آپ کا Pro چالو کر دیں گے', payNote: 'Pro لانچ کے بعد شروع ہوگا۔ ادائیگی سے پہلے ہمارے اعلان کا انتظار کریں۔', payClose: 'بند کریں',
     faqEyebrow: 'سوالات و جوابات',
     faq1Q: 'رہنما کب لانچ ہوگا؟',
     faq1A: 'ہم ابھی بیٹا بنا رہے ہیں۔ ویٹ لسٹ میں شامل ہونے والوں کو سب سے پہلے رسائی ملے گی، لانچ ڈیٹ کنفرم ہوتے ہی ای میل/ایس ایم ایس سے پتا چل جائے گا۔',
@@ -1930,7 +1924,7 @@ const translations = {
     priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'Full access ke liye',
     pricePro1: 'Unlimited doubts aur MCQs', pricePro2: 'Detailed weak-area tracking',
     pricePro3: 'Monthly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
-    payTitle: 'Payment sirf JazzCash se', payAcc: 'Account', payNum: 'JazzCash number', payCopy: 'Number copy karo', payNote: 'Pro launch ke baad shuru hoga. Abhi payment bhejne ki zaroorat nahi.',
+    buyPro: 'Pro kharido', payTitle: 'JazzCash se payment', payAmt: 'Raqam', payAcc: 'Account ka naam', payNum: 'JazzCash number', payCopy: 'Number copy karo', payS1: 'Apni JazzCash app kholo', payS2: 'Send Money chuno aur ye number daalo', payS3: 'Upar likhi raqam bhejo', payS4: 'Bhejne ke baad hamein batao, hum aapka Pro on kar denge', payNote: 'Pro launch ke baad shuru hoga. Payment se pehle hamare ailaan ka intezar karo.', payClose: 'Band karo',
     faqEyebrow: 'Sawal jawab',
     faq1Q: 'Rehnuma kab launch hoga?',
     faq1A: 'Hum abhi beta build kar rahe hain. Waitlist join karne walon ko sabse pehle access milega, launch date confirm hote hi email/SMS se pata chal jayega.',
@@ -4926,7 +4920,26 @@ async function grpPoll() {
   finally { if (grp === g) g.busy = false; }
 }
 document.getElementById('groupBtn').addEventListener('click', () => grpMenu());
-(function(){ const b = document.getElementById('payCopy'); if (!b) return; b.addEventListener('click', async () => { const num = '03263417092'; try { await navigator.clipboard.writeText(num); rnToast('Number copy ho gaya'); } catch (e) { rnToast(num); } }); })();
+function payOpen() {
+  closeNotes();
+  const t = (k, d) => ((translations[getCurrentLanguage()] || translations.roman)[k]) || d;
+  const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
+  const card = document.createElement('div'); card.className = 'notes-card pay-card';
+  const h = document.createElement('h3'); h.textContent = t('payTitle', 'JazzCash se payment'); card.appendChild(h);
+  const row = (l, v) => { const r = document.createElement('div'); r.className = 'pay-row'; const a = document.createElement('span'); a.textContent = l; const b = document.createElement('b'); b.textContent = v; r.append(a, b); card.appendChild(r); };
+  row(t('payAmt', 'Raqam'), 'Rs 499'); row(t('payAcc', 'Account ka naam'), 'Javeria Maqsood'); row(t('payNum', 'JazzCash number'), '0326 3417092');
+  const cp = document.createElement('button'); cp.type = 'button'; cp.className = 'btn btn-primary'; cp.textContent = t('payCopy', 'Number copy karo');
+  cp.addEventListener('click', async () => { try { await navigator.clipboard.writeText('03263417092'); rnToast('Number copy ho gaya'); } catch (e) { rnToast('0326 3417092'); } });
+  card.appendChild(cp);
+  const ol = document.createElement('ol'); ol.className = 'pay-steps';
+  ['payS1', 'payS2', 'payS3', 'payS4'].forEach((k) => { const li = document.createElement('li'); li.textContent = t(k, ''); ol.appendChild(li); });
+  card.appendChild(ol);
+  const n = document.createElement('p'); n.className = 'pay-note'; n.textContent = t('payNote', ''); card.appendChild(n);
+  const c = document.createElement('button'); c.type = 'button'; c.className = 'btn btn-outline'; c.textContent = t('payClose', 'Band karo'); c.addEventListener('click', closeNotes); card.appendChild(c);
+  ov.appendChild(card); ov.addEventListener('click', (e) => { if (e.target === ov) closeNotes(); });
+  document.body.appendChild(ov);
+}
+document.getElementById('buyProBtn').addEventListener('click', payOpen);
 (function roomFromLink() {
   let code = ''; try { code = (new URLSearchParams(location.search).get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); } catch (e) {}
   if (code.length !== 6) return;
