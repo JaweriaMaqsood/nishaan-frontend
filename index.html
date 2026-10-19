@@ -621,6 +621,9 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 .grp-form input{ flex:1; min-width:0; background:var(--bg); border:1.4px solid var(--border); border-radius:12px; padding:11px 12px; color:var(--text); font-size:14.5px; font-family:inherit; }
 .grp-bar{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
 .grp-bar button{ font-size:12.5px; font-weight:700; padding:7px 13px; border-radius:999px; border:1.4px solid var(--border-strong); color:var(--text-dim); background:var(--bg-soft); }
+.grp-bar button.off{ background:#7a1f2b; border-color:#c4475a; color:#fff; }
+.grp-bar button.live{ background:#1f7a4a; border-color:#34b472; color:#fff; }
+.grp-stat{ font-size:12px; color:var(--cyan); margin-top:6px; min-height:16px; }
 .grp-bar button.primary{ background:var(--cyan); color:#04101a; border-color:var(--cyan); }
 .grp-join{ display:flex; gap:8px; margin-top:8px; } .grp-join input{ flex:1; min-width:0; background:var(--bg); border:1.4px solid var(--border); border-radius:12px; padding:11px 12px; color:var(--text); font-size:15px; letter-spacing:.14em; text-transform:uppercase; font-family:inherit; }
 .ob-card{ max-width:480px; }
@@ -1403,7 +1406,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-E</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-F</div>
   </div>
 </footer>
 
@@ -2268,13 +2271,13 @@ if (!SpeechRecognitionAPI) {
 let voiceGenderMatched = false;
 const MALE_VOICE_RE = /\b(male|david|mark|ravi|hemant|asad|guy|james|george|rishi|prabhat|ryan|liam|daniel|salman|naayf|junior|alex|fred)\b/i;
 const FEMALE_VOICE_RE = /\b(female|zira|heera|hazel|susan|linda|neerja|uzma|aria|jenny|samantha|karen|veena|kalpana|libby|sonia|moira|tessa|victoria)\b/i;
-function pickVoice() {
+function pickVoice(subj) {
   voiceGenderMatched = false;
   if (!SpeechSynthesisAPI) return null;
   const voices = SpeechSynthesisAPI.getVoices();
   if (!voices.length) return null;
   const lang = getCurrentLanguage();
-  const wantMale = (typeof TUTORS !== 'undefined' && TUTORS[currentSubject] && TUTORS[currentSubject].gender === 'm');
+  const wantMale = (typeof TUTORS !== 'undefined' && TUTORS[subj || currentSubject] && TUTORS[subj || currentSubject].gender === 'm');
   const starts = (p) => (v) => (v.lang || '').toLowerCase().replace('_', '-').startsWith(p);
   const isMaleV = (v) => MALE_VOICE_RE.test(v.name) && !/female/i.test(v.name);
   const isFemaleV = (v) => FEMALE_VOICE_RE.test(v.name);
@@ -4745,7 +4748,7 @@ function grpEligible() {
   return true;
 }
 function grpBody(extra) { return Object.assign({ studentClass: localStorage.getItem('nishaan_student_class'), name: (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0] || 'Student' }, extra || {}); }
-function grpClose() { if (grp) { clearInterval(grp.timer); grp = null; } closeNotes(); }
+function grpClose() { if (grp) { clearInterval(grp.timer); grpRecStop(); try { if (SpeechSynthesisAPI) SpeechSynthesisAPI.cancel(); } catch (e) {} grp = null; } closeNotes(); }
 function grpMenu(prefill) {
   if (!grpEligible()) return;
   closeNotes();
@@ -4789,10 +4792,10 @@ function grpMenu(prefill) {
 }
 function grpOpen(first) {
   closeNotes();
-  grp = { code: first.code, since: 0, timer: null, busy: false, isHost: !!first.isHost };
+  grp = { code: first.code, since: 0, timer: null, busy: false, isHost: !!first.isHost, mic: false, rec: null, speaker: true, speaking: false, spokenFrom: first.last || 0, subject: first.subject || 'general', askBusy: false };
   const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
   const card = document.createElement('div'); card.className = 'notes-card grp-card';
-  card.innerHTML = '<div class="grp-head"><h3 id="grpTitle"></h3><div class="grp-sub" id="grpSub"></div><div class="grp-bar"><button type="button" id="grpShare" class="primary">WhatsApp par bulao</button><button type="button" id="grpCopy">Code copy</button><button type="button" id="grpLeave"></button></div></div><div class="grp-feed" id="grpFeed" aria-live="polite"></div><form class="grp-form" id="grpForm"><input type="text" id="grpInput" maxlength="300" placeholder="Tutor se sawal poochho..." autocomplete="off"><button type="submit" class="btn btn-primary" id="grpSend">Bhejo</button></form>';
+  card.innerHTML = '<div class="grp-head"><h3 id="grpTitle"></h3><div class="grp-sub" id="grpSub"></div><div class="grp-bar"><button type="button" id="grpShare" class="primary">WhatsApp par bulao</button><button type="button" id="grpCopy">Code copy</button><button type="button" id="grpMic" class="off">Mic band (muted)</button><button type="button" id="grpSpk" class="live">Tutor ki awaz: on</button><button type="button" id="grpLeave"></button></div><div class="grp-stat" id="grpStat"></div></div><div class="grp-feed" id="grpFeed" aria-live="polite"></div><form class="grp-form" id="grpForm"><input type="text" id="grpInput" maxlength="300" placeholder="Tutor se sawal poochho..." autocomplete="off"><button type="submit" class="btn btn-primary" id="grpSend">Bhejo</button></form>';
   ov.appendChild(card); document.body.appendChild(ov);
   const $ = (id) => document.getElementById(id);
   const link = location.origin + '/?room=' + grp.code;
@@ -4803,18 +4806,78 @@ function grpOpen(first) {
     const code = grp && grp.code; grpClose();
     try { if (code) await chatFetch('/api/room/' + code + '/leave', { method: 'POST', body: {} }); } catch (e) {}
   });
-  $('grpForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); const inp = $('grpInput'), q = inp.value.trim(); if (!q || !grp) return;
-    inp.value = ''; $('grpSend').disabled = true;
-    try {
-      const res = await chatFetch('/api/room/' + grp.code + '/ask', { method: 'POST', body: { question: q } });
-      if (!res.ok) { const d = await res.json().catch(() => ({})); rnToast(d.error || 'Sawal nahi ja saka.'); if (d.code === 'ROOM_BUSY') inp.value = q; }
-      grpPoll();
-    } catch (err) { rnToast('Internet check karein.'); inp.value = q; }
-    finally { const b = $('grpSend'); if (b) b.disabled = false; }
+  $('grpForm').addEventListener('submit', (e) => { e.preventDefault(); const inp = $('grpInput'), q = inp.value.trim(); if (!q) return; inp.value = ''; grpAsk(q, inp); });
+  const spk = $('grpSpk'), mic = $('grpMic');
+  spk.addEventListener('click', () => {
+    if (!grp) return; grp.speaker = !grp.speaker;
+    spk.textContent = 'Tutor ki awaz: ' + (grp.speaker ? 'on' : 'off'); spk.className = grp.speaker ? 'live' : 'off';
+    if (!grp.speaker && SpeechSynthesisAPI) { SpeechSynthesisAPI.cancel(); grp.speaking = false; grpMicResume(); }
   });
+  if (!SpeechRecognitionAPI) { mic.style.display = 'none'; }
+  mic.addEventListener('click', () => { if (!grp) return; grpMicSet(!grp.mic); });
   grpRender(first);
   grp.timer = setInterval(grpPoll, 2500);
+}
+async function grpAsk(q, inp) {
+  if (!grp || grp.askBusy) return; grp.askBusy = true;
+  const sendBtn = document.getElementById('grpSend'); if (sendBtn) sendBtn.disabled = true;
+  try {
+    const res = await chatFetch('/api/room/' + grp.code + '/ask', { method: 'POST', body: { question: q } });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); rnToast(d.error || 'Sawal nahi ja saka.'); if (inp && d.code === 'ROOM_BUSY') inp.value = q; }
+    grpPoll();
+  } catch (err) { rnToast('Internet check karein.'); if (inp) inp.value = q; }
+  finally { if (grp) grp.askBusy = false; const b = document.getElementById('grpSend'); if (b) b.disabled = false; }
+}
+function grpStat(t) { const e = document.getElementById('grpStat'); if (e) e.textContent = t || ''; }
+function grpMicSet(on) {
+  if (!grp) return; grp.mic = on;
+  const mic = document.getElementById('grpMic');
+  if (mic) { mic.textContent = on ? 'Mic on (bolo)' : 'Mic band (muted)'; mic.className = on ? 'live' : 'off'; }
+  if (on) grpRecStart(); else { grpRecStop(); grpStat(''); }
+}
+function grpRecStop() { if (grp && grp.rec) { const r = grp.rec; grp.rec = null; try { r.onend = null; r.stop(); } catch (e) {} } }
+function grpMicResume() { if (grp && grp.mic && !grp.speaking && !grp.rec) setTimeout(grpRecStart, 250); }
+function grpRecStart() {
+  if (!SpeechRecognitionAPI || !grp || !grp.mic || grp.speaking || grp.rec) return;
+  const g = grp, rec = new SpeechRecognitionAPI();
+  rec.lang = recognitionLang(); rec.continuous = false; rec.interimResults = true;
+  let fin = '', interim = '', err = null;
+  rec.onresult = (e) => {
+    interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) { const t = e.results[i][0].transcript; if (e.results[i].isFinal) fin += t + ' '; else interim += t; }
+    const inp = document.getElementById('grpInput'); if (inp) inp.value = (fin + interim).trim();
+  };
+  rec.onerror = (e) => { err = e.error; };
+  rec.onstart = () => grpStat('Sun raha hoon... bolo');
+  rec.onend = async () => {
+    if (grp !== g) return; g.rec = null;
+    const fatal = err === 'not-allowed' || err === 'service-not-allowed' || err === 'audio-capture' || err === 'network';
+    if (fatal) { grpMicSet(false); rnToast(err === 'not-allowed' || err === 'service-not-allowed' ? 'Mic ki ijazat nahi mili. Browser mein mic allow karo.' : err === 'network' ? 'Awaz pehchanne ke liye internet chahiye.' : 'Mic nahi mila.'); return; }
+    const text = (fin || interim).trim();
+    const inp = document.getElementById('grpInput'); if (inp) inp.value = '';
+    if (text) { grpStat('Tutor ko bhej raha hoon...'); const t2 = await toRomanIfNeeded(text); if (grp === g) await grpAsk(t2); }
+    if (grp === g) { grpStat(''); grpMicResume(); }
+  };
+  g.rec = rec; try { rec.start(); } catch (e) { g.rec = null; }
+}
+function grpSpeak(text, subj) {
+  if (!SpeechSynthesisAPI || !grp || !grp.speaker) return;
+  const g = grp, voice = pickVoice(subj);
+  const clean = String(text).replace(/https?:\/\/\S+/g, ' ').replace(/[*_#`>~|]/g, ' ').replace(/\s+/g, ' ').trim();
+  const chunks = clean.split(/(?<=[.!?۔؟])\s+/).reduce((acc, part) => { const last = acc[acc.length - 1]; if (last && (last + ' ' + part).length < 180) acc[acc.length - 1] = last + ' ' + part; else acc.push(part); return acc; }, []);
+  if (!chunks.length) return;
+  grpRecStop(); g.speaking = true; grpStat('Tutor bol rahe hain...');
+  let fin = false, guard = null;
+  const done = () => { if (fin) return; fin = true; clearTimeout(guard); if (grp !== g) return; g.speaking = false; grpStat(''); grpMicResume(); };
+  guard = setTimeout(done, Math.min(90000, 4000 + clean.length * 110));
+  chunks.forEach((chunk, i) => {
+    const u = new SpeechSynthesisUtterance(chunk);
+    if (voice) { u.voice = voice; u.lang = voice.lang; }
+    u.rate = 0.95;
+    if (!voiceGenderMatched) u.pitch = (TUTORS[subj] && TUTORS[subj].gender === 'm') ? 0.7 : 1.1;
+    if (i === chunks.length - 1) { u.onend = done; u.onerror = done; }
+    SpeechSynthesisAPI.speak(u);
+  });
 }
 function grpRender(d) {
   const feed = document.getElementById('grpFeed'); if (!feed || !grp) return;
@@ -4831,6 +4894,7 @@ function grpRender(d) {
     else if (ev.kind === 'q') { el.className = 'grp-q'; const i = document.createElement('i'); i.textContent = ev.who; el.append(i, document.createTextNode(ev.text)); }
     else { el.className = 'grp-a'; const i = document.createElement('i'); i.textContent = ev.who.toUpperCase(); el.appendChild(i); const b = document.createElement('div'); b.innerHTML = renderTutorMarkdown(ev.text); el.appendChild(b); }
     feed.appendChild(el);
+    if (ev.kind === 'a' && ev.seq > grp.spokenFrom) { grp.spokenFrom = ev.seq; grpSpeak(ev.text, d.subject || grp.subject); }
   });
   if (stick || grp.since <= 1) feed.scrollTop = feed.scrollHeight;
   if (d.ended) { clearInterval(grp.timer); const f = document.getElementById('grpForm'); if (f) f.style.display = 'none'; }
