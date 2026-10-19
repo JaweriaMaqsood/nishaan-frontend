@@ -1413,7 +1413,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 19-Oct-B</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 19-Oct-C</div>
   </div>
 </footer>
 
@@ -4758,7 +4758,7 @@ function grpEligible() {
   return true;
 }
 function grpBody(extra) { return Object.assign({ studentClass: localStorage.getItem('nishaan_student_class'), name: (localStorage.getItem('nishaan_user_name') || '').split(/\s+/)[0] || 'Student' }, extra || {}); }
-function grpClose() { if (grp) { clearInterval(grp.timer); grpRecStop(); try { if (SpeechSynthesisAPI) SpeechSynthesisAPI.cancel(); } catch (e) {} grp = null; } closeNotes(); }
+function grpClose() { if (grp) { clearInterval(grp.timer); grpVoiceStop(false); grpRecStop(); try { if (SpeechSynthesisAPI) SpeechSynthesisAPI.cancel(); } catch (e) {} grp = null; } closeNotes(); }
 function grpMenu(prefill) {
   if (!grpEligible()) return;
   closeNotes();
@@ -4802,10 +4802,10 @@ function grpMenu(prefill) {
 }
 function grpOpen(first) {
   closeNotes();
-  grp = { code: first.code, since: 0, timer: null, busy: false, isHost: !!first.isHost, mic: false, rec: null, speaker: true, speaking: false, spokenFrom: first.last || 0, subject: first.subject || 'general', askBusy: false };
+  grp = { code: first.code, since: 0, timer: null, busy: false, isHost: !!first.isHost, mic: false, rec: null, speaker: true, speaking: false, spokenFrom: first.last || 0, subject: first.subject || 'general', askBusy: false, joinSeq: first.last || 0, peers: [], meId: '', v: { on: false, busy: false, muted: false, stream: null, pcs: {}, early: {}, timer: null, ice: [{ urls: 'stun:stun.l.google.com:19302' }] } };
   const ov = document.createElement('div'); ov.id = 'notesOv'; ov.className = 'notes-ov';
   const card = document.createElement('div'); card.className = 'notes-card grp-card';
-  card.innerHTML = '<div class="grp-head"><h3 id="grpTitle"></h3><div class="grp-sub" id="grpSub"></div><div class="grp-bar"><button type="button" id="grpShare" class="primary">WhatsApp par bulao</button><button type="button" id="grpCopy">Code copy</button><button type="button" id="grpMic" class="off">Mic band (muted)</button><button type="button" id="grpSpk" class="live">Tutor ki awaz: on</button><button type="button" id="grpLeave"></button></div><div class="grp-stat" id="grpStat"></div></div><div class="grp-feed" id="grpFeed" aria-live="polite"></div><form class="grp-form" id="grpForm"><input type="text" id="grpInput" maxlength="300" placeholder="Tutor se sawal poochho..." autocomplete="off"><button type="submit" class="btn btn-primary" id="grpSend">Bhejo</button></form>';
+  card.innerHTML = '<div class="grp-head"><h3 id="grpTitle"></h3><div class="grp-sub" id="grpSub"></div><div class="grp-bar"><button type="button" id="grpShare" class="primary">WhatsApp par bulao</button><button type="button" id="grpCopy">Code copy</button><button type="button" id="grpVoice" class="off">Awaz join karo</button><button type="button" id="grpMute" class="live" style="display:none">Mic on</button><button type="button" id="grpMic" class="off">Tutor se poochho</button><button type="button" id="grpSpk" class="live">Tutor ki awaz: on</button><button type="button" id="grpLeave"></button></div><div class="grp-stat" id="grpStat"></div></div><div class="grp-feed" id="grpFeed" aria-live="polite"></div><form class="grp-form" id="grpForm"><input type="text" id="grpInput" maxlength="300" placeholder="Tutor se sawal poochho..." autocomplete="off"><button type="submit" class="btn btn-primary" id="grpSend">Bhejo</button></form>';
   ov.appendChild(card); document.body.appendChild(ov);
   const $ = (id) => document.getElementById(id);
   const link = location.origin + '/?room=' + grp.code;
@@ -4825,11 +4825,15 @@ function grpOpen(first) {
   });
   if (!SpeechRecognitionAPI) { mic.style.display = 'none'; }
   mic.addEventListener('click', () => { if (!grp) return; grpMicSet(!grp.mic); });
+  const ab = document.createElement('div'); ab.id = 'grpAudio'; ab.style.display = 'none'; card.appendChild(ab);
+  $('grpVoice').addEventListener('click', () => { if (!grp) return; if (grp.v.on) grpVoiceStop(true); else grpVoiceStart(); });
+  $('grpMute').addEventListener('click', () => { if (!grp || !grp.v.on) return; grp.v.muted = !grp.v.muted; if (grp.v.stream) grp.v.stream.getAudioTracks().forEach((t) => { t.enabled = !grp.v.muted; }); grpVoiceUI(); });
   grpRender(first);
   grp.timer = setInterval(grpPoll, 2500);
 }
 async function grpAsk(q, inp) {
   if (!grp || grp.askBusy) return; grp.askBusy = true;
+  if (grp.speaking) grpInterrupt();
   const sendBtn = document.getElementById('grpSend'); if (sendBtn) sendBtn.disabled = true;
   try {
     const res = await chatFetch('/api/room/' + grp.code + '/ask', { method: 'POST', body: { question: q } });
@@ -4842,10 +4846,16 @@ function grpStat(t) { const e = document.getElementById('grpStat'); if (e) e.tex
 function grpMicSet(on) {
   if (!grp) return; grp.mic = on;
   const mic = document.getElementById('grpMic');
-  if (mic) { mic.textContent = on ? 'Mic on (bolo)' : 'Mic band (muted)'; mic.className = on ? 'live' : 'off'; }
-  if (on) grpRecStart(); else { grpRecStop(); grpStat(''); }
+  if (mic) { mic.textContent = on ? 'Sun raha hoon... bolo' : 'Tutor se poochho'; mic.className = on ? 'live' : 'off'; }
+  if (on) { grpInterrupt(); grpRecStart(); } else { grpRecStop(); grpStat(''); }
 }
 function grpRecStop() { if (grp && grp.rec) { const r = grp.rec; grp.rec = null; try { r.onend = null; r.stop(); } catch (e) {} } }
+function grpInterrupt() {
+  if (!grp) return;
+  try { if (SpeechSynthesisAPI) SpeechSynthesisAPI.cancel(); } catch (e) {}
+  grp.speaking = false;
+  chatFetch('/api/room/' + grp.code + '/interrupt', { method: 'POST', body: {} }).catch(() => {});
+}
 function grpMicResume() { if (grp && grp.mic && !grp.speaking && !grp.rec) setTimeout(grpRecStart, 250); }
 function grpRecStart() {
   if (!SpeechRecognitionAPI || !grp || !grp.mic || grp.speaking || grp.rec) return;
@@ -4866,7 +4876,7 @@ function grpRecStart() {
     const text = (fin || interim).trim();
     const inp = document.getElementById('grpInput'); if (inp) inp.value = '';
     if (text) { grpStat('Tutor ko bhej raha hoon...'); const t2 = await toRomanIfNeeded(text); if (grp === g) await grpAsk(t2); }
-    if (grp === g) { grpStat(''); grpMicResume(); }
+    if (grp === g) { grpStat(''); grpMicSet(false); }
   };
   g.rec = rec; try { rec.start(); } catch (e) { g.rec = null; }
 }
@@ -4889,6 +4899,109 @@ function grpSpeak(text, subj) {
     SpeechSynthesisAPI.speak(u);
   });
 }
+function grpVoiceUI() {
+  const vb = document.getElementById('grpVoice'), mb = document.getElementById('grpMute'); if (!vb || !mb || !grp) return;
+  const v = grp.v;
+  vb.textContent = v.on ? 'Awaz chhoro' : 'Awaz join karo'; vb.className = v.on ? 'live' : 'off';
+  mb.style.display = v.on ? '' : 'none';
+  mb.textContent = v.muted ? 'Mic muted' : 'Mic on'; mb.className = v.muted ? 'off' : 'live';
+}
+function grpSignal(to, data) {
+  if (!grp) return;
+  chatFetch('/api/room/' + grp.code + '/signal', { method: 'POST', body: { to, data } }).catch(() => {});
+}
+function grpPcClose(id) {
+  if (!grp) return; const o = grp.v.pcs[id]; if (!o) return;
+  delete grp.v.pcs[id];
+  try { o.pc.onicecandidate = null; o.pc.ontrack = null; o.pc.close(); } catch (e) {}
+  if (o.audio) { try { o.audio.srcObject = null; o.audio.remove(); } catch (e) {} }
+}
+function grpPcMake(id, vs, initiator) {
+  const g = grp; grpPcClose(id);
+  const pc = new RTCPeerConnection({ iceServers: g.v.ice });
+  const o = { pc, vs, pend: [], audio: null };
+  g.v.pcs[id] = o;
+  g.v.stream.getTracks().forEach((t) => pc.addTrack(t, g.v.stream));
+  pc.onicecandidate = (e) => { if (e.candidate) grpSignal(id, { t: 'ice', c: e.candidate.toJSON ? e.candidate.toJSON() : e.candidate }); };
+  pc.ontrack = (e) => {
+    if (!o.audio) { const a = document.createElement('audio'); a.autoplay = true; a.setAttribute('playsinline', ''); const box = document.getElementById('grpAudio'); if (box) box.appendChild(a); o.audio = a; }
+    o.audio.srcObject = e.streams[0];
+    const pr = o.audio.play(); if (pr && pr.catch) pr.catch(() => {});
+  };
+  (g.v.early[id] || []).forEach((c) => o.pend.push(c)); delete g.v.early[id];
+  if (initiator) {
+    pc.createOffer().then((of) => pc.setLocalDescription(of)).then(() => grpSignal(id, { t: 'offer', sdp: pc.localDescription.sdp, vs })).catch(() => {});
+  }
+  return o;
+}
+function grpVoiceSync() {
+  if (!grp || !grp.v.on || !grp.v.stream) return;
+  const g = grp, live = {};
+  g.peers.forEach((x) => {
+    if (x.id === g.meId || !x.voice) return; live[x.id] = 1;
+    const o = g.v.pcs[x.id];
+    if (o && o.vs !== x.vs) grpPcClose(x.id);
+    if (!g.v.pcs[x.id] && g.meId < x.id) grpPcMake(x.id, x.vs, true);
+  });
+  Object.keys(g.v.pcs).forEach((id) => { if (!live[id]) grpPcClose(id); });
+}
+async function grpVoicePoll() {
+  const g = grp; if (!g || !g.v.on || g.v.polling) return; g.v.polling = true;
+  try {
+    const res = await chatFetch('/api/room/' + g.code + '/signals');
+    if (!res.ok || grp !== g) return;
+    const d = await res.json();
+    for (const m of (d.msgs || [])) {
+      if (grp !== g || !g.v.on) break;
+      const data = m.data || {}, id = m.from;
+      try {
+        if (data.t === 'offer') {
+          const peer = g.peers.find((x) => x.id === id);
+          const o = grpPcMake(id, (peer && peer.vs) || data.vs || 0, false);
+          await o.pc.setRemoteDescription({ type: 'offer', sdp: data.sdp });
+          for (const c of o.pend.splice(0)) { try { await o.pc.addIceCandidate(c); } catch (e) {} }
+          const ans = await o.pc.createAnswer(); await o.pc.setLocalDescription(ans);
+          grpSignal(id, { t: 'answer', sdp: o.pc.localDescription.sdp });
+        } else if (data.t === 'answer') {
+          const o = g.v.pcs[id]; if (!o) continue;
+          await o.pc.setRemoteDescription({ type: 'answer', sdp: data.sdp });
+          for (const c of o.pend.splice(0)) { try { await o.pc.addIceCandidate(c); } catch (e) {} }
+        } else if (data.t === 'ice') {
+          const o = g.v.pcs[id];
+          if (o && o.pc.remoteDescription) { try { await o.pc.addIceCandidate(data.c); } catch (e) {} }
+          else if (o) o.pend.push(data.c);
+          else (g.v.early[id] = g.v.early[id] || []).push(data.c);
+        }
+      } catch (e) { /* ek peer ka masla baqi ko na roke */ }
+    }
+  } catch (e) {} finally { g.v.polling = false; }
+}
+async function grpVoiceStart() {
+  const g = grp; if (!g || g.v.on || g.v.busy) return;
+  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) || !window.RTCPeerConnection) { rnToast('Is browser mein awaz support nahi hai.'); return; }
+  g.v.busy = true; let stream = null;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    if (grp !== g) { stream.getTracks().forEach((t) => t.stop()); return; }
+    const res = await chatFetch('/api/room/' + g.code + '/voice', { method: 'POST', body: { on: true } });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(d.error || 'Awaz shuru nahi ho saki.');
+    g.v.stream = stream; g.v.muted = false; g.v.ice = d.ice || g.v.ice; g.v.on = true;
+    g.v.timer = setInterval(grpVoicePoll, 1000);
+    grpVoiceUI(); grpPoll();
+  } catch (err) {
+    if (stream) stream.getTracks().forEach((t) => t.stop());
+    rnToast(err && (err.name === 'NotAllowedError' || err.name === 'SecurityError') ? 'Mic ki ijazat nahi mili. Browser mein mic allow karo.' : err && err.name === 'NotFoundError' ? 'Mic nahi mila.' : (err && err.message) || 'Awaz shuru nahi ho saki.');
+  } finally { g.v.busy = false; }
+}
+function grpVoiceStop(post) {
+  if (!grp) return; const g = grp, v = g.v;
+  clearInterval(v.timer); Object.keys(v.pcs).forEach(grpPcClose);
+  if (v.stream) v.stream.getTracks().forEach((t) => t.stop());
+  const was = v.on; v.on = false; v.stream = null; v.muted = false; v.early = {};
+  if (was && post) chatFetch('/api/room/' + g.code + '/voice', { method: 'POST', body: { on: false } }).catch(() => {});
+  grpVoiceUI();
+}
 function grpRender(d) {
   const feed = document.getElementById('grpFeed'); if (!feed || !grp) return;
   document.getElementById('grpTitle').textContent = d.tutor + ' ki class';
@@ -4896,12 +5009,19 @@ function grpRender(d) {
   const sub = document.getElementById('grpSub');
   sub.append('Code: '); const cd = document.createElement('span'); cd.className = 'grp-code'; cd.textContent = grp.code; sub.appendChild(cd);
   sub.append(' · ' + d.members.length + ' dost: ' + d.members.join(', ') + (d.busy ? ' · tutor soch rahe hain...' : ''));
+  grp.peers = d.peers || []; grp.meId = d.me || '';
+  const vn = grp.peers.filter((x) => x.voice).map((x) => x.name);
+  if (vn.length) sub.append(' · awaz mein: ' + vn.join(', '));
+  grpVoiceSync();
   const stick = feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 40;
   (d.events || []).forEach((ev) => {
     if (ev.seq <= grp.since) return; grp.since = Math.max(grp.since, ev.seq);
     const el = document.createElement('div');
     if (ev.kind === 'sys') { el.className = 'grp-sys'; el.textContent = ev.text; }
     else if (ev.kind === 'q') { el.className = 'grp-q'; const i = document.createElement('i'); i.textContent = ev.who; el.append(i, document.createTextNode(ev.text)); }
+    else if (ev.kind === 'int') {
+      if (ev.seq > grp.joinSeq) { try { if (SpeechSynthesisAPI) SpeechSynthesisAPI.cancel(); } catch (e) {} grp.speaking = false; grpStat(''); el.className = 'grp-sys'; el.textContent = ev.who + ' ne beech mein poocha, tutor ruk gaye.'; } else return;
+    }
     else { el.className = 'grp-a'; const i = document.createElement('i'); i.textContent = ev.who.toUpperCase(); el.appendChild(i); const b = document.createElement('div'); b.innerHTML = renderTutorMarkdown(ev.text); el.appendChild(b); }
     feed.appendChild(el);
     if (ev.kind === 'a' && ev.seq > grp.spokenFrom) { grp.spokenFrom = ev.seq; grpSpeak(ev.text, d.subject || grp.subject); }
