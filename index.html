@@ -234,6 +234,12 @@ section{ position:relative; z-index:1; padding:100px 0; scroll-margin-top:88px; 
 .how-step h3{ font-size:18px; margin-bottom:8px; }
 .how-step p{ font-size:14.5px; color:var(--text-dim); }
 
+.pay-box{ max-width:420px; margin:26px auto 0; padding:18px; border:1.6px solid var(--border); border-radius:16px; background:var(--bg-soft); text-align:center; }
+.pay-title{ font-weight:700; margin-bottom:12px; }
+.pay-row{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--border); font-size:14px; }
+.pay-row span{ opacity:.75; }
+.pay-box .btn{ margin-top:14px; }
+.pay-note{ font-size:12.5px; opacity:.75; margin-top:10px; }
 .pricing-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:22px; max-width:760px; margin:0 auto; }
 .price-card{
   background:var(--surface); border:1.6px solid var(--border); border-radius:var(--radius-lg);
@@ -1332,6 +1338,13 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
         <a href="#waitlist" class="btn btn-primary btn-block" data-i18n="waitlistJoin">Waitlist join karo</a>
       </div>
     </div>
+    <div class="pay-box reveal">
+      <div class="pay-title" data-i18n="payTitle">Payment sirf JazzCash se</div>
+      <div class="pay-row"><span data-i18n="payAcc">Account</span><b>Javeria Maqsood</b></div>
+      <div class="pay-row"><span data-i18n="payNum">JazzCash number</span><b id="payNumTxt">0326 3417092</b></div>
+      <button type="button" class="btn btn-outline" id="payCopy" data-i18n="payCopy">Number copy karo</button>
+      <p class="pay-note" data-i18n="payNote">Pro launch ke baad shuru hoga. Abhi payment bhejne ki zaroorat nahi.</p>
+    </div>
   </div>
 </section>
 
@@ -1406,7 +1419,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 18-Oct-F</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 19-Oct-A</div>
   </div>
 </footer>
 
@@ -1643,6 +1656,7 @@ const translations = {
     priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'For full access',
     pricePro1: 'Unlimited doubts and MCQs', pricePro2: 'Detailed weak-area tracking',
     pricePro3: 'Monthly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
+    payTitle: 'Payment via JazzCash only', payAcc: 'Account', payNum: 'JazzCash number', payCopy: 'Copy number', payNote: 'Pro starts after launch. No need to send any payment right now.',
     faqEyebrow: 'Questions & Answers',
     faq1Q: 'When will Rehnuma launch?',
     faq1A: "We're currently building the beta. Waitlist members get access first — you'll hear by email/SMS as soon as the launch date is confirmed.",
@@ -1779,6 +1793,7 @@ const translations = {
     priceBadge: 'ویٹ لسٹ آفر', pricePro: 'پرو', priceProDesc: 'مکمل رسائی کے لیے',
     pricePro1: 'لامحدود سوالات اور MCQs', pricePro2: 'تفصیلی ویک ایریا ٹریکنگ',
     pricePro3: 'ماہانہ پیش رفت رپورٹ (جلد آ رہی ہے)', pricePro4: 'مکمل past-paper MCQ بینک',
+    payTitle: 'ادائیگی صرف جاز کیش سے', payAcc: 'اکاؤنٹ', payNum: 'جاز کیش نمبر', payCopy: 'نمبر کاپی کریں', payNote: 'Pro لانچ کے بعد شروع ہوگا۔ ابھی کوئی ادائیگی بھیجنے کی ضرورت نہیں۔',
     faqEyebrow: 'سوالات و جوابات',
     faq1Q: 'رہنما کب لانچ ہوگا؟',
     faq1A: 'ہم ابھی بیٹا بنا رہے ہیں۔ ویٹ لسٹ میں شامل ہونے والوں کو سب سے پہلے رسائی ملے گی، لانچ ڈیٹ کنفرم ہوتے ہی ای میل/ایس ایم ایس سے پتا چل جائے گا۔',
@@ -1915,6 +1930,7 @@ const translations = {
     priceBadge: 'Waitlist offer', pricePro: 'Pro', priceProDesc: 'Full access ke liye',
     pricePro1: 'Unlimited doubts aur MCQs', pricePro2: 'Detailed weak-area tracking',
     pricePro3: 'Monthly progress report (coming soon)', pricePro4: 'Full past-paper MCQ bank',
+    payTitle: 'Payment sirf JazzCash se', payAcc: 'Account', payNum: 'JazzCash number', payCopy: 'Number copy karo', payNote: 'Pro launch ke baad shuru hoga. Abhi payment bhejne ki zaroorat nahi.',
     faqEyebrow: 'Sawal jawab',
     faq1Q: 'Rehnuma kab launch hoga?',
     faq1A: 'Hum abhi beta build kar rahe hain. Waitlist join karne walon ko sabse pehle access milega, launch date confirm hote hi email/SMS se pata chal jayega.',
@@ -4910,6 +4926,7 @@ async function grpPoll() {
   finally { if (grp === g) g.busy = false; }
 }
 document.getElementById('groupBtn').addEventListener('click', () => grpMenu());
+(function(){ const b = document.getElementById('payCopy'); if (!b) return; b.addEventListener('click', async () => { const num = '03263417092'; try { await navigator.clipboard.writeText(num); rnToast('Number copy ho gaya'); } catch (e) { rnToast(num); } }); })();
 (function roomFromLink() {
   let code = ''; try { code = (new URLSearchParams(location.search).get('room') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6); } catch (e) {}
   if (code.length !== 6) return;
