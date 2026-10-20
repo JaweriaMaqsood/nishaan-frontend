@@ -1413,7 +1413,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 19-Oct-C</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 20-Oct-A</div>
   </div>
 </footer>
 
@@ -4496,19 +4496,36 @@ function shareToWhatsApp(topic, correct, total) {
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
 }
 
-// PWA: install button + service worker
+// PWA: install button + banner + service worker
 let rnInstallEvent = null;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); rnInstallEvent = e;
-  document.getElementById('installBtn').style.display = '';
-});
-window.addEventListener('appinstalled', () => { document.getElementById('installBtn').style.display = 'none'; rnInstallEvent = null; });
-document.getElementById('installBtn').addEventListener('click', async () => {
+const rnStandalone = () => (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+function rnInstallHidden() { try { return Date.now() - Number(localStorage.getItem('rehnuma_install_x') || 0) < 7 * 864e5; } catch (e) { return false; } }
+function rnInstallBanner(ios) {
+  if (rnStandalone() || rnInstallHidden() || document.getElementById('instBar')) return;
+  const bar = document.createElement('div'); bar.id = 'instBar';
+  bar.style.cssText = 'position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:#1b2140;border:1.6px solid #2e3868;color:#fff;font-size:13.5px;box-shadow:0 8px 28px rgba(0,0,0,.45);';
+  const t = document.createElement('div'); t.style.flex = '1'; t.textContent = ios ? 'Rehnuma app banao: Share dabao, phir "Add to Home Screen".' : 'Rehnuma ko app ki tarah install karo';
+  bar.appendChild(t);
+  if (!ios) { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn-primary'; b.style.cssText = 'padding:8px 14px;font-size:13px;'; b.textContent = 'Install'; b.addEventListener('click', rnDoInstall); bar.appendChild(b); }
+  const x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'Band'); x.textContent = '×'; x.style.cssText = 'background:none;border:0;color:#fff;font-size:22px;cursor:pointer;line-height:1;';
+  x.addEventListener('click', () => { try { localStorage.setItem('rehnuma_install_x', String(Date.now())); } catch (e) {} bar.remove(); });
+  bar.appendChild(x); document.body.appendChild(bar);
+}
+async function rnDoInstall() {
   if (!rnInstallEvent) return;
   rnInstallEvent.prompt();
   try { await rnInstallEvent.userChoice; } catch (e) {}
   rnInstallEvent = null; document.getElementById('installBtn').style.display = 'none';
+  const bar = document.getElementById('instBar'); if (bar) bar.remove();
+}
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault(); rnInstallEvent = e;
+  document.getElementById('installBtn').style.display = '';
+  setTimeout(() => rnInstallBanner(false), 2500);
 });
+window.addEventListener('appinstalled', () => { document.getElementById('installBtn').style.display = 'none'; rnInstallEvent = null; const bar = document.getElementById('instBar'); if (bar) bar.remove(); });
+document.getElementById('installBtn').addEventListener('click', rnDoInstall);
+if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !rnStandalone()) setTimeout(() => rnInstallBanner(true), 4000);
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}); });
 }
