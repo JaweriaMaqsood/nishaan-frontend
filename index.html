@@ -1422,7 +1422,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 20-Oct-C</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 20-Oct-D</div>
   </div>
 </footer>
 
@@ -5077,14 +5077,18 @@ function grpVadStop(g) {
 async function grpVoiceSend(g, blob) {
   try {
     grpStat('Tutor sun rahe hain...');
-    const send = (tok) => fetch(BACKEND_URL + '/api/room/' + g.code + '/voice-ask', { method: 'POST', headers: Object.assign({ 'Content-Type': blob.type || 'audio/webm' }, tok ? { Authorization: 'Bearer ' + tok } : {}), body: blob });
+    const send = (tok) => fetch(BACKEND_URL + '/api/room/' + g.code + '/voice-ask?lang=' + (getCurrentLanguage() === 'en' ? 'en' : 'ur'), { method: 'POST', headers: Object.assign({ 'Content-Type': blob.type || 'audio/webm' }, tok ? { Authorization: 'Bearer ' + tok } : {}), body: blob });
     let res = await send(localStorage.getItem('nishaan_access_token'));
     if (res.status === 401) { await chatFetch('/api/room/' + g.code, {}); res = await send(localStorage.getItem('nishaan_access_token')); }
     if (grp !== g) return;
-    if (!res.ok) { const d = await res.json().catch(() => ({})); rnToast(d.error || 'Awaz nahi ja saki.'); }
+    let d = {}; try { d = await res.json(); } catch (e) {}
+    if (!res.ok) { rnToast(d.error || 'Awaz nahi ja saki.'); }
+    else if (d.why === 'unclear' || d.why === 'empty') { grpStat('Awaz saaf nahi aayi, thora qareeb aa kar dobara bolo.'); setTimeout(() => { if (grp === g) grpStat(''); }, 3500); return; }
+    else if (d.why === 'busy') { grpStat('Tutor abhi jawab de rahe hain, thori der baad bolo.'); setTimeout(() => { if (grp === g) grpStat(''); }, 3500); return; }
+    else if (d.why === 'chat') { grpStat('Suna: "' + String(d.heard || '').slice(0, 60) + '" (tutor ko nahi bheja, "Mam" bol kar poocho)'); setTimeout(() => { if (grp === g) grpStat(''); }, 4500); return; }
     grpPoll();
   } catch (e) { rnToast('Internet check karein.'); }
-  finally { if (grp === g) grpStat(''); }
+  finally { if (grp === g && !document.getElementById('grpStat').textContent.startsWith('Suna') && !/saaf|abhi/.test(document.getElementById('grpStat').textContent)) grpStat(''); }
 }
 function grpRender(d) {
   const feed = document.getElementById('grpFeed'); if (!feed || !grp) return;
