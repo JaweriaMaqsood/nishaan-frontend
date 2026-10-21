@@ -1424,7 +1424,7 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
       </div>
     </div>
     <div class="footer-bottom" data-i18n="footerCopyright">© 2026 Rehnuma. Sab huqooq mehfooz.</div>
-    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 20-Oct-E</div>
+    <div style="text-align:center; font-size:11px; color:var(--text-faint); opacity:.6; padding-bottom:10px;">Build 20-Oct-F</div>
   </div>
 </footer>
 
@@ -1566,6 +1566,15 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 
         <button type="submit" class="btn btn-primary btn-block" id="authSubmitBtn" style="margin-top:12px;">Login karein</button>
       </form>
+      <div id="otpBox" style="display:none;">
+        <h3 style="font-size:20px; margin-bottom:10px;">Email verify karein</h3>
+        <p id="otpMsg" style="color:var(--text-dim); font-size:14px; margin-bottom:14px;"></p>
+        <input type="text" id="otpInput" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Code likhein" style="width:100%; background:var(--bg-soft); border:1.6px solid var(--border); border-radius:12px; padding:13px 14px; font-size:22px; letter-spacing:6px; text-align:center; color:var(--text);">
+        <div id="otpErr" style="display:none; font-size:13px; margin-top:10px; color:var(--pink);"></div>
+        <button type="button" class="btn btn-primary btn-block" id="otpVerify" style="margin-top:14px;">Verify karein</button>
+        <button type="button" class="btn btn-outline btn-block" id="otpResend" style="margin-top:10px;">Code dobara bhejein</button>
+        <button type="button" id="otpBack" style="background:none; border:none; color:var(--cyan); font-size:13px; font-weight:600; cursor:pointer; margin-top:12px;">Wapas</button>
+      </div>
     </div>
 
     <div id="authLoggedInView" style="display:none; text-align:center;">
@@ -3374,6 +3383,86 @@ classFixSaveBtn.addEventListener('click', async () => {
   }
 });
 
+function authSuccess(data, email, nameVal, studentClass) {
+  const authMode2 = nameVal ? 'signup' : authMode;
+  localStorage.setItem('nishaan_user_email', email);
+  const metaName = data.user && data.user.user_metadata && data.user.user_metadata.name;
+  if (nameVal) localStorage.setItem('nishaan_user_name', nameVal);
+  else if (metaName) localStorage.setItem('nishaan_user_name', metaName);
+  else localStorage.removeItem('nishaan_user_name');
+  if (data.session && data.session.access_token) {
+    localStorage.setItem('nishaan_access_token', data.session.access_token);
+  }
+  if (data.session && data.session.refresh_token) {
+    localStorage.setItem('nishaan_refresh_token', data.session.refresh_token);
+  }
+  if (data.user && data.user.id) {
+    localStorage.setItem('nishaan_user_id', data.user.id);
+  }
+  // Save class: comes back directly on signup, or via studentClass on login
+  if (studentClass) {
+    localStorage.setItem('nishaan_student_class', studentClass);
+  } else if (data.studentClass) {
+    localStorage.setItem('nishaan_student_class', data.studentClass);
+  }
+
+  cloudOff = false;
+  refreshAuthButtonLabel();
+  showLoggedInView(email);
+  initSubjectChat();
+  renderStreak();
+  cloudPull().finally(() => setTimeout(maybeOnboard, 900));
+  renderProgressSection();
+  renderLeaderboard();
+  if (typeof renderChatSection === 'function') renderChatSection();
+}
+
+// ---- Email code (OTP) verification ----
+let otpCtx = null, otpTimer = null;
+function otpErrShow(t, ok) { const e = document.getElementById('otpErr'); e.textContent = t || ''; e.style.display = t ? 'block' : 'none'; e.style.color = ok ? 'var(--cyan)' : 'var(--pink)'; }
+function otpCooldown(sec) {
+  const b = document.getElementById('otpResend'); clearInterval(otpTimer); let left = sec;
+  const tick = () => { if (left > 0) { b.disabled = true; b.textContent = 'Dobara bhejein (' + left + 's)'; left -= 1; } else { clearInterval(otpTimer); b.disabled = false; b.textContent = 'Code dobara bhejein'; } };
+  tick(); otpTimer = setInterval(tick, 1000);
+}
+async function otpResend() {
+  if (!otpCtx) return; otpErrShow('');
+  try {
+    const res = await fetch(BACKEND_URL + '/api/resend-code', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: otpCtx.email }) });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok) { otpErrShow(d.error || 'Code nahi ja saka, thori der baad try karein.'); return; }
+    otpErrShow('Naya code bhej diya gaya hai.', true);
+  } catch (e) { otpErrShow('Internet check karein.'); }
+  otpCooldown(60);
+}
+function showOtp(email, nameVal, studentClass, sendNow) {
+  otpCtx = { email, nameVal, studentClass };
+  authForm.style.display = 'none'; authFormTitle.style.display = 'none';
+  document.getElementById('otpBox').style.display = 'block';
+  document.getElementById('otpMsg').textContent = email + ' par ek code bheja gaya hai (spam folder bhi dekh lein). Woh yahan likhein.';
+  document.getElementById('otpInput').value = ''; otpErrShow('');
+  if (sendNow) otpResend(); else otpCooldown(60);
+  setTimeout(() => document.getElementById('otpInput').focus(), 100);
+}
+function hideOtp() { otpCtx = null; clearInterval(otpTimer); document.getElementById('otpBox').style.display = 'none'; authForm.style.display = ''; authFormTitle.style.display = ''; }
+document.getElementById('otpBack').addEventListener('click', hideOtp);
+document.getElementById('otpResend').addEventListener('click', otpResend);
+async function otpVerify() {
+  if (!otpCtx) return; const code = document.getElementById('otpInput').value.replace(/\D/g, '');
+  if (code.length < 6) { otpErrShow('Poora code likhein.'); return; }
+  const b = document.getElementById('otpVerify'); b.disabled = true; otpErrShow('');
+  try {
+    const res = await fetch(BACKEND_URL + '/api/verify-otp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: otpCtx.email, code }) });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok || !d.session || !d.session.access_token) { otpErrShow(d.error || 'Code ghalat ya purana hai.'); return; }
+    const ctx = otpCtx; hideOtp();
+    authSuccess(d, ctx.email, ctx.nameVal, ctx.studentClass);
+  } catch (e) { otpErrShow('Internet check karein.'); }
+  finally { b.disabled = false; }
+}
+document.getElementById('otpVerify').addEventListener('click', otpVerify);
+document.getElementById('otpInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); otpVerify(); } });
+
 authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   authError.style.display = 'none';
@@ -3412,51 +3501,17 @@ authForm.addEventListener('submit', async (e) => {
     });
     const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.code === 'EMAIL_NOT_CONFIRMED' ? authDict.authConfirmEmailLogin : (data.error || authDict.authGenericError));
+      if (data.code === 'EMAIL_NOT_CONFIRMED') { showOtp(email, nameVal, studentClass, true); return; }
+      throw new Error(data.error || authDict.authGenericError);
     }
 
     // Email confirmation ON hone par signup ke baad session nahi milta: login ka dikhawa nahi karna
     if (!data.session || !data.session.access_token) {
-      if (authMode === 'signup') {
-        setAuthMode('login');
-        authError.textContent = authDict.authConfirmEmail;
-        authError.style.color = 'var(--cyan)';
-        authError.style.display = 'block';
-        return;
-      }
+      if (authMode === 'signup') { showOtp(email, nameVal, studentClass, false); return; }
       throw new Error(authDict.authNoSession);
     }
 
-    localStorage.setItem('nishaan_user_email', email);
-    const metaName = data.user && data.user.user_metadata && data.user.user_metadata.name;
-    if (authMode === 'signup' && nameVal) localStorage.setItem('nishaan_user_name', nameVal);
-    else if (metaName) localStorage.setItem('nishaan_user_name', metaName);
-    else localStorage.removeItem('nishaan_user_name');
-    if (data.session && data.session.access_token) {
-      localStorage.setItem('nishaan_access_token', data.session.access_token);
-    }
-    if (data.session && data.session.refresh_token) {
-      localStorage.setItem('nishaan_refresh_token', data.session.refresh_token);
-    }
-    if (data.user && data.user.id) {
-      localStorage.setItem('nishaan_user_id', data.user.id);
-    }
-    // Save class: comes back directly on signup, or via studentClass on login
-    if (studentClass) {
-      localStorage.setItem('nishaan_student_class', studentClass);
-    } else if (data.studentClass) {
-      localStorage.setItem('nishaan_student_class', data.studentClass);
-    }
-
-    cloudOff = false;
-    refreshAuthButtonLabel();
-    showLoggedInView(email);
-    initSubjectChat();
-    renderStreak();
-    cloudPull().finally(() => setTimeout(maybeOnboard, 900));
-    renderProgressSection();
-    renderLeaderboard();
-    if (typeof renderChatSection === 'function') renderChatSection();
+    authSuccess(data, email, nameVal, studentClass);
   } catch (err) {
     authError.textContent = err.message;
     authError.style.color = 'var(--pink)';
