@@ -2173,7 +2173,7 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 // ============ Live AI demo — calls your own backend ============
-const BACKEND_URL = "https://nishaan-backend-production.up.railway.app";
+const BACKEND_URL = "https://rehnuma-backend-production-d10c.up.railway.app";
 
 function escapeHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
