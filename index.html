@@ -1973,7 +1973,7 @@ const RN_RX = [
   [/^Assalam o Alaikum (.+)!$/, (m, l) => l === 1 ? 'Assalam o Alaikum ' + m[1] + '!' : 'السلام علیکم ' + m[1] + '!'],
   [/^Tayyar! Shukriya(?: (.+))?\.$/, (m, l) => l === 1 ? 'Ready! Thank you' + (m[1] ? ' ' + m[1] : '') + '.' : 'تیار! شکریہ' + (m[1] ? ' ' + m[1] : '') + '۔'],
   [/^Dobara bhejein \((\d+)s\)$/, (m, l) => l === 1 ? 'Resend (' + m[1] + 's)' : 'دوبارہ بھیجیں (' + m[1] + 's)'],
-  [/^Code (.+) par bheja gaya hai\. Spam folder bhi dekh lein\.$/, (m, l) => l === 1 ? 'A code was sent to ' + m[1] + '. Check your spam folder too.' : 'کوڈ ' + m[1] + ' پر بھیجا گیا ہے۔ اسپام فولڈر بھی دیکھ لیں۔'],
+  [/^A code has been sent to (.+)\.$/, (m, l) => l === 1 ? m[0] : 'کوڈ ' + m[1] + ' پر بھیج دیا گیا ہے۔'],
   [/^Assalam o Alaikum! Main (.{2,40}?) hoon, aapka (.{2,40}?) ka tutor\. Aaj aap kya parhna chahte hain\?$/, (m, l) => l === 1 ? 'Hello! I\'m ' + m[1] + ', your ' + m[2] + ' teacher on Rehnuma. What would you like to learn today?' : 'السلام علیکم! میں ' + RN_T(m[1], 2) + ' ہوں، آپ کا ' + RN_T(m[2], 2) + ' کا ٹیوٹر۔ آج آپ کیا پڑھنا چاہتے ہیں؟'],
   [/^(\d+) \/ (\d+) MCQs$/, (m, l) => m[1] + ' / ' + m[2] + ' MCQs'],
   [/^Aap \((.+)\) ne poocha$/, (m, l) => l === 1 ? 'You (' + m[1] + ') asked' : 'آپ (' + m[1] + ') نے پوچھا'],
@@ -3506,7 +3506,7 @@ function showOtp(email, nameVal, studentClass, sendNow) {
   otpCtx = { email, nameVal, studentClass };
   authForm.style.display = 'none'; authFormTitle.style.display = 'none';
   document.getElementById('otpBox').style.display = 'block';
-  document.getElementById('otpMsg').textContent = 'Code ' + email + ' par bheja gaya hai. Spam folder bhi dekh lein.';
+  document.getElementById('otpMsg').textContent = 'A code has been sent to ' + email + '.';
   document.getElementById('otpInput').value = ''; otpErrShow('');
   if (sendNow) otpResend(); else otpCooldown(60);
   setTimeout(() => document.getElementById('otpInput').focus(), 100);
