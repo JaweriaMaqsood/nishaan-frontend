@@ -81,35 +81,6 @@ h1,h2,h3,h4{ font-family:var(--font-display); font-weight:700; letter-spacing:-0
 @keyframes float{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(30px,-36px) scale(1.08); } }
 @keyframes callPulseAnim{ 0%{ transform:scale(1); opacity:.5; } 100%{ transform:scale(1.6); opacity:0; } }
 
-/* Sehar welcome page animations */
-@keyframes seharTwinkle{ 0%,100%{ opacity:.15; transform:scale(.8); } 50%{ opacity:1; transform:scale(1.15); } }
-.sehar-star{ position:absolute; width:3px; height:3px; border-radius:50%; background:#fff; box-shadow:0 0 6px 1px rgba(255,255,255,.7); animation:seharTwinkle 3.2s ease-in-out infinite; }
-
-@keyframes seharParticleFloat{ 0%,100%{ transform:translateY(0); opacity:.25; } 50%{ transform:translateY(-30px); opacity:.7; } }
-.sehar-particle{ position:absolute; width:5px; height:5px; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,.9), transparent 70%); filter:blur(.5px); animation:seharParticleFloat 8s ease-in-out infinite; }
-
-@keyframes seharSGlow{
-  0%{ opacity:0; transform:scale(.82); }
-  28%{ opacity:1; transform:scale(1); }
-  68%{ opacity:1; transform:scale(1); }
-  100%{ opacity:0; transform:scale(1.06); }
-}
-
-@keyframes seharFadeUp{ 0%{ opacity:0; transform:translateY(16px); } 100%{ opacity:1; transform:translateY(0); } }
-.sehar-seq{ opacity:0; animation:seharFadeUp 1s cubic-bezier(.2,.8,.25,1) forwards; }
-
-@keyframes seharBreathe{
-  0%,100%{ box-shadow:0 0 0 0 rgba(255,46,154,.35), 0 12px 32px -10px rgba(255,46,154,.5); }
-  50%{ box-shadow:0 0 0 10px rgba(255,46,154,0), 0 16px 40px -10px rgba(255,46,154,.65); }
-}
-.sehar-glow-btn{ animation:seharFadeUp 1s cubic-bezier(.2,.8,.25,1) forwards, seharBreathe 2.8s ease-in-out infinite; animation-delay:3.1s, 4.1s; transition:transform .3s ease; }
-.sehar-glow-btn:hover{ transform:translateY(-2px) scale(1.02); }
-
-.sehar-date-dot{ width:9px; height:9px; border-radius:50%; background:var(--cyan); box-shadow:0 0 14px 3px rgba(0,229,255,.55); margin:0 auto; }
-
-@media (prefers-reduced-motion: reduce){
-  .sehar-seq, .sehar-glow-btn{ opacity:1 !important; animation:none !important; }
-}
 
 .eyebrow{
   display:inline-flex; align-items:center; gap:8px;
@@ -342,7 +313,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .hero-inner{ grid-template-columns:1fr; }
   .hero-visual{ order:-1; max-width:420px; margin:0 auto; }
   .pricing-grid{ grid-template-columns:1fr; }
-  .sehar-note{ display:none !important; }
 }
 @media (max-width: 640px){
   .wrap{ padding:0 20px; }
@@ -351,7 +321,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .tools-grid{ grid-template-columns:1fr; }
   .waitlist{ margin:0 16px; padding:44px 24px; border-radius:24px; }
   .footer-top{ flex-direction:column; }
-  #seharWelcomeCard{ padding:100px 20px 60px !important; }
 }
 
 /* ================= APP SHELL (dashboard layout) ================= */
@@ -711,96 +680,6 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
 
 </head>
 <body>
-
-<!-- ============================= SPECIAL WELCOME — for Sehar ============================= -->
-<div id="seharWelcome" style="display:none; position:fixed; inset:0; z-index:500; overflow-y:auto; background:#0B0718;">
-
-  <!-- Starfield, particles, moon, soft glows -->
-  <div aria-hidden="true" style="position:fixed; inset:0; overflow:hidden; z-index:0;">
-    <div style="position:absolute; inset:0; background:radial-gradient(ellipse 55% 45% at 18% 10%, rgba(180,150,255,.12), transparent 60%), radial-gradient(ellipse 50% 50% at 85% 18%, rgba(0,229,255,.10), transparent 60%), radial-gradient(ellipse 70% 45% at 50% 100%, rgba(255,170,90,.14), transparent 70%);"></div>
-
-    <!-- crescent moon -->
-    <div style="position:absolute; top:9%; right:11%; width:64px; height:64px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #fdf6e3, #e4d7b0); box-shadow:-20px 3px 0 3px #0B0718, 0 0 46px 8px rgba(255,247,220,.18); opacity:.9;"></div>
-
-    <!-- stars -->
-    <div class="sehar-star" style="top:6%; left:14%; animation-delay:.1s;"></div>
-    <div class="sehar-star" style="top:11%; left:32%; animation-delay:.9s;"></div>
-    <div class="sehar-star" style="top:18%; left:6%; animation-delay:.4s;"></div>
-    <div class="sehar-star" style="top:22%; left:22%; animation-delay:1.2s;"></div>
-    <div class="sehar-star" style="top:14%; left:60%; animation-delay:.6s;"></div>
-    <div class="sehar-star" style="top:28%; left:78%; animation-delay:1.4s;"></div>
-    <div class="sehar-star" style="top:34%; left:10%; animation-delay:.3s;"></div>
-    <div class="sehar-star" style="top:40%; left:88%; animation-delay:.8s;"></div>
-    <div class="sehar-star" style="top:48%; left:4%; animation-delay:1.1s;"></div>
-    <div class="sehar-star" style="top:55%; left:92%; animation-delay:.5s;"></div>
-    <div class="sehar-star" style="top:62%; left:16%; animation-delay:1.3s;"></div>
-    <div class="sehar-star" style="top:70%; left:84%; animation-delay:.2s;"></div>
-    <div class="sehar-star" style="top:76%; left:8%; animation-delay:1s;"></div>
-    <div class="sehar-star" style="top:82%; left:70%; animation-delay:.7s;"></div>
-    <div class="sehar-star" style="top:88%; left:28%; animation-delay:1.5s;"></div>
-    <div class="sehar-star" style="top:8%; left:80%; animation-delay:1.6s;"></div>
-
-    <!-- particles -->
-    <div class="sehar-particle" style="top:22%; left:20%; animation-delay:0s;"></div>
-    <div class="sehar-particle" style="top:65%; left:85%; animation-delay:-3s;"></div>
-    <div class="sehar-particle" style="top:78%; left:15%; animation-delay:-6s;"></div>
-    <div class="sehar-particle" style="top:40%; left:92%; animation-delay:-2s;"></div>
-    <div class="sehar-particle" style="top:15%; left:50%; animation-delay:-4.5s;"></div>
-    <div class="sehar-particle" style="top:88%; left:60%; animation-delay:-1s;"></div>
-  </div>
-
-  <!-- Sticky notes, pinned like the reference -->
-  <div class="sehar-seq sehar-note" style="animation-delay:1.3s; position:absolute; top:9%; left:4%; transform:rotate(-7deg); z-index:2; width:190px; background:#fdf3f0; border-radius:4px; padding:16px 18px; box-shadow:0 18px 34px -12px rgba(0,0,0,.5);">
-    <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(-4deg); width:26px; height:22px; background:#e6b8c2; border-radius:3px; box-shadow:0 3px 6px rgba(0,0,0,.25);"></div>
-    <p style="font-family:'Dancing Script', cursive; font-weight:700; font-size:22px; color:#2a1f3d; margin-bottom:6px;">Sehar ♡</p>
-    <p style="font-size:12px; color:#5a4a63; font-family:var(--font-body); font-weight:600; margin-bottom:8px;">🎂 5 November ♡</p>
-    <p style="font-size:11px; color:#8a7a90; font-family:var(--font-body); line-height:1.5;">A beautiful soul was born on this special day ♡</p>
-  </div>
-
-  <div class="sehar-seq sehar-note" style="animation-delay:1.45s; position:absolute; top:9%; right:4%; transform:rotate(6deg); z-index:2; width:190px; background:#fdf3f0; border-radius:4px; padding:16px 18px; box-shadow:0 18px 34px -12px rgba(0,0,0,.5);">
-    <div style="position:absolute; top:-11px; left:50%; transform:translateX(-50%) rotate(4deg); width:26px; height:22px; background:#e6b8c2; border-radius:3px; box-shadow:0 3px 6px rgba(0,0,0,.25);"></div>
-    <p style="font-family:'Dancing Script', cursive; font-weight:700; font-size:22px; color:#2a1f3d; margin-bottom:6px;">Javeria ♡</p>
-    <p style="font-size:12px; color:#5a4a63; font-family:var(--font-body); font-weight:600; margin-bottom:8px;">🎂 8 September ♡</p>
-    <p style="font-size:11px; color:#8a7a90; font-family:var(--font-body); line-height:1.5;">Two souls, different dates... same sky ♡</p>
-  </div>
-
-  <!-- Glowing S reveal -->
-  <div aria-hidden="true" style="position:fixed; inset:0; z-index:4; display:flex; align-items:center; justify-content:center; pointer-events:none;">
-    <span style="font-family:'Playfair Display', serif; font-style:italic; font-weight:700; font-size:120px; background:linear-gradient(135deg, var(--cyan), var(--pink), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 0 28px rgba(255,255,255,.28)); opacity:0; animation:seharSGlow 2s ease-in-out .3s forwards;">S</span>
-  </div>
-
-  <div id="seharWelcomeCard" style="position:relative; z-index:3; min-height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:130px 26px 80px;">
-
-    <p class="sehar-seq" style="animation-delay:1.7s; font-size:12.5px; letter-spacing:0.3em; color:var(--text-dim); font-family:var(--font-body); font-weight:600; margin-bottom:14px; text-transform:uppercase;">💜 Special Website 💗</p>
-
-    <p class="sehar-seq" style="animation-delay:1.85s; font-family:'Playfair Display', serif; font-style:italic; font-size:clamp(16px,2.4vw,20px); color:var(--text-dim); margin-bottom:8px;">A little space made just for you...</p>
-
-    <h1 class="sehar-seq" style="animation-delay:2.05s; font-family:'Dancing Script', cursive; font-weight:700; font-size:clamp(58px,12vw,104px); line-height:1; color:var(--pink); text-shadow:0 0 34px rgba(255,46,154,.4); margin-bottom:0;">Welcome <span style="font-size:0.5em; vertical-align:middle;">💗</span></h1>
-    <div class="sehar-seq" style="animation-delay:2.15s; width:150px; height:2px; background:linear-gradient(90deg, transparent, var(--pink), transparent); margin:2px auto 4px;"></div>
-    <h1 class="sehar-seq" style="animation-delay:2.25s; font-family:'Dancing Script', cursive; font-weight:700; font-size:clamp(42px,9vw,76px); line-height:1; color:#fff; margin-bottom:22px;">Sehar <span style="color:var(--pink);">♡</span></h1>
-
-    <p class="sehar-seq" style="animation-delay:2.4s; font-size:13px; letter-spacing:0.2em; color:var(--text-dim); margin-bottom:26px; text-transform:uppercase;">♡ You are so special ♡</p>
-
-    <p class="sehar-seq" style="animation-delay:2.55s; max-width:460px; color:var(--text-dim); font-size:15.5px; line-height:1.95; margin-bottom:20px; font-family:var(--font-body);">
-      This website is a little gift for you, because you deserve all the happiness, success and love in the world. ♡
-    </p>
-
-    <div class="sehar-seq" style="animation-delay:2.7s; width:130px; height:1px; background:linear-gradient(90deg, transparent, var(--border-strong), transparent); margin-bottom:20px;"></div>
-
-    <p class="sehar-seq" style="animation-delay:2.8s; font-family:'Playfair Display', serif; font-style:italic; font-size:15.5px; color:var(--text-dim); margin-bottom:38px;">Two special dates... One beautiful bond ♡</p>
-
-    <!-- mini calendar chip -->
-    <div class="sehar-seq" style="animation-delay:2.95s; display:inline-flex; flex-direction:column; align-items:center; gap:6px; padding:14px 30px; border:1.2px solid rgba(255,255,255,.16); border-radius:16px; background:rgba(255,255,255,.05); margin-bottom:44px;">
-      <span style="font-family:var(--font-body); font-weight:700; font-size:14px; letter-spacing:0.05em; color:var(--text);">5 Nov ♡</span>
-      <span style="width:26px; height:1px; background:var(--border-strong);"></span>
-      <span style="font-family:var(--font-body); font-weight:700; font-size:14px; letter-spacing:0.05em; color:var(--text);">8 Sep ♡</span>
-    </div>
-
-    <button type="button" id="seharEnterBtn" class="sehar-seq sehar-glow-btn" style="display:inline-flex; align-items:center; gap:9px; padding:16px 34px; border-radius:999px; border:none; background:#fbe2ea; color:#a3264e; font-weight:700; font-size:15px; font-family:var(--font-body); cursor:pointer;">✨ Click to Continue <span>→</span></button>
-
-    <p class="sehar-seq" style="animation-delay:3.3s; margin-top:44px; font-family:'Playfair Display', serif; font-style:italic; font-size:14px; color:var(--text-faint);">Because some people deserve their own little corner. ♡</p>
-  </div>
-</div>
 
 <div class="bg-fx" aria-hidden="true">
   <div class="orb orb-cyan"></div>
@@ -1406,19 +1285,6 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
   </div>
 </section>
 
-<section data-view="about" class="view owner-note" id="owner-note">
-  <div class="wrap">
-    <div class="owner-card reveal" >
-      <div class="owner-top"><div class="owner-av">J</div><div><span class="owner-eyebrow">JAVERIA KI TARAF SE &#128156;</span><h2>Assalam o Alaikum, My Dear Students,</h2></div></div>
-      <p>Agar aap ko yeh website use karte hue ya parhai karte hue kisi bhi qism ka masla pesh aaye, to bas <a class="owner-link">&ldquo;Problem batao&rdquo;</a> mein apni problem likh dein. InshaAllah main khud us masle ko hal karoongi, aur saath saath is AI tutor ko mazeed behtar banati rahoongi.</p>
-      <p>Mujhe maloom hai ke abhi is mein bohot si kamiyan hongi, jo InshaAllah main waqt ke saath saath poori kar doongi. Asal baat yeh hai ke mera jitna budget tha, utna main ne laga diya hai. Agar is waqt mere ghar walay mujhe ghar se bahar nikal dein, to main is qabil bhi nahi hoongi ke ek bread le kar apna pait bhar sakoon.</p>
-      <p>Is liye aap sab se request hai ke thora adjust kar lein. Main saath saath isay behtar karne ki poori koshish kar rahi hoon.</p>
-      <p>Aap se meri dil se request hai ke thora sabar aur tawun karein, aur apni tawajjo parhai par rakhein. Aap ki mehnat aur kamyabi hi meri sab se badi khushi hai.</p>
-      <p>Shukriya.</p>
-      <div class="owner-sign">Javeria Maqsood<span>Founder, Rehnuma &middot; 20 saal</span></div>
-    </div>
-  </div>
-</section>
 
 <section class="view" data-view="about" id="waitlist" style="padding-top:20px;">
   <div class="waitlist reveal">
@@ -1458,7 +1324,6 @@ h1,h2,h3,h4{ font-family:var(--font-body) !important; letter-spacing:-.02em; }
           <h5 data-i18n="footerCompany">Company</h5>
           <button type="button" data-i18n="footerAbout">Hamare baray mein</button>
           <a href="#" id="footerContact" data-i18n="footerContact">Contact</a>
-          <a href="#" id="footerSehar">Khaas page 💜</a>
           <a href="/privacy.html">Privacy Policy</a>
           <a href="/terms.html">Terms of Use</a>
         </div>
@@ -2194,8 +2059,8 @@ function rnTx(s, lang) {
 }
 window.rnL = (s) => rnTx(s, getCurrentLanguage());
 
-const RN_SKIP_A = 'script,style,#seharWelcome,#langSwitchMenu,[data-no-i18n]';
-const RN_SKIP = 'script,style,textarea,#seharWelcome,#langSwitchMenu,.lang-option,.lang-option-mobile,[data-no-i18n],.tutor-msg-body,.msg-body,.rn-ai';
+const RN_SKIP_A = 'script,style,#langSwitchMenu,[data-no-i18n]';
+const RN_SKIP = 'script,style,textarea,#langSwitchMenu,.lang-option,.lang-option-mobile,[data-no-i18n],.tutor-msg-body,.msg-body,.rn-ai';
 const RN_TXT = new WeakMap(), RN_ATTR = new WeakMap();
 const RN_ATTRS = ['placeholder', 'title', 'aria-label', 'alt'];
 let rnBusy = false;
@@ -2283,19 +2148,6 @@ applyLanguage(getCurrentLanguage());
   });
   new MutationObserver(() => { if (ov.style.display === 'none') stop(); }).observe(ov, { attributes: true, attributeFilter: ['style'] });
 })();
-
-// ============ Sehar's Welcome Screen ============
-const seharWelcome = document.getElementById('seharWelcome');
-if (/[?&]sehar\b/.test(location.search)) { seharWelcome.style.display = 'block'; }
-const seharWelcomeCard = document.getElementById('seharWelcomeCard');
-const seharEnterBtn = document.getElementById('seharEnterBtn');
-seharWelcome.style.transition = 'opacity .5s ease';
-
-document.getElementById('footerSehar').addEventListener('click', (e) => { e.preventDefault(); seharWelcome.style.display = 'block'; seharWelcome.style.opacity = '1'; seharWelcome.scrollTop = 0; });
-seharEnterBtn.addEventListener('click', () => {
-  seharWelcome.style.opacity = '0';
-  setTimeout(() => { seharWelcome.style.display = 'none'; }, 500);
-});
 
 const header = document.getElementById('site-header');
 window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 12));
