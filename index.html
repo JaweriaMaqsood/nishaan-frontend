@@ -2784,11 +2784,6 @@ function renderSubjectChips() {
     c.addEventListener('click', () => { doubtInput.value = q; askDoubt(); });
     box.appendChild(c);
   });
-  const ic = document.createElement('button');
-  ic.className = 'demo-chip'; ic.type = 'button'; ic.textContent = 'Image banao';
-  ic.style.cssText = 'font-size:12.5px; padding:8px 14px; border-radius:999px; border:1.4px dashed var(--cyan); color:var(--cyan); background:var(--bg-soft);';
-  ic.addEventListener('click', () => { doubtInput.value = 'Ek image bana do: '; doubtInput.focus(); });
-  box.appendChild(ic);
 }
 
 function updateCallIdentity() {
