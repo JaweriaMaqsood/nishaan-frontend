@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://rehnuma-js.vercel.app/sitemap.xml
+Sitemap: https://rehnuma.eu.cc/sitemap.xml
